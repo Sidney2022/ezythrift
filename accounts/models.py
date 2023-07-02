@@ -13,9 +13,9 @@ class Profile(AbstractUser):
     #     return cart
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'username', 'password']
+    REQUIRED_FIELDS = [ 'password']
     def __str__(self):
-        return self.username
+        return self.email
     
 
 class SocialLink(models.Model):

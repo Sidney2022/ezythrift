@@ -7,7 +7,11 @@
             <div class="breadcrumb-content">
                 <ul>
                     <li><a href="{% url 'homepage' %}">Home</a></li>
-                    <li class="active">Product Listings</li>
+                    {% if request.path == '/search' %}
+                    <li class="active">Search Results </li>
+                    {% else %}
+                    <li class="active">Product Listings  </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -33,18 +37,20 @@
                         </div>
                         <!-- product-select-box start -->
                         <div class="product-select-box">
+                            <form id="sortForm" onchange="exam()"> 
                             <div class="product-short">
-                                <p>Sort By:</p>
-                                <select class="nice-select">
-                                    <option value="trending">Relevance</option>
-                                    <option value="sales">Name (A - Z)</option>
-                                    <option value="sales">Name (Z - A)</option>
-                                    <option value="rating">Price (Low &gt; High)</option>
-                                    <option value="date">Rating (Lowest)</option>
-                                    <option value="price-asc">Model (A - Z)</option>
-                                    <option value="price-asc">Model (Z - A)</option>
-                                </select>
-                            </div>
+                                    <p>Sort By:</p>
+                                    <select class="nice-select">
+                                        <option value="trending">Relevance</option>
+                                        <option value="sales">Name (A - Z)</option>
+                                        <option value="sales">Name (Z - A)</option>
+                                        <option value="rating">Price (Low &gt; High)</option>
+                                        <option value="date">Rating (Lowest)</option>
+                                        <option value="price-asc">Model (A - Z)</option>
+                                        <option value="price-asc">Model (Z - A)</option>
+                                    </select>
+                                </div>
+                            </form>
                         </div>
                         <!-- product-select-box end -->
                     </div>
@@ -90,9 +96,9 @@
                                                     </div>
                                                     <div class="add-actions">
                                                         <ul class="add-actions-link">
-                                                            <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                                            <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                                        </ul>
+                                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
+                                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name"> {{product.slug}}</span></button></li>
+                                                       </ul>
                                                     </div>
                                                 </div>
                                             </div>
@@ -119,7 +125,11 @@
                                         <ul class="pagination-box ">
                                             {% if page.has_previous %}
                                             <li class=" ">
+                                                {% if request.path == '/search' %}
+                                                <a class="Previous" href="?item={{item}}&page={{ page.previous_page_number }}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
+                                                {% else %}
                                                 <a class="Previous" href="?page={{ page.previous_page_number }}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
+                                                {% endif %}
                                             </li>
                                             {% else %}
                                             <li class=" ">
@@ -130,13 +140,25 @@
                                                 {% if page_num == page.number %}
                                             <li class=" active"><a class="" href="#">{{ page_num }}</a></li>
                                             {% else %}
-                                            <li class=""><a class="" href="?page={{ page_num }}">{{ page_num }}</a></li>
+
+                                            {% if request.path == '/search' %}
+                                            <li class=""><a class="" href="?item={{item}}&page={{ page_num }}">{{ page_num }}</a></li>
+                                            {% else %}
+                                            <li class=""><a class="" href="?page=gg{{ page_num }}">{{ page_num }}</a></li>
+                                            {% endif %}
+
                                             {% endif %}
                                             {% endfor %}
                     
                                             {% if page.has_next %}
                                             <li class="">
+
+                                                {% if request.path == '/search' %}
+                                                <a class="Next" href="?item={{item}}&page={{ page.next_page_number }}">Next <i class="fa fa-chevron-right"></i></a>
+                                                {% else %}
                                                 <a class="Next" href="?page={{ page.next_page_number }}">Next <i class="fa fa-chevron-right"></i></a>
+                                                {% endif %}
+
                                             </li>
                                             {% else %}
                                             <li class="">
@@ -189,65 +211,29 @@
                                 <form action="#">
                                     <ul>
                                         {% for brand in brands %}
-                                        <li><input type="checkbox" name="product-categori"><a class="upper">{{brand.brand}} (13)</a></li>
+                                        <li><input type="checkbox" name="product-categori"><a class="upper">{{brand.brand}} </a></li>
                                         {% endfor %}
                                     </ul>
                                 </form>
                             </div>
                             </div>
                         <!-- filter-sub-area end -->
-                        <!-- filter-sub-area start -->
-                        <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                            <h5 class="filter-sub-titel">Categories</h5>
-                            <div class="categori-checkbox">
-                                <form action="#">
-                                    <ul>
-                                        <li><input type="checkbox" name="product-categori"><a href="#">Graphic Corner (10)</a></li>
-                                    </ul>
-                                </form>
-                            </div>
-                            </div>
-                        <!-- filter-sub-area end -->
-                        <!-- filter-sub-area start -->
-                        <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                            <h5 class="filter-sub-titel">Size</h5>
-                            <div class="size-checkbox">
-                                <form action="#">
-                                    <ul>
-                                        <li><input type="checkbox" name="product-size"><a href="#">S (3)</a></li>
-                                        <li><input type="checkbox" name="product-size"><a href="#">M (3)</a></li>
-                                        <li><input type="checkbox" name="product-size"><a href="#">L (3)</a></li>
-                                        <li><input type="checkbox" name="product-size"><a href="#">XL (3)</a></li>
-                                    </ul>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- filter-sub-area end -->
-                        <!-- filter-sub-area start -->
-                      
-                        
                     </div>
                     <!--sidebar-categores-box end  -->
-                    <!-- category-sub-menu start -->
-                    <div class="sidebar-categores-box mb-sm-0">
-                        <div class="sidebar-title">
-                            <h2>Laptop</h2>
-                        </div>
-                        <div class="category-tags">
-                            <ul>
-                                <li><a href="# ">Devita</a></li>
-                                <li><a href="# ">Cameras</a></li>
-                                <li><a href="# ">Sony</a></li>
-                                <li><a href="# ">Computer</a></li>
-                                <li><a href="# ">Big Sale</a></li>
-                                <li><a href="# ">Accessories</a></li>
-                            </ul>
-                        </div>
-                        <!-- category-sub-menu end -->
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
     <!-- Content Wraper Area End Here -->
+
+
+
+
+<script >
+    function exam() {
+       // alert("connected")
+    }
+
+</script>
 {% endblock  %}

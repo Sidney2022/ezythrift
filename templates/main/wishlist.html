@@ -41,9 +41,19 @@
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img src="{{item.product.img1.url}}" width=80 alt=""></td>
                                         <td class="li-product-price"><span class="amount">${{item.product.price}}</span></td>
-                                        <td class="li-product-stock-status"><span class="in-stock">in stock</span></td>
-                                        <td ><a href="#"> <span class="btn btn-secondary">add to cart</span></a></td>
-                                        
+
+                                        {% if item.product.is_in_stock == True %}
+                                        <td class="li-product-stock-status " ><span class="in-stock text-white btn btn-success btn-sm">in stock</span></td>
+                                        {% else %}
+                                        <td class="li-product-stock-status"><span class="text-white btn btn-warning btn-sm">out of stock</span></td>
+                                        {% endif %}
+
+                                        {% if item.product.is_in_stock == True %}
+                                        <td ><span style="border:none; cursor:pointer" class="btn text-white btn-warning" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{item.product.slug}}</span></span></td>
+                                        {% else %}
+                                        <td ><span class="btn btn-secondary"> Out Of Stock</span></td>
+                                        {% endif %}   
+
                                         <td class="li-product-remove"><a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-times"></i> <span id="product-select" > {{item.product.slug}} </span></a>
 
                                             {%empty%}

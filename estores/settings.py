@@ -133,7 +133,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_URL = '/accounts/signin'
+LOGIN_URL = '/accounts/auth'
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 

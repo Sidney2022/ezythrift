@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
 <style>
     #product-select {
@@ -32,7 +33,7 @@
                                         <th class="li-product-price">Unit Price</th>
                                         <th class="li-product-quantity">Quantity</th>
                                         <th class="li-product-subtotal">Total</th>
-                                        <th class="li-product-remove">remove item</th>
+                                        <th class="li-product-remove">remove item  </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,14 +43,13 @@
                                         <td class="li-product-thumbnail"><img draggable='false' src="{{item.product.img1.url}}" alt="" width=80></td>
                                         <td class="li-product-price"><span class="amount">${{item.product.price}}</span></td>
                                          <td class="quantity">
-                                            <label>Quantity</label>
                                             <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="{{item.number_of_items}}" type="text">
-                                                <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                                    <input class="cart-plus-minus-box"  value="{{item.number_of_items}}" type="text">
+                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                                    <div class="inc qtybutton" ><i class="fa fa-angle-up" ></i></div>
                                             </div>
                                         </td>
-                                        <td class="product-subtotal"><span class="amount">$  </span></td>
+                                        <td class="product-subtotal"><span class="amount">$ </span></td>
                                         <td class="li-product-remove"><a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-times"></i> <span id="product-select" > {{item.product.slug}} </span></a>
                                             
                                             
@@ -80,10 +80,10 @@
                         <div class="row">
                             <div class="col-md-5 ml-auto">
                                 <div class="cart-page-total">
-                                    <h2>Cart totals</h2>
+                                    {% comment %} <h2>Cart totals</h2> {% endcomment %}
                                     <ul>
-                                        <li>Subtotal <span>$130.00</span></li>
-                                        <li>Total <span>$130.00</span></li>
+                                        {% comment %} <li>Subtotal <span>$130.00</span></li> {% endcomment %}
+                                        <li>Total <span>${{no_items}}</span></li>
                                     </ul>
                                     <a href="{% url 'checkout' %}">Proceed to checkout</a>
                                 </div>
@@ -97,11 +97,7 @@
 
 
     <script>
-        {% comment %} const delBtn = document.getElementById("del-cart")
-        const selectedProduct = document.getElementById("product-select")
-        delBtn.forEach(btn => {
-            btn.add
-        }) {% endcomment %}
+       
         function deleteCartItem(elem) {
             
             fetch(`{% url 'del-cart-item'  %}?item=${elem.textContent}`, {
@@ -114,5 +110,8 @@
              })
             
         }
+
+
+       
     </script>
     {% endblock  %}

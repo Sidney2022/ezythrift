@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %} {%load static%} {% block branding %}
+
+<h1 id="head">
+  {% comment %} <img src="{% static 'img/logo.png' %}" width="35" height="35" /> {% endcomment %}
+  <h1><a href="{% url 'homepage' %}" > <span style="color:#fed700">Ezy</span>Thrift  Admin </a></h1>
+</h1>
+
+{% comment %} {% endblock %} {% block extrastyle%} {% endcomment %}
+
+{% comment %} <link rel="stylesheet" href="{% static 'css/adminstyle.css'%}" /> {% endcomment %}
+
+{%endblock %}

@@ -1,0 +1,118 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block content %}
+
+ 
+    <!-- Begin Login Content Area -->
+    <div class="page-section mb-60">
+        <div class="container">
+            <div class="alert alert-danger p-3 mr-3" id ="msgArea" style="display:none">
+                       message goes here
+                <button class="close" id="msgCloseBtn" >×</button>
+            </div>
+            <div class="product-area pt-35">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="li-product-tab">
+                                <ul class="nav li-product-menu">
+                                   <li><a data-toggle="tab" href="#login" class="active show"><span>Login</span></a></li>
+                                   <li><a data-toggle="tab" href="#register" ><span>Register</span></a></li>
+                                </ul>               
+                            </div>
+                            <!-- Begin Li's Tab Menu Content Area -->
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div class="row">
+                       
+                        <div id="login" class="tab-pane active show" role="tabpanel">
+                            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                                <form action="#"  id="login-form">
+                                    {% csrf_token %}
+                                    <div class="login-form">
+                                        <h4 class="login-title">Login</h4>
+                                        <p id ="loginMsg"> </p>
+                                        <div class="row">
+                                            <input  id="next" type="hidden" value="{{redirect_page}}">
+            
+                                            <div class="col-md-12 col-12 mb-20">
+                                                <label>Email Address*</label>
+                                                <input class="mb-0 form-control" id="loginEmailField" type="email" placeholder="Email Address">
+                                            </div>
+                                            <div class="col-12 mb-20">
+                                                <label>Password</label>
+                                                <input class="mb-0 form-control" id="loginpasswordField" type="password" placeholder="Password">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
+                                                    <input type="checkbox" id="remember_me">
+                                                    <label for="remember_me">Remember me</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
+                                                <a href="{% url 'reset-pw' %}"> Forgotten password?</a>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button class="register-button mt-0" id="login-btn">Login</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                      
+                        </div>
+                        <div id="register" class="tab-pane " role="tabpanel">
+                            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                                <form action="#" id="reg-form">
+                                    <div class="login-form form-group">
+                                        <h4 class="login-title">Register</h4>
+                                        
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6 col-12 mb-20">
+                                                <label>First Name</label>
+                                                <input id="firstNameField" required class="mb-0 form-control " type="text" placeholder="First Name">
+                                            </div>
+                                            <div class="col-md-6 col-12 mb-20">
+                                                <label>Last Name</label>
+                                                <input id="lastNameField" required class="mb-0" type="text" placeholder="Last Name">
+                                            </div>
+                                            <div class="col-md-12 mb-20">
+                                                <label>Email Address*</label>
+                                                <p class="text-sm text-success usernameSuccessOutput"></p>
+                                                <input id="emailField" required class="mb-0  form-control" type="email" placeholder="Email Address">
+                                                <p id="emailFieldMsg"  style="display:">
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-20">
+                                                {% comment %} <small class="float-right py-3 showPasswordToggle" style="cursor:pointer">SHOW</small> {% endcomment %}
+                                                <label>Password</label>
+                                                <input id="passwordField" required class="mb-0  form-control" type="password" placeholder="Password">
+                                                <p id="passwordFieldMsg"  style="display:">
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-20">
+                                                <label>Confirm Password</label>
+                                                <input id="confPasswordField" required class="mb-0  form-control" type="password" placeholder="Confirm Password">
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="register-button mt-0" id="reg-btn">Register</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/auth.js' %}"></script>
+
+     
+{% endblock  %}

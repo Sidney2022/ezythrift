@@ -1,14 +1,20 @@
-from django.contrib.auth.models import auth
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.views import View
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import auth
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
 from django.http import JsonResponse
-import json
-from .models import Profile
+from django.contrib import messages
 from django.conf import settings
+from django.views import View
+from core.models import Order
+from .models import Profile
+import json
 import os
+
 
 
 class SignIn(View):
@@ -39,7 +45,7 @@ class SignIn(View):
             messages.warning(request, f'You are already logged in')
             return redirect('homepage')
         
-        return render(request, 'auth/auth.html', {"redirect_page":redirect_page})
+        return render(request, 'accounts/auth.html', {"redirect_page":redirect_page})
 
 
 class UsernameValidationView(View):
@@ -85,13 +91,13 @@ class SignUp(View):
         context = { "fields": request.POST }
         if Profile.objects.filter(username=username).exists():
             messages.error(request, 'username already exists')
-            return render(request, 'auth/auth.html', context)
+            return render(request, 'accounts/auth.html', context)
         elif Profile.objects.filter(email=email).exists():
             messages.error(request, 'email already exists')
-            return render(request, 'auth/auth.html', context)
+            return render(request, 'accounts/auth.html', context)
         elif password != password2:
             messages.error(request, 'passwords do not match!')
-            return render(request, 'auth/auth.html', context)
+            return render(request, 'accounts/auth.html', context)
         
         try:
             validate_password(password)
@@ -102,7 +108,7 @@ class SignUp(View):
             return redirect("homepage")
         except Exception as e:
             messages.error(request, str(e))
-            return render(request, 'auth/auth.html', context)
+            return render(request, 'accounts/auth.html', context)
     
     
 
@@ -115,21 +121,77 @@ class SignUp(View):
         # context = {
         #     'currencies':data,
         # }
-        return render(request, 'auth/auth.html')
+        return render(request, 'accounts/auth.html')
 
 
 class SignOut(View):
     def get(self, request):
         auth.logout(request)
         messages.info(request, "logged out successfuly")
-        return redirect('login')
+        return redirect('auth')
 
 
 def reset_password(request):
-    return render(request, 'auth/reset-pw.html')
+    return render(request, 'accounts/reset-pw.html')
+
+@login_required()
+def accountPage(request):
+    orders = Order.objects.filter(user=request.user)
+    context = {
+        "myorders":orders
+    }
+    return render(request, 'accounts/account.html', context)
+
+
+def register(request):
+    if request.method =="POST":
+        data = json.loads(request.body)
+        first_name = data['first_name']
+        last_name = data['last_name']
+        email = data['email']
+        password = data['password']
+        password2 = data['password2']
+        if Profile.objects.filter(email=email).exists():
+            return JsonResponse({"email_exists":'email in use'})
+        elif password !=password2:
+            return JsonResponse({"password_match":'passwords do not match'})
+        try:
+            validate_password(password)
+            new_user = Profile.objects.create_user(username=email, first_name=first_name, last_name=last_name, email=email, password=password)
+            new_user.is_active=False
+            new_user.save()
+
+
+        except Exception as err:
+            print(err)
+            for e in err:
+                print(e)
+            return JsonResponse({'password_strength':str(err)})
+    return JsonResponse({"hey":'hey'})
+
+
+def login(request):
+    if request.method =="POST":
+        data = json.loads(request.body)
+        email = data['email']
+        print(email)
+        password = data['password']
+        user = auth.authenticate(email=email, password=password)
+        print(user)
+        if user:
+            auth.login(request, user)
+            return JsonResponse({"success":"logged In"})
+        
+        else:
+            return JsonResponse({"auth_error":"invalid login"})
+
+
+def AuthPage(request):
+    if request.user.is_authenticated:
+        return redirect("homepage")
+    redirect_page = request.GET.get("next")
+    return render (request, 'accounts/auth.html',  {"redirect_page":redirect_page})
 
 
 
-
-
-
+        

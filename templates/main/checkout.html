@@ -193,7 +193,9 @@
                                 </div>
                             </div>
                             <div class="order-button-payment">
-                                <input value="Place order" type="submit">
+                                {% comment %} <input value="Place order" type="submit"> {% endcomment %}
+                                <a href="{% url 'order' %}" class="btn btn-dark"> Place Order</a>
+
                             </div>
                         </div>
                     </div>

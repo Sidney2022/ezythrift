@@ -5,7 +5,7 @@ def ProductCategories(request):
     context =  {
         "product_categories":Category.objects.all(), 
         "product_types":ProductType.objects.all(),
-        "brands":Brand.objects.all(),
+        # "brands":Brand.objects.all(),
         }
     if request.user.is_authenticated:
         cart_items = { 
