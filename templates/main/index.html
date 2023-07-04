@@ -5,6 +5,11 @@
     #product-to-add{
         display:none
     }
+    .add-actions-link button {
+        border:none;
+        background:transparent;
+        color:#333
+    }
 </style>
 <div class="slider-with-banner">
     <div class="container">
@@ -125,10 +130,17 @@
                                         </div>
                                     </div>
                                     <div class="add-actions">
+                                        {% if user.is_authenticated %}
                                         <ul class="add-actions-link" >
-                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
-                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name"> {{product.slug}}</span></button></li>
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
+                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
                                         </ul>
+                                        {% else %}
+                                        <ul class="add-actions-link" >
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
+                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
+                                        </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -174,10 +186,17 @@
                                         </div>
                                     </div>
                                     <div class="add-actions">
+                                        {% if user.is_authenticated %}
                                         <ul class="add-actions-link" >
-                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
-                                            <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
+                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
                                         </ul>
+                                        {% else %}
+                                        <ul class="add-actions-link" >
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
+                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
+                                        </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -275,10 +294,16 @@
                                         </div>
                                     </div>
                                     <div class="add-actions">
+                                        {% if user.is_authenticated %}
                                         <ul class="add-actions-link" >
                                             <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
                                             <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li id="product-to-add"> {{product.slug}} </li>
+                                        </ul>
+                                        {% else %}
+                                        <ul class="add-actions-link" >
+                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="loginRequiredAction(this)">Add to cart </button></li>
+                                            <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                 </div>
@@ -371,11 +396,17 @@
                                         </div>
                                     </div>
                                     <div class="add-actions">
+                                        {% if user.is_authenticated %}
                                         <ul class="add-actions-link" >
-                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
                                             <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
-                                            <li id="product-to-add"> {{product.slug}} </li>
                                         </ul>
+                                        {% else %}
+                                        <ul class="add-actions-link" >
+                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
+                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
+                                        </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

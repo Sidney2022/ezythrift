@@ -74,9 +74,16 @@
                                     
                                 </div>
                                 <div class="product-additional-info pt-25">
-                                        <button onclick="AddTocart(this)" class="add-to-cart" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
+                                        
+                                        {% if user.is_authenticated %}
+                                        <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <span id="prod-name"> {{product.slug}}</span></button>
                                         {% comment %} <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i></a> {% endcomment %}
-                                        <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                        <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                        {% else %}
+                                        <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
+                                        {% comment %} <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i></a> {% endcomment %}
+                                        <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                        {% endif %}
                                         <div class="product-social-sharing pt-25">
                                             <ul>
                                                 <li class="facebook"><a href="#"><i class="fa fa-facebook"></i>Facebook</a></li>

@@ -19,6 +19,9 @@ urlpatterns = [
     path("", views.accountPage, name='account'),
     path("auth", views.AuthPage, name='auth'),
     path("signup", csrf_exempt(views.register), name='signup'),
-    path("signin", csrf_exempt(views.login), name='signin')
+    path("signin", csrf_exempt(views.login), name='signin'),
+
+    path('shipping', views.editShippingDetail, name='shipping'),
+    path('change-password', views.changePw, name='change-pw'),
 
 ]

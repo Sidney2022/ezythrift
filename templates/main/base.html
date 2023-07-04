@@ -6,11 +6,11 @@
 <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>ESTORES - Ecommerce Store </title>
+        <title>EzyThrift - Ecommerce Store </title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'logo.svg' %}">
         <!-- Material Design Iconic Font-V2.2.0 -->
         <link rel="stylesheet" href="{% static 'css/material-design-iconic-font.min.css' %}">
         <!-- Font Awesome -->
@@ -51,6 +51,18 @@
             #prod-name {
                 display:none
             }
+            <style>
+                #product-to-add{
+                    display:none
+                }
+                .add-actions-link button, .add-cart button {
+                    border:none;
+                    background:transparent;
+                    color:#333
+                }
+                .product-additional-info button {
+
+                }
             </style>
 </head>
 <body>
@@ -69,7 +81,7 @@
                             <div class="col-lg-3 col-md-4">
                                 <div class="header-top-left">
                                     <ul class="phone-wrap">
-                                        <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
+                                        <li><a href="#">(+123) 123 321 345</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -80,21 +92,26 @@
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
                                         <li>
-                                            <div class="ht-setting-trigger"><span>Setting</span></div>
+                                            <div class="ht-setting-trigger"><span>Account</span></div>
                                             <div class="setting ht-setting">
                                                 <ul class="ht-setting-list">
                                                     <li><a href="{% url 'account' %}">My Account</a></li>
                                                     <li><a href="{% url 'checkout' %}">Checkout</a></li>
+                                                    {% if  user.is_authenticated %}
+                                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                                    {% else %}
                                                     <li><a href="{% url 'auth' %}">Sign In</a></li>
+                                                    {% endif %} 
                                                 </ul>
                                             </div>
+                                            
                                         </li>
                                         <!-- Setting Area End Here -->
                                  
                                         <!-- Begin Language Area -->
-                                        <li>
-                                            <div id ="google_translate_element" > </div>
-                                        </li>
+                                        
+                                        <li id ="google_translate_element" > </li>
+                                        
                                         <!-- Language Area End Here -->
                                     </ul>
                                 </div>
@@ -130,12 +147,21 @@
                                 <div class="header-middle-right">
                                     <ul class="hm-menu">
                                         <!-- Begin Header Middle Wishlist Area -->
+                                        {% if user.is_authenticated %}
                                         <li class="hm-wishlist">
                                             <a href="{% url 'wishlist' %}">
-                                                <span class="cart-item-count wishlist-item-count">0</span>
+                                                <span class="cart-item-count wishlist-item-count" id="wish-amt">{{number_of_items}}</span>
                                                 <i class="fa fa-heart-o"></i>
                                             </a>
                                         </li>
+                                        {% else %}
+                                        <li class="hm-wishlist">
+                                            <a  onclick="loginRequiredAction()">
+                                                <span class="cart-item-count wishlist-item-count" id="wish-amt">{{number_of_items}}</span>
+                                                <i class="fa fa-heart-o"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
                                         <!-- Header Middle Wishlist Area End Here -->
                                         <!-- Begin Header Mini Cart Area -->
                                         <li class="hm-minicart">
@@ -185,41 +211,29 @@
                                 <!-- Begin Header Bottom Menu Area -->
                                 <div class="hb-menu">
                                     <nav>
-                                        <ul> 
-                                            <li class="megamenu-holder" style="font-size:10px !important"><a href="{% url 'market' %}">All </a>
-                                                <ul class="megamenu hb-megamenu upper" style="text-transform:capitalize">
-                                                    {% for category in product_categories  %}
-                                                    <li><a href="{% url 'shop' category.slug %}">{{category.category}}</a>
-                                                        <ul>
-                                                            {% for sub in category.SubCategories %}
-                                                            <li><a href="{% url 'shop' sub.slug %}">{{sub}}</a></li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    </li>
-                                                 
+                                        <ul>
+                                            <li class="dropdown-holder"><a href="">All</a>
+                                                <ul class="hb-dropdown">
+                                                    {% for  category in product_categories %}
+                                                    <li class="upper"><a href="{% url 'shop' category.slug %}">{{category.category}}</a></li>
                                                     {% endfor %}
                                                 </ul>
                                             </li>
-                                            {% for category in product_categories  %}
-                                            <li class="megamenu-holder"><a href="{% url 'shop' category.slug %}">{{category.category}}</a>
-                                                <ul class="megamenu hb-megamenu upper" style="text-transform:capitalize">
-                                                    {% for sub in category.SubCategories %}
-                                                    <li><a href="{% url 'shop' sub.slug %}">{{sub}}</a>
-                                                        <ul>
-                                                            {% for type in product_types %}
-                                                            {% if type.sub_category == sub %}
-                                                            <li><a href="{% url 'shop' type.slug %}">{{type}}</a></li>
-                                                            {% endif %}
+                                            {% for  category in product_categories %}
+                                            <li class="dropdown-holder"><a href="{% url 'shop' category.slug %}">{{category.category}}</a>
+                                                <ul class="hb-dropdown">
+                                                    {% for sub_category in category.SubCategories %}
+                                                    <li class="sub-dropdown-holder"><a href="{% url 'shop' sub_category.slug %}">{{sub_category.sub_category}}</a>
+                                                        <ul class="hb-dropdown hb-sub-dropdown">
+                                                            {% for product_type in  sub_category.productTypes%}
+                                                            <li><a href="{% url 'shop' product_type.slug %}">{{product_type}}</a></li>
                                                             {% endfor %}
                                                         </ul>
                                                     </li>
                                                     {% endfor %}
-                                                  
                                                 </ul>
                                             </li>
-                                            {% endfor %}
-                                          
-                                           
+                                            {%endfor%}
                                         </ul>
                                     </nav>
                                 </div>
@@ -247,7 +261,8 @@
             <!-- Begin Footer Area -->
             <div class="footer">
                 <!-- Begin Footer Static Top Area -->
-                <div class="footer-static-top">
+
+                {% comment %} <div class="footer-static-top">
                     <div class="container">
                         <!-- Begin Footer Shipping Area -->
                         <div class="footer-shipping pt-60 pb-55 pb-xs-25">
@@ -308,7 +323,8 @@
                         </div>
                         <!-- Footer Shipping Area End Here -->
                     </div>
-                </div>
+                </div> {% endcomment %}
+
                 <!-- Footer Static Top Area End Here -->
                 <!-- Begin Footer Static Middle Area -->
                 <div class="footer-static-middle">
@@ -316,14 +332,12 @@
                         <div class="footer-logo-wrap pt-50 pb-35">
                             <div class="row">
                                 <!-- Begin Footer Logo Area -->
-                                <div class="col-lg-4 col-md-6">
+                                <div class="col-lg-5 col-md-6">
                                     <div class="footer-logo">
                                         <h1><span style="color:#fed700">Ezy</span>Thrift </h1>
-                                        <p class="info">
-                                            We are a team of designers and developers that create high quality HTML Template & Woocommerce, Shopify Theme.
-                                        </p>
+                                        
                                     </div>
-                                    <ul class="des">
+                                    <ul class="des pt-3">
                                         <li>
                                             <span>Address: </span>
                                             6688Princess Road, London, Greater London BAS 23JK, UK
@@ -334,61 +348,51 @@
                                         </li>
                                         <li>
                                             <span>Email: </span>
-                                            <a href="mailto://info@yourdomain.com">info@yourdomain.com</a>
+                                            <a href="mailto://ezythrift@gmail.com">ezythrift@gmail.com</a>
                                         </li>
+                                        <div class="footer-block">
+                                            <ul class="social-link">
+                                                <li class="twitter">
+                                                    <a href="https://twitter.com/" data-toggle="tooltip" target="_blank" title="Twitter">
+                                                        <i class="fa fa-twitter"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="facebook">
+                                                    <a href="https://www.facebook.com/" data-toggle="tooltip" target="_blank" title="Facebook">
+                                                        <i class="fa fa-facebook"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="instagram">
+                                                    <a href="https://www.instagram.com/" data-toggle="tooltip" target="_blank" title="Instagram">
+                                                        <i class="fa fa-instagram"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </ul>
+                                    
                                 </div>
+
                                 <!-- Footer Logo Area End Here -->
                                 <!-- Begin Footer Block Area -->
-                                <div class="col-lg-2 col-md-3 col-sm-6">
-                                    <div class="footer-block">
-                                        <h3 class="footer-block-title">Product</h3>
-                                        <ul>
-                                            <li><a href="#">Prices drop</a></li>
-                                            <li><a href="#">New products</a></li>
-                                            <li><a href="#">Best sales</a></li>
-                                            <li><a href="{% url 'contact' %}">Contact us</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                
                                 <!-- Footer Block Area End Here -->
                                 <!-- Begin Footer Block Area -->
-                                <div class="col-lg-2 col-md-3 col-sm-6">
+                                <div class="col-lg-3 col-md-3 col-sm-6">
                                     <div class="footer-block">
-                                        <h3 class="footer-block-title">Our company</h3>
+                                        <h3 class="footer-block-title">Quick links</h3>
                                         <ul>
-                                            <li><a href="#">Delivery</a></li>
-                                            <li><a href="#">Legal Notice</a></li>
                                             <li><a href="{% url 'about' %}">About us</a></li>
-                                            <li><a href="{% url 'faq' %}">FAQs</a></li>
-                                            <li><a href="{% url 'contact' %}">Contact us</a></li>
+                                            {% comment %} <li><a href="{% url 'faq' %}">FAQs</a></li> {% endcomment %}
+                                            {% comment %} <li><a href="{% url 'contact' %}">Contact us</a></li> {% endcomment %}
+                                            <li><a href="#">terms and conditions</a></li>
+                                            <li><a href="#">Privacy Policy</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <!-- Footer Block Area End Here -->
                                 <!-- Begin Footer Block Area -->
                                 <div class="col-lg-4">
-                                    <div class="footer-block">
-                                        <h3 class="footer-block-title">Follow Us</h3>
-                                        <ul class="social-link">
-                                            <li class="twitter">
-                                                <a href="https://twitter.com/" data-toggle="tooltip" target="_blank" title="Twitter">
-                                                    <i class="fa fa-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li class="facebook">
-                                                <a href="https://www.facebook.com/" data-toggle="tooltip" target="_blank" title="Facebook">
-                                                    <i class="fa fa-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="instagram">
-                                                <a href="https://www.instagram.com/" data-toggle="tooltip" target="_blank" title="Instagram">
-                                                    <i class="fa fa-instagram"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- Begin Footer Newsletter Area -->
                                     <div class="footer-newsletter">
                                         <h4>Sign up to newsletter</h4>
                                         <form action="" method="post" id="form" name="mc-embedded-subscribe-form" class="footer-subscribe-form validate" >
@@ -401,6 +405,9 @@
                                            </div>
                                         </form>
                                     </div>
+                                    
+                                    <!-- Begin Footer Newsletter Area -->
+                                   
                                     <!-- Footer Newsletter Area End Here -->
                                 </div>
                                 <!-- Footer Block Area End Here -->
@@ -409,53 +416,9 @@
                     </div>
                 </div>
                 <!-- Footer Static Middle Area End Here -->
-                <!-- Begin Footer Static Bottom Area -->
-                <div class="footer-static-bottom pt-55 pb-55">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <!-- Begin Footer Links Area -->
-                                <div class="footer-links">
-                                    <ul>
-                                        <li><a href="#">Online Shopping</a></li>
-                                        <li><a href="#">Promotions</a></li>
-                                        <li><a href="#">My Orders</a></li>
-                                        <li><a href="#">Help</a></li>
-                                        <li><a href="#">Customer Service</a></li>
-                                        <li><a href="#">Support</a></li>
-                                        <li><a href="#">Most Populars</a></li>
-                                        <li><a href="#">New Arrivals</a></li>
-                                        <li><a href="#">Special Products</a></li>
-                                        <li><a href="#">Manufacturers</a></li>
-                                        <li><a href="#">Our Stores</a></li>
-                                        <li><a href="#">Shipping</a></li>
-                                        <li><a href="#">Payments</a></li>
-                                        <li><a href="#">Warantee</a></li>
-                                        <li><a href="#">Refunds</a></li>
-                                        <li><a href="#">Checkout</a></li>
-                                        <li><a href="#">Discount</a></li>
-                                        <li><a href="#">Refunds</a></li>
-                                        <li><a href="#">Policy Shipping</a></li>
-                                    </ul>
-                                </div>
-                                <!-- Footer Links Area End Here -->
-                                <!-- Begin Footer Payment Area -->
-                                <div class="copyright text-center">
-                                    <a href="#">
-                                        <img src="{% static 'images/payment/1.png' %}" alt="">
-                                    </a>
-                                </div>
-                                <!-- Footer Payment Area End Here -->
-                                <!-- Begin Copyright Area -->
-                                <div class="copyright text-center pt-25">
-                                    <span><a target="_blank" href="">&copy EzyThrift Stores 2023</a></span>
-                                </div>
-                                <!-- Copyright Area End Here -->
-                            </div>
-                        </div>
-                    </div>
+                <div class="copyright text-center pt-25 pb-25">
+                    <span><a target="_blank" href="">&copy EzyThrift Stores 2023</a></span>
                 </div>
-                <!-- Footer Static Bottom Area End Here -->
             </div>
             <!-- Footer Area End Here -->
            
@@ -518,32 +481,36 @@
 
     </body>
 
-{% if  user.is_authenticated %}
     <script>
 
-            const Form = document.getElementById("form")
-            Form.addEventListener("submit", (e) => {
-                e.preventDefault()
-                alert("yea")
-              const formData = new FormData(form)
-                const FormSubmitBtn = document.getElementById("mc-submit")
-                FormSubmitBtn.innerHTML="Please Wait...."
-                FormSubmitBtn.disabled = true;
-            fetch("{% url 'newsletter'   %}", {
-                body: formData,
-                method: "POST",
-              })
-                .then((res) => res.json())
-                .then((data) => {
-                 console.log("data", data);
-                  FormSubmitBtn.innerHTML="Subscribed"
-                  Form.reset()
-                  FormSubmitBtn.removeAttribute("disabled");
-                  
-                });
-            })
-        
+        const Form = document.getElementById("form")
+        Form.addEventListener("submit", (e) => {
+            e.preventDefault()
+          const formData = new FormData(form)
+            const FormSubmitBtn = document.getElementById("mc-submit")
+            FormSubmitBtn.innerHTML="Please Wait...."
+            FormSubmitBtn.disabled = true;
+        fetch("{% url 'newsletter'   %}", {
+            body: formData,
+            method: "POST",
+          })
+            .then((res) => res.json())
+            .then((data) => {
+             console.log("data", data);
+              FormSubmitBtn.innerHTML="Subscribed"
+              Form.reset()
+              FormSubmitBtn.removeAttribute("disabled");
+              
+            });
+        })
 
+        function loginRequiredAction() {
+            alert("please login to continue")
+        }
+    </script>
+
+{% if  user.is_authenticated %}
+    <script>
 
         const cartItemsList = document.getElementById("cart-list")
         function fetchCartData() {
@@ -619,6 +586,8 @@
                    // console.log("data", data);
                     if (data['status'] == 200) {
                         alert(`item has been added to wishlist`)
+                        const WishAmtElem = document.getElementById("wish-amt")
+                        WishAmtElem.innerHTML = data['number_of_items']
                     } else if (data['status'] == 400) {
                         alert(`item has already been added to wishlist`)
                     }

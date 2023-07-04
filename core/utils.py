@@ -7,6 +7,7 @@ from django.conf import settings
 
 
 
+
 def SendEmail(subject:str, email_to:str, context:dict, template:str):
     try:
 

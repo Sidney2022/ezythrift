@@ -15,9 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
 
 
 # Application definition
@@ -127,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
@@ -158,14 +158,27 @@ MESSAGE_TAGS = {
     messages.ERROR : 'danger'
 }
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
+    'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
+    'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET')
+}
+
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_UESR')
 EMAIL_PORT = os.getenv('PORT')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-CSRF_TRUSTED_ORIGINS =["https://*.domain", "http://*.domain"]
 
+SECURE_HSTS_SECONDS = 3600
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE  = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+SECURE_HSTS_PRELOAD=True

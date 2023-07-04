@@ -6,10 +6,7 @@
     <!-- Begin Login Content Area -->
     <div class="page-section mb-60">
         <div class="container">
-            <div class="alert alert-danger p-3 mr-3" id ="msgArea" style="display:none">
-                       message goes here
-                <button class="close" id="msgCloseBtn" >×</button>
-            </div>
+           {% include 'asyncMessages.html' %}
             <div class="product-area pt-35">
                 <div class="container">
                     <div class="row">
@@ -27,7 +24,7 @@
                         <div class="row">
                        
                         <div id="login" class="tab-pane active show" role="tabpanel">
-                            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
                                 <form action="#"  id="login-form">
                                     {% csrf_token %}
                                     <div class="login-form">
@@ -63,7 +60,7 @@
                       
                         </div>
                         <div id="register" class="tab-pane " role="tabpanel">
-                            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
                                 <form action="#" id="reg-form">
                                     <div class="login-form form-group">
                                         <h4 class="login-title">Register</h4>

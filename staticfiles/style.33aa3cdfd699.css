@@ -451,7 +451,7 @@ textarea:focus {
 /*----------------------------------------*/
 /*Home One | Slider Background Image*/
 .bg-1, .bg-2, .bg-3 {
-	background-image: url(images/slider/1.jpg);
+	background-image: url("images/slider/1.164ffc0c5cac.jpg");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -459,14 +459,14 @@ textarea:focus {
 	width: 100%;
 }
 .bg-2 {
-	background-image: url(images/slider/2.jpg);
+	background-image: url("images/slider/2.1b5918495af3.jpg");
 }
 .bg-3 {
-	background-image: url(images/slider/3.jpg);
+	background-image: url("images/slider/3.9a12980966ba.jpg");
 }
 /*Home Two | Slider Background Image*/
 .bg-4, .bg-5, .bg-6 {
-	background-image: url(images/slider/4.jpg);
+	background-image: url("images/slider/4.8f503a16e9f7.jpg");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -474,14 +474,14 @@ textarea:focus {
 	width: 100%;
 }
 .bg-5 {
-	background-image: url(images/slider/5.jpg);
+	background-image: url("images/slider/5.cc3abe394ff0.jpg");
 }
 .bg-6 {
-	background-image: url(images/slider/6.jpg);
+	background-image: url("images/slider/6.745f95e6fab7.jpg");
 }
 /*Home Three | Slider Background Image*/
 .bg-7, .bg-8, .bg-9 {
-	background-image: url(images/slider/7.jpg);
+	background-image: url("images/slider/7.0d2750e434de.jpg");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -489,14 +489,14 @@ textarea:focus {
 	width: 100%;
 }
 .bg-8 {
-	background-image: url(images/slider/8.jpg);
+	background-image: url("images/slider/8.b8a6ade8bf88.jpg");
 }
 .bg-9 {
-	background-image: url(images/slider/9.jpg);
+	background-image: url("images/slider/9.847cecf460e1.jpg");
 }
 /*Home Four | Slider Background Image*/
 .bg-10, .bg-11, .bg-12 {
-	background-image: url(images/slider/10.jpg);
+	background-image: url("images/slider/10.af63c6b6ed44.jpg");
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -504,10 +504,10 @@ textarea:focus {
 	width: 100%;
 }
 .bg-11 {
-	background-image: url(images/slider/11.jpg);
+	background-image: url("images/slider/11.7a39ced707ed.jpg");
 }
 .bg-12 {
-	background-image: url(images/slider/12.jpg);
+	background-image: url("images/slider/12.15dc06f6107f.jpg");
 }
 /*----------------------------------------*/
 /*  li's Background Variation Set 
@@ -1740,22 +1740,19 @@ textarea:focus {
 .hb-menu > nav > ul {
 		position: relative;
 }
-.hb-menu .dropdown-holder {
-	text-transform: capitalize;
-}
 .hb-menu nav > ul > li {
 		display: inline-block;
 		position: relative;
-		padding-right: 25px;
+		padding-right: 40px;
 		transition: all 0.3s ease-in-out;
 }
 .hb-menu nav > ul > li > a {
 	display: flex;
 	color: #242424;
 	text-transform: uppercase;
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 35px;
-	font-weight: bold;
+	font-weight: 500;
 	padding: 8px 0;
 }
 .hb-menu-2 nav > ul > li > a {
@@ -1906,7 +1903,7 @@ textarea:focus {
 	position: static !important;
 }
 .megamenu-static-holder .hb-megamenu, .megamenu-holder .hb-megamenu {
-	background-image: url(images/menu/li-bg-menu.jpg);
+	background-image: url("images/menu/li-bg-menu.4febddd3e5fa.jpg");
 	background-size: cover;
 	background-position: top;
 	background-repeat: no-repeat;
@@ -2069,7 +2066,7 @@ textarea:focus {
 	font-size: 16px;
 	padding: 20px 0;
 	color: #fff;
-	background-image: url(images/static-top/1.jpg);
+	background-image: url("images/static-top/1.d51e387379b3.jpg");
 	background-size: cover;
 	margin-top: 20px;
 }
@@ -2658,7 +2655,7 @@ textarea:focus {
 /*  2.7 Li's Static Home Banner
 /*----------------------------------------*/
 .li-static-home-image {
-	background-image: url(images/bg-banner/1.jpg);
+	background-image: url("images/bg-banner/1.b01d45878005.jpg");
 	background-size: cover;
 	height: 400px;
 	background-repeat: no-repeat;

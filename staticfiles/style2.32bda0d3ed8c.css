@@ -1468,7 +1468,7 @@ only screen and (min-width: 768px) and (max-width: 991px) {
     content: "\f105";
     position: absolute;
     right: 25px;
-    top: 50;
+    top: 0;
     line-height: 50px;
     font-family: "FontAwesome";
 }

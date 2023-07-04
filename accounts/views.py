@@ -1,8 +1,8 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.password_validation import validate_password
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
@@ -134,6 +134,7 @@ class SignOut(View):
 def reset_password(request):
     return render(request, 'accounts/reset-pw.html')
 
+
 @login_required()
 def accountPage(request):
     orders = Order.objects.filter(user=request.user)
@@ -163,9 +164,6 @@ def register(request):
 
 
         except Exception as err:
-            print(err)
-            for e in err:
-                print(e)
             return JsonResponse({'password_strength':str(err)})
     return JsonResponse({"hey":'hey'})
 
@@ -193,5 +191,43 @@ def AuthPage(request):
     return render (request, 'accounts/auth.html',  {"redirect_page":redirect_page})
 
 
-
+@login_required()
+def editShippingDetail(request):
+    if request.method == "POST":
+        country = request.POST['country']
+        town = request.POST['town']
+        state = request.POST['state']
+        address = request.POST['address']
+        phone = request.POST['phone']
+        apartment = request.POST['apartment']
+        user_acct = Profile.objects.get(email=request.user.email)
+        user_acct.phone_number = phone
+        user_acct.country = country
+        user_acct.state = state
+        user_acct.city = town
+        user_acct.apartment = apartment
+        user_acct.address = address
+        user_acct.save()
+        return JsonResponse({"status":"well received and saved"})
         
+
+@login_required()
+def changePw(request):
+    if request.method == "POST":
+        profile = get_object_or_404(Profile, email=request.user.email)
+        current_password = request.POST['current']
+        new_pw = request.POST['password']
+        new_pw2 = request.POST['password2']
+        user = auth.authenticate(email=profile.email, password=current_password)
+        if not user:
+            return JsonResponse({"pw_incorrect":"incorrect password"})
+        elif not new_pw == new_pw2:
+            return JsonResponse({"pw_match":" passwords do not match"})
+        try:
+            validate_password(new_pw)
+            profile.set_password(new_pw)
+            return JsonResponse({"success":"password changed successfully"})
+        except Exception as err:
+            return JsonResponse({'password_strength':str(err)})
+
+

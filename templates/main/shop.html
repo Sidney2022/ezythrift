@@ -36,22 +36,23 @@
                             </div>
                         </div>
                         <!-- product-select-box start -->
+                        {% if not request.path == '/search' %}
                         <div class="product-select-box">
-                            <form id="sortForm" onchange="exam()"> 
+                            <form id="sortForm" onchange="submit()" >  
                             <div class="product-short">
                                     <p>Sort By:</p>
-                                    <select class="nice-select">
+                                    <select class="nice-select" name="q">
                                         <option value="trending">Relevance</option>
-                                        <option value="sales">Name (A - Z)</option>
-                                        <option value="sales">Name (Z - A)</option>
-                                        <option value="rating">Price (Low &gt; High)</option>
-                                        <option value="date">Rating (Lowest)</option>
-                                        <option value="price-asc">Model (A - Z)</option>
-                                        <option value="price-asc">Model (Z - A)</option>
+                                        <option value="name">Name (A - Z)</option>
+                                        <option value="-name">Name (Z - A)</option>
+                                        <option value="price">Price (Low &gt; High)</option>
+                                        <option value="-price">Price (High &gt; Low)</option>
+                                        {% comment %} <option value="-pr">Rating (Lowest)</option> {% endcomment %}
                                     </select>
                                 </div>
                             </form>
                         </div>
+                        {% endif %}
                         <!-- product-select-box end -->
                     </div>
                     <!-- shop-top-bar end -->
@@ -95,10 +96,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="add-actions">
-                                                        <ul class="add-actions-link">
-                                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
-                                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name"> {{product.slug}}</span></button></li>
-                                                       </ul>
+                                                        {% if user.is_authenticated %}
+                                                        <ul class="add-actions-link" >
+                                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
+                                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
+                                                        </ul>
+                                                        {% else %}
+                                                        <ul class="add-actions-link" >
+                                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
+                                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
+                                                        </ul>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>

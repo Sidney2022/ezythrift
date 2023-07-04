@@ -1740,19 +1740,22 @@ textarea:focus {
 .hb-menu > nav > ul {
 		position: relative;
 }
+.hb-menu .dropdown-holder {
+	text-transform: capitalize;
+}
 .hb-menu nav > ul > li {
 		display: inline-block;
 		position: relative;
-		padding-right: 40px;
+		padding-right: 25px;
 		transition: all 0.3s ease-in-out;
 }
 .hb-menu nav > ul > li > a {
 	display: flex;
 	color: #242424;
 	text-transform: uppercase;
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 35px;
-	font-weight: 500;
+	font-weight: bold;
 	padding: 8px 0;
 }
 .hb-menu-2 nav > ul > li > a {
@@ -1768,7 +1771,7 @@ textarea:focus {
 .hb-menu nav > ul > li:hover > a::after {
 		color: #ffffff;
 }
-.hb-menu nav > ul > li > a::after {
+/* .hb-menu nav > ul > li > a::after {
 	content: "\f107";
 	position: absolute;
 	top: 8px;
@@ -1777,7 +1780,7 @@ textarea:focus {
 	font-size: 18px;
 	transition: all 0.3s ease-in-out;
 	color: #242424;
-}
+} */
 .hb-menu nav > ul > li:nth-child(n+5) > a::after {
 	content: none;
 }

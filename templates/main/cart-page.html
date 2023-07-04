@@ -80,7 +80,7 @@
                         <div class="row">
                             <div class="col-md-5 ml-auto">
                                 <div class="cart-page-total">
-                                    {% comment %} <h2>Cart totals</h2> {% endcomment %}
+                                    <h2>Cart totals</h2>
                                     <ul>
                                         {% comment %} <li>Subtotal <span>$130.00</span></li> {% endcomment %}
                                         <li>Total <span>${{no_items}}</span></li>
@@ -107,6 +107,7 @@
             .then((data) => {
                 console.log('data', data)
                 elem.parentNode.parentNode.innerHTML = ''
+                fetchCartData();
              })
             
         }

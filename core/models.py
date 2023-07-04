@@ -39,8 +39,7 @@ class Category(models.Model):
 
 class Brand(models.Model):
     brand = models.CharField(max_length=255)
-    c = Category.objects.all().first()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=c.id)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     def __str__(self):
         return self.brand
 
@@ -49,6 +48,10 @@ class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub_category = models.CharField(max_length=255)
     slug = models.SlugField(null=True, blank=True)
+
+    def productTypes(self):
+        types = ProductType.objects.filter(sub_category=self.id)
+        return types
 
 
     class Meta:
@@ -136,14 +139,14 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField()
     review = models.TextField()
-    date = models.DateTimeField(auto_now_add=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 class Cart(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     number_of_items = models.PositiveIntegerField(default=1)
-    timestamp =models.DateTimeField(null=True, auto_now_add=True)
+    timestamp =models.DateTimeField( auto_now_add=True)
     def cartNum(self):
         cart = 0
         for item in Cart.objects.filter(user=self.user):
@@ -191,17 +194,30 @@ class Order(models.Model):
             self.badge = 'success'
         super(Order, self).save(*args, **kwargs)
 
+    def items(self):
+        items = OrderItem.objects.filter(order=self.tracking_id)
+        return items
+    
+    def total(self):
+        amt = 0
+        for item in self.items():
+            amt += (item.product.price * item.quantity)
+        return amt
+
 
     class Meta:
         ordering = ['-date']
 
 
 class OrderItem(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, default = None)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, editable=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, editable=False)
+    quantity = models.PositiveIntegerField(default=1, editable=False)
+
+    def amount(self):
+        amt = self.product.price * self.quantity
+        return amt
 
 
         

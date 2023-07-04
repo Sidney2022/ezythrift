@@ -29,7 +29,12 @@ urlpatterns = [
    path('newsletter', views.newsLetter, name='newsletter'),
    path('products/<slug:slug>/review', views.writeReview, name='review'),
 
-   path('place-order', views.createOrder, name="order")
+   path('place-order/<uuid:id>', views.createOrder, name="order"),
+   path("orders/<pk>", views.getOrderItems, name="order-items"),
+   path('users/checkout/payment', views.payment, name='payment'),
+   path('payment-callback/<uuid:id>', views.payment_success, name='payment-callback'),
+   path('mail', views.mail, name='mail'),
+
 
 
 ]

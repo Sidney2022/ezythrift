@@ -4,18 +4,29 @@ from datetime import datetime
 import random
 # from core.models import Cart
 
-
 class Profile(AbstractUser):
     """ custom user model """
+    phone_number = models.CharField(max_length=14, default="None")
+    country = models.CharField(max_length=100, default="None")
+    state = models.CharField(max_length=100, default="None")
+    city = models.CharField(max_length=255, default="None")
+    address = models.CharField(max_length=255, default="None")
+    apartment = models.CharField(max_length=255, default="None")
+
     email = models.EmailField(unique=True)
     # def cart_items(self):
     #     cart = Cart.objects.all()
     #     return cart
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'password']
+    REQUIRED_FIELDS = [ 'username','password']
     def __str__(self):
         return self.email
+    
+   
+    
+   
+   
     
 
 class SocialLink(models.Model):
