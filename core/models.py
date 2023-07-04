@@ -22,16 +22,16 @@ class Category(models.Model):
     def SubCategories(self):
         sub_categories = SubCategory.objects.filter(category=self.id)
         return sub_categories
-    
+
     def productType(self):
         products = [product for product in self.SubCategories()]
-        return 
-    
-    
+        return
+
+
 
     def __str__(self):
         return self.category
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.category)
         super(Category, self).save(*args, **kwargs)
@@ -56,14 +56,14 @@ class SubCategory(models.Model):
 
     class Meta:
         verbose_name_plural = 'Sub categories'
-         
+
     def __str__(self):
         return self.sub_category
-    
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.sub_category)
         super(SubCategory, self).save(*args, **kwargs)
-    
+
 
 class ProductType(models.Model):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
@@ -72,7 +72,7 @@ class ProductType(models.Model):
 
     def __str__(self):
         return self.product_type
-    
+
     def products(self):
         p = Product.objects.filter(product_type=self.product_type)
         return p
@@ -80,7 +80,7 @@ class ProductType(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.product_type)
         super(ProductType, self).save(*args, **kwargs)
-    
+
 
 class Product(models.Model):
     id_product = models.UUIDField(default=uuid.uuid4)
@@ -125,7 +125,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def is_in_stock(self):
         if self.no_stock != 0:
             return True
@@ -181,9 +181,9 @@ class Order(models.Model):
         ("cancelled", "Cancelled")
     ), default= "in progress")
     badge = models.CharField(max_length=30, null=True,  blank=True)
-    
+
     # at checkout, all products in cart are emptied.
-   
+
 
     def save(self, *args, **kwargs):
         if self.status == 'cancelled':
@@ -220,6 +220,6 @@ class OrderItem(models.Model):
         return amt
 
 
-        
+
 
 
