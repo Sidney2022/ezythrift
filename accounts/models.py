@@ -11,12 +11,12 @@ class Profile(AbstractUser):
     # def cart_items(self):
     #     cart = Cart.objects.all()
     #     return cart
-    
+
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'password']
+    REQUIRED_FIELDS = ['username', 'password']
     def __str__(self):
         return self.email
-    
+
 
 class SocialLink(models.Model):
     facebook = models.CharField(max_length=100, blank=True)
@@ -34,7 +34,7 @@ class SocialLink(models.Model):
 
 #     def time_sent(self):
 #         time_active =   datetime.now().date() - self.timestamp.date()
-#         time = float(time_active.total_seconds())   # Return time in secs 
+#         time = float(time_active.total_seconds())   # Return time in secs
 #         if time > 3600*24 :
 #             time /= (3600*24)
 #             msg_time = f"{time} days"
@@ -46,6 +46,6 @@ class SocialLink(models.Model):
 #             msg_time = f"{time} mins"
 #         else:
 #             msg_time = f"{time} secs"
-#         return msg_time 
-    
-    
+#         return msg_time
+
+
