@@ -15,9 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
+EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 
 # Application definition
@@ -137,7 +138,7 @@ LOGIN_URL = '/accounts/auth'
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+# @Thrift124
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -161,7 +162,7 @@ MESSAGE_TAGS = {
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
     'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
-    'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET')
+    'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
 }
 
 if not DEBUG:
@@ -175,10 +176,17 @@ EMAIL_PORT = os.getenv('PORT')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-
-SECURE_HSTS_SECONDS = 3600
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE  = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS =True
-SECURE_HSTS_PRELOAD=True
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_UESR')
+EMAIL_PORT = os.getenv('PORT')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE  = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+# SECURE_HSTS_PRELOAD=True
+ADMIN_MEDIA_PREFIX='/static/admin'
