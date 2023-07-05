@@ -147,7 +147,8 @@ STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -158,14 +159,17 @@ MESSAGE_TAGS = {
     messages.ERROR : 'danger'
 }
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
-    'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
-    'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET')
-}
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
+#     'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
+#     'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
+#     'SECURE':True,
+#     'API_PROXY' : "http://proxy.server:3128"
+# }
 
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# if not DEBUG:
+    # DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
