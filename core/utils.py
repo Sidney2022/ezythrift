@@ -8,19 +8,18 @@ from django.conf import settings
 
 
 
-def SendEmail(subject:str, email_to):
+def SendEmail(subject:str, email_to:str, context:dict, template:str):
     try:
 
         subject = f'subject'
-        # html_message = render_to_string(template, context)
-        # plain_message = strip_tags(html_message)
+        html_message = render_to_string(template, context)
+        plain_message = strip_tags(html_message)
         send_mail(
         subject,
-        # plain_message, 
-        message="",
-        from_email=f"EzyThrift <{settings.DEFAULT_FROM_EMAIL}>",
-        recipient_list=['uwayasidney@gmail.com'], 
-        # html_message=html_message, 
+        plain_message, 
+        f"EzyThrift <{settings.DEFAULT_FROM_EMAIL}>",
+        [email_to], 
+        html_message=html_message, 
     )
         return {"status":200}
     except Exception as e:
