@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.password_validation import validate_password
-from django.shortcuts import render, redirect, get_object_or_404 
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.contrib.auth.models import auth
@@ -38,13 +38,13 @@ class SignIn(View):
         else:
             messages.error(request, 'invalid login credentials')
             return redirect('login')
-            
+
     def get(self, request, *args, **kwargs):
         redirect_page = request.GET.get("next")
         if request.user.is_authenticated:
             messages.warning(request, f'You are already logged in')
             return redirect('homepage')
-        
+
         return render(request, 'accounts/auth.html', {"redirect_page":redirect_page})
 
 
@@ -57,7 +57,7 @@ class UsernameValidationView(View):
         if Profile.objects.filter(username=username).exists():
             return JsonResponse({'username_error': 'sorry username in use,choose another one '}, status=409)
         return JsonResponse({'username_valid': True})
-    
+
 
 class EmailValidationView(View):
     def post(self, request):
@@ -66,7 +66,7 @@ class EmailValidationView(View):
         if Profile.objects.filter(email=email).exists():
             return JsonResponse({'email_error': 'sorry email in use. If this is your account, proceed to login '}, status=409)
         return JsonResponse({'email_valid': True})
-    
+
 
 class PasswordValidationView(View):
     def post(self, request):
@@ -98,7 +98,7 @@ class SignUp(View):
         elif password != password2:
             messages.error(request, 'passwords do not match!')
             return render(request, 'accounts/auth.html', context)
-        
+
         try:
             validate_password(password)
             new_user = Profile.objects.create_user(username=username, email=email, password=password)
@@ -109,15 +109,15 @@ class SignUp(View):
         except Exception as e:
             messages.error(request, str(e))
             return render(request, 'accounts/auth.html', context)
-    
-    
+
+
 
     def get(self, request):
         # f = os.path.join(settings.BASE_DIR, 'currency.json')
         # with open(f, 'r', encoding='utf-8') as file:
         #     json_data = json.load(file)
         #     data = [({'name':k,'value':v['name'], 'symbol':v['symbol']}) for k,v in json_data.items()]
-               
+
         # context = {
         #     'currencies':data,
         # }
@@ -159,10 +159,12 @@ def register(request):
         try:
             validate_password(password)
             new_user = Profile.objects.create_user(username=email, first_name=first_name, last_name=last_name, email=email, password=password)
-            new_user.is_active=False
             new_user.save()
-
-
+            from core.utils import SendEmail
+            msg=f"You are welcome to Ezythrift. we are delighted to have you onboard and we hope you enjoy your shopping experience with us"
+            s = SendEmail("Welcome To EzyThrift", email, {"email_content":msg, "user_name":first_name},"emails/admin.html")
+            user = auth.authenticate(email=email, password=password)
+            auth.login(request, user)
         except Exception as err:
             return JsonResponse({'password_strength':str(err)})
     return JsonResponse({"hey":'hey'})
@@ -179,7 +181,7 @@ def login(request):
         if user:
             auth.login(request, user)
             return JsonResponse({"success":"logged In"})
-        
+
         else:
             return JsonResponse({"auth_error":"invalid login"})
 
@@ -209,7 +211,7 @@ def editShippingDetail(request):
         user_acct.address = address
         user_acct.save()
         return JsonResponse({"status":"well received and saved"})
-        
+
 
 @login_required()
 def changePw(request):

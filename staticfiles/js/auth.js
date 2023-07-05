@@ -26,7 +26,7 @@ LoginForm.addEventListener("submit" , (event) => {
  LoginEmailField.classList.remove("is-invalid")
   fetch("/accounts/signin", {
     body: JSON.stringify({
-      email: LoginEmailField.value, 
+      email: LoginEmailField.value,
       password:LoginpasswordField.value,
       }),
     method: "POST",
@@ -50,7 +50,7 @@ LoginForm.addEventListener("submit" , (event) => {
          window.location = `${next.value}`
        }
      }
-      
+
     });
 })
 
@@ -64,9 +64,9 @@ RegForm.addEventListener("submit" , (event) => {
     body: JSON.stringify({
       first_name:firstNameField.value,
       last_name:lastNameField.value,
-      email: EmailField.value, 
+      email: EmailField.value,
       password:passwordField.value,
-      password2:conFPasswordField.value 
+      password2:conFPasswordField.value
       }),
     method: "POST",
   })
@@ -90,14 +90,14 @@ RegForm.addEventListener("submit" , (event) => {
       passwordField.classList.add("is-invalid")
       msgArea.setAttribute('style', 'display:block')
       msgArea.innerHTML = `passwords do not match `
-     
-      
+
+
 
      }
      else {
-      window.location = "/accounts/verify"
+      window.location = "/"
      }
-      
+
     });
 })
 

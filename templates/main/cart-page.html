@@ -1,6 +1,5 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% load custom_filters %}
 {% block content %}
 <style>
     #product-select {
@@ -51,8 +50,8 @@
                                         </td>
                                         <td class="product-subtotal"><span class="amount">$ </span></td>
                                         <td class="li-product-remove"><a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-times"></i> <span id="product-select" > {{item.product.slug}} </span></a>
-                                            
-                                            
+
+
                                         </td>
 
                                         {%empty%}
@@ -68,7 +67,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="coupon-all">
-                                   
+
                                     <div class="coupon2">
                                         <div class="coupon">
                                             <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
@@ -97,9 +96,9 @@
 
 
     <script>
-       
+
         function deleteCartItem(elem) {
-            
+
             fetch(`{% url 'del-cart-item'  %}?item=${elem.textContent}`, {
                 method:"GET"
             })
@@ -109,10 +108,10 @@
                 elem.parentNode.parentNode.innerHTML = ''
                 fetchCartData();
              })
-            
+
         }
 
 
-       
+
     </script>
     {% endblock  %}
