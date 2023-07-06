@@ -15,9 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 
@@ -135,7 +135,7 @@ USE_I18N = True
 USE_TZ = True
 
 LOGIN_URL = '/accounts/auth'
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
