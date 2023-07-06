@@ -83,7 +83,7 @@ class ProductType(models.Model):
 
 
 class Product(models.Model):
-    id_product = models.UUIDField(default=uuid.uuid4)
+    id_product = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=40)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

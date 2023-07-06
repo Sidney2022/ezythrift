@@ -1,10 +1,35 @@
 from django.contrib import admin
-
+from django.utils.html import format_html
 from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem
+from django.urls import reverse
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name',  'category', 'slug', 'status', 'sub_category', 'product_type', 'no_stock', 'is_in_stock']
+    list_display = ['name',  'category', 'slug', 'status', 'sub_category', 'product_type', 'no_stock', 'is_in_stock', "Edit_button", 'delete_button']
+    search_fields = ['name', 'description']  # Fields to be searched
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        # Custom search logic
+        queryset |= self.model.objects.filter(description__icontains=search_term)  # Add additional search fields as needed
+        return queryset, use_distinct
+    
+    def delete_button(self, obj):
+        delete_url = reverse('admin:%s_%s_delete' % (obj._meta.app_label, obj._meta.model_name), args=[obj.pk])
+        return format_html(
+            '<a style="display: inline-block; padding: 6px 12px;background-color: #dc3545; color: #fff;text-decoration: none;border-radius: 4px;" class="button" href="{}">Delete</a>', delete_url)
+
+    delete_button.short_description = ''
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        qs = qs.only('pk')  # Optimize queryset by selecting only the primary key
+        return qs
+    
+    def Edit_button(self, obj):
+        return format_html('<a style="display: inline-block; padding: 6px 12px;background-color: ; color: #fff;text-decoration: none;border-radius: 4px;"  class="button button-warning" href="{}">Edit</a>', obj.pk)
+
+    Edit_button.short_description = 'Actions'
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['slug',  'category']

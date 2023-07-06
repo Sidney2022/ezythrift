@@ -20,9 +20,15 @@ def marketPlace(request):
     
     paginator = Paginator(products, 20)
     page = paginator.get_page( page_number)
+    items_per_page = 20
+    start_index = (page.number - 1) * items_per_page + 1
+    end_index = min(start_index + items_per_page - 1, page.paginator.count)
+
     context = {
             "products":products,
             'page':page,
+            'start_index': start_index,
+            'end_index': end_index,
             "brands":Brand.objects.all(),
     }
     return render(request, 'main/shop.html', context)
@@ -50,11 +56,18 @@ def marketCategory(request, slug):
         products=products.order_by(query)
                 
     page_number = request.GET.get('page')
-    paginator = Paginator(products, 20)
+    items_per_page = 3
+    paginator = Paginator(products, items_per_page)
     page = paginator.get_page( page_number)
+    start_index = (page.number - 1) * items_per_page + 1
+    end_index = min(start_index + items_per_page - 1, page.paginator.count)
+    print(start_index, end_index)
+
     context = {
             "products":products,
             'page':page,
+            'start_index': start_index,
+            'end_index': end_index,
             "brands":brands
             
 
@@ -296,24 +309,7 @@ def payment(request):
         raise Http404("poor network")
 
 def mail(request):
-    
-    from django.template.loader import render_to_string
-    from django.utils.html import strip_tags
-    from django.core.mail import send_mail
-    from django.conf import settings
-    context = { "email_content":"A Test", "user_name":request.user.first_name}
-    subject = f'A Test'
-    html_message = render_to_string('emails/admin.html', context)
-    plain_message = strip_tags(html_message)
-    try:
-        send_mail(
-                subject,
-                plain_message, 
-                f"Ezythrift <{settings.DEFAULT_FROM_EMAIL}>",
-                [request.user.email,], 
-                html_message=html_message, 
-            )
-        return HttpResponse("done")
-    except Exception as e:
-        print(e)
-        return HttpResponse(f"error: {e}")
+    from core.utils import SendEmail
+    SendEmail("Test", ["ezythrift@gmail.com"])
+    # print(s)
+    return JsonResponse({"ok":""})
