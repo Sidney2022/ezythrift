@@ -32,7 +32,7 @@
                                 <!-- shop-item-filter-list end -->
                             </div>
                             <div class="toolbar-amount">
-                                <span>Showing 1 to 9 of 15</span>
+                                <span>Showing  {{ start_index }}-{{ end_index }} of {{ page.paginator.count }} items</span>
                             </div>
                         </div>
                         <!-- product-select-box start -->
@@ -152,7 +152,7 @@
                                             {% if request.path == '/search' %}
                                             <li class=""><a class="" href="?item={{item}}&page={{ page_num }}">{{ page_num }}</a></li>
                                             {% else %}
-                                            <li class=""><a class="" href="?page=gg{{ page_num }}">{{ page_num }}</a></li>
+                                            <li class=""><a class="" href="?page={{ page_num }}">{{ page_num }}</a></li>
                                             {% endif %}
 
                                             {% endif %}
