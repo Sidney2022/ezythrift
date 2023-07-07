@@ -14,7 +14,7 @@ class Seller(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=255)
-    thumbnail = models.ImageField(upload_to='products')
+    # thumbnail = models.ImageField(upload_to='products')
     slug = models.SlugField(null=True, blank=True, editable=False)
 
     class Meta:
