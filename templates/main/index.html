@@ -78,6 +78,40 @@
         </div>
     </div>
 </div>
+<div class="container mb-4 p-2">
+   <div class="shop-products-wrapper">
+            <div class="tab-content">
+                <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                    <div class="product-area shop-product-area">
+                        <div class="row">
+                            {% for product in products  %}
+                            <div class="col-lg-2 col-md-4 col-sm-6 mt-40">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap">
+                                    <div class="product-image">
+                                        <a href="{% url 'product' product.slug %}">
+                                            <img src="{{product.img1.url}}" alt="Li's Product Image">
+                                        </a>
+                                    </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- single-product-wrap end -->
+                            </div>
+                            {%empty%}
+                            <div class="product_desc">
+                            no categores 
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 <!-- Slider With Banner Area End Here -->
 <!-- Begin Product Area -->
 <div class="product-area pt-60 pb-50">

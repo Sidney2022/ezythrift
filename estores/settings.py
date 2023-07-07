@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 from django.contrib import messages
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,7 +19,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 
@@ -79,11 +81,15 @@ WSGI_APPLICATION = 'estores.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+# Update your existing DATABASES configuration
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -148,8 +154,7 @@ STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -166,6 +171,9 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
 }
 
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -175,17 +183,11 @@ EMAIL_PORT = os.getenv('PORT')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_UESR')
-EMAIL_PORT = os.getenv('PORT')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-SECURE_HSTS_SECONDS = 3600
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE  = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS =True
-SECURE_HSTS_PRELOAD=True
+
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE  = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+# SECURE_HSTS_PRELOAD=True
 ADMIN_MEDIA_PREFIX='/static/admin'

@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import auth
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib import messages
 from django.conf import settings
 from django.views import View
@@ -167,7 +167,7 @@ def register(request):
             auth.login(request, user)
         except Exception as err:
             return JsonResponse({'password_strength':str(err)})
-    return JsonResponse({"hey":'hey'})
+    raise Http404("invalid request")
 
 
 def login(request):
@@ -184,6 +184,7 @@ def login(request):
 
         else:
             return JsonResponse({"auth_error":"invalid login"})
+    raise Http404("invalid request")
 
 
 def AuthPage(request):

@@ -14,7 +14,8 @@ class Seller(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=255)
-    slug = models.SlugField(null=True, blank=True)
+    thumbnail = models.ImageField(upload_to='products')
+    slug = models.SlugField(null=True, blank=True, editable=False)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -22,12 +23,6 @@ class Category(models.Model):
     def SubCategories(self):
         sub_categories = SubCategory.objects.filter(category=self.id)
         return sub_categories
-
-    def productType(self):
-        products = [product for product in self.SubCategories()]
-        return
-
-
 
     def __str__(self):
         return self.category
@@ -121,6 +116,19 @@ class Product(models.Model):
         if not self.discount == 0:
             self.discount_price = self.price - (self.price * (self.discount/100))
         self.slug = slugify(self.name)
+        if self.status == "approved":
+            from core.utils import SendEmail 
+            msg=f"Your product {self.name} has been approved. "
+            SendEmail(
+                "Approval", 
+                self.seller.profile.email, 
+                {
+                    "email_content":msg,
+                    "user_name":self.seller.profile.first_name
+                },
+                "emails/admin.html"
+                )
+           
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
