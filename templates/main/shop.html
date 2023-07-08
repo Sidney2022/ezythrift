@@ -68,7 +68,7 @@
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
                                                     <a href="{% url 'product' product.slug %}">
-                                                        <img src="{{product.img1.url}}" alt="Li's Product Image">
+                                                        <img height="100" src="{{product.img1.url}}" alt="Li's Product Image">
                                                     </a>
                                                     {% if product.is_new %}
                                                     <span class="sticker">New</span>
@@ -92,22 +92,16 @@
                                                         </div>
                                                         <h4><a class="product_name" href="">{{product.name}}</a></h4>
                                                         <div class="price-box">
-                                                            <span class="new-price">${{product.price}}</span>
+                                                            {% if product.discount == 0 %}
+                                                            <span class="new-price new-price-2">N{{product.price}}</span>
+                                                            {% else %}
+                                                            <span class="new-price new-price-2">N{{product.price}}</span>
+                                                            <span class="old-price">N{{product.discount_price}}</span>
+                                                            <span class="discount-percentage">-{{product.discount}}%</span>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
-                                                    <div class="add-actions">
-                                                        {% if user.is_authenticated %}
-                                                        <ul class="add-actions-link" >
-                                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
-                                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
-                                                        </ul>
-                                                        {% else %}
-                                                        <ul class="add-actions-link" >
-                                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
-                                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
-                                                        </ul>
-                                                        {% endif %}
-                                                    </div>
+                                                  
                                                 </div>
                                             </div>
                                             <!-- single-product-wrap end -->
@@ -126,7 +120,8 @@
                             <nav class="paginatoin-area ">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
-                                        <p>Showing 1-12 of 13 item(s)</p>
+                                        <p>Showing  {{ start_index }}-{{ end_index }} of {{ page.paginator.count }} items</p>
+
                                     </div>
 
                                     <div class="col-lg-6 col-md-6">
@@ -238,10 +233,4 @@
 
 
 
-<script >
-    function exam() {
-       // alert("connected")
-    }
-
-</script>
 {% endblock  %}

@@ -28,7 +28,7 @@
                                 <thead>
                                     <tr>
                                         <th class="cart-product-name">Product</th>
-                                        <th class="li-product-thumbnail">images</th>
+                                        <th class="li-product-thumbnail">image</th>
                                         <th class="li-product-price">Unit Price</th>
                                         <th class="li-product-quantity">Quantity</th>
                                         <th class="li-product-subtotal">Total</th>
@@ -37,18 +37,19 @@
                                 </thead>
                                 <tbody>
                                     {% for item  in cart_items  %}
-                                    <tr>
+                                    <tr class="cart-row-item" id="cart-row-{{item.id}}">
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img draggable='false' src="{{item.product.img1.url}}" alt="" width=80></td>
-                                        <td class="li-product-price"><span class="amount">${{item.product.price}}</span></td>
+                                        <td class="li-product-price">N<span id ="product-price" class="amount">{{item.product.price}}</span></td>
                                          <td class="quantity">
                                             <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box"  value="{{item.number_of_items}}" type="text">
-                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                    <div class="inc qtybutton" ><i class="fa fa-angle-up" ></i></div>
+                                                    <input class="cart-plus-minus-box this" id="quantity"  value="{{item.number_of_items}}" type="text">
+                                                    <input id="cart_id"  value="{{item.id}}" type="hidden">
+                                                    <div class="dec qtybutton" id="i-btn"><i class="fa fa-angle-down"></i></div>
+                                                    <div class="inc qtybutton" ><i class="fa fa-angle-up" id="inc-btn" onclick="myTest(this)" ></i></div>
                                             </div>
                                         </td>
-                                        <td class="product-subtotal"><span class="amount">$ </span></td>
+                                        <td class="product-subtotal"><span id="product-total" class="amount">N </span></td>
                                         <td class="li-product-remove"><a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-times"></i> <span id="product-select" > {{item.product.slug}} </span></a>
 
 
@@ -110,8 +111,6 @@
              })
 
         }
-
-
-
+      
     </script>
     {% endblock  %}

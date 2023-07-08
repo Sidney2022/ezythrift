@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem
+from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem, BannerProduct
 from django.urls import reverse
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name',  'category', 'slug', 'status', 'sub_category', 'product_type', 'no_stock', 'is_in_stock', "Edit_button", 'delete_button']
+    list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'is_in_stock', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
 
     def get_search_results(self, request, queryset, search_term):
@@ -49,6 +49,9 @@ class OrderAdmin(admin.ModelAdmin):
 class BrandAdmin(admin.ModelAdmin):
     list_display = ['brand',  'category']
 
+class BannerProductAdmin(admin.ModelAdmin):
+    list_display = ['product',  'role']
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductType, )
 admin.site.register(Seller, )
@@ -61,3 +64,4 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Brand)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(WishList, WishListAdmin)
+admin.site.register(BannerProduct, BannerProductAdmin)

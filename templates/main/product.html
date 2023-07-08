@@ -26,7 +26,7 @@
                             <div class="product-details-left">
                                 <div class="product-details-images slider-navigation-1">
                                     <div class="lg-image">
-                                        <img src="{{product.img1.url}}" alt="product image">
+                                        <img  src="{{product.img1.url}}" alt="product image">
                                     </div>
                                     <div class="lg-image">
                                         <img src="{{product.img2.url}}" alt="product image">
@@ -57,13 +57,15 @@
                             <div class="product-details-view-content sp-sale-content pt-60">
                                 <div class="product-info">
                                     <h2>{{product.name}}</h2>
-                                 
                                     <div class="price-box pt-20">
-                                        <span class="new-price new-price-2">${{product.price}}</span>
+                                        {% if product.discount == 0 %}
+                                        <span class="new-price new-price-2">N{{product.price}}</span>
+                                        {% else %}
+                                        <span class="new-price new-price-2">N{{product.price}}</span>
+                                        <span class="old-price">N{{product.discount_price}}</span>
+                                        <span class="discount-percentage">-{{product.discount}}%</span>
+                                        {% endif %}
                                     </div>
-                                    {% comment %} <div class="countersection">
-                                        <div class="li-countdown product-sale-countdown"></div>
-                                    </div> {% endcomment %}
                                     <div class="product-desc">
                                         <p>
                                             <span>{{product.description}}
@@ -73,15 +75,14 @@
                                     
                                     
                                 </div>
+                                
                                 <div class="product-additional-info pt-25">
                                         
                                         {% if user.is_authenticated %}
                                         <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <span id="prod-name"> {{product.slug}}</span></button>
-                                        {% comment %} <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i></a> {% endcomment %}
                                         <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
                                         {% else %}
                                         <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
-                                        {% comment %} <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i></a> {% endcomment %}
                                         <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
                                         {% endif %}
                                         <div class="product-social-sharing pt-25">
@@ -212,7 +213,7 @@
                                         <div class="single-product-wrap">
                                             <div class="product-image">
                                                 <a href="{% url 'product' item.slug %}">
-                                                    <img src="{{item.img1.url}}" alt="">
+                                                    <img height="200" src="{{item.img1.url}}" alt="">
                                                 </a>
                                                 {% if item.is_new %}
                                                 <span class="sticker">New</span>
@@ -226,7 +227,6 @@
                                                 <div class="product_desc_info">
                                                     <div class="product-review">
                                                         <h5 class="manufacturer">
-                                                            <a href="product-details.html">{{item.brand}}</a>
                                                         </h5>
                                                         <div class="rating-box">
                                                             <ul class="rating">
@@ -238,11 +238,18 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <h4><a class="product_name" href="single-product.html">{{item.name}}</a></h4>
+                                                    <h4><a class="product_name" href="{% url 'product' item.slug %}">{{item.name}}</a></h4>
                                                     <div class="price-box">
-                                                        <span class="new-price">${{item.price}}</span>
+                                                        {% if item.discount == 0 %}
+                                                        <span class="new-price new-price-2">N{{item.price}}</span>
+                                                        {% else %}
+                                                        <span class="new-price new-price-2">N{{item.price}}</span>
+                                                        <span class="old-price">N{{item.discount_price}}</span>
+                                                        <span class="discount-percentage">-{{item.discount}}%</span>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
+                                                
                                                 <div class="add-actions">
                                                     <ul class="add-actions-link">
                                                         <li class="add-cart active"><button onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>

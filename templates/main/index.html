@@ -78,24 +78,31 @@
         </div>
     </div>
 </div>
-<div class="container mb-4 p-2">
+<div class="container my-5 p-2 ">
    <div class="shop-products-wrapper">
             <div class="tab-content">
                 <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
                     <div class="product-area shop-product-area">
+                        <div class="li-section-title">
+                            <h2>Our Categories
+                                {% comment %} <span></span> {% endcomment %}
+                            </h2>
+                            
+                        </div>
                         <div class="row">
-                            {% for product in products  %}
-                            <div class="col-lg-2 col-md-4 col-sm-6 mt-40">
+                            {% for category in product_categories  %}
+                            <div class="col-lg-2 col-md-4 col-sm-4 mt-40">
+                                
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap">
                                     <div class="product-image">
-                                        <a href="{% url 'product' product.slug %}">
-                                            <img src="{{product.img1.url}}" alt="Li's Product Image">
+                                        <a href="{% url 'shop' category.slug %}">
+                                            <img src="{{category.thumbnail.url}}" height="100" alt="{{category.category}}">
                                         </a>
                                     </div>
                                     <div class="product_desc">
                                         <div class="product_desc_info">
-                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                            <h4><a class="product_name" href="{% url 'shop' category.slug %}">{{category.category}}</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +110,7 @@
                             </div>
                             {%empty%}
                             <div class="product_desc">
-                            no categores 
+                            no categories 
                             </div>
                             {% endfor %}
                         </div>
@@ -116,246 +123,71 @@
 <!-- Begin Product Area -->
 <div class="product-area pt-60 pb-50">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="li-product-tab">
-                    <ul class="nav li-product-menu">
-                       <li><a class="active" data-toggle="tab" href="#li-new-product"><span>New Arrivals</span></a></li>
-                       <li><a data-toggle="tab" href="#li-bestseller-product"><span>Bestsellers</span></a></li>
-                    </ul>               
-                </div>
-                <!-- Begin Li's Tab Menu Content Area -->
-            </div>
-        </div>
-        <div class="tab-content">
-            <div id="li-new-product" class="tab-pane active show" role="tabpanel">
-                <div class="row">
-                    <div class="product-active owl-carousel">
-                        {% for product in products %}
-                        {% if product.is_new %}
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="{% url 'product' product.slug %}">
-                                        <img src="{{product.img1.url}}" alt="{{product.name}}">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="shop-left-sidebar.html">{{product.category}}</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">N{{product.price}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        {% if user.is_authenticated %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
-                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
-                                        </ul>
-                                        {% else %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
-                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
-                                        </ul>
+        <div class="shop-products-wrapper">
+            <div class="tab-content">
+                <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                    <div class="product-area shop-product-area ">
+                        <div class="li-section-title">
+                            <h2>Latest Products
+                                {% comment %} <span></span> {% endcomment %}
+                            </h2>
+                            
+                        </div>
+                        <div class="row px-3" >
+                            {% for product in latest_products  %}
+                            <div class="mt-40 ">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap ">
+                                    <div class="product-image ">
+                                        <a href="{% url 'product' product.slug %}">
+                                            <img style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
+                                        </a>
+                                        {% if product.is_new %}
+                                        <span class="sticker">New</span>
                                         {% endif %}
                                     </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div id="li-bestseller-product" class="tab-pane" role="tabpanel">
-                <div class="row">
-                    <div class="product-active owl-carousel">
-                        {% for product in products %}
-                        {% if product.is_new %}
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="{% url 'product' product.slug %}">
-                                        <img src="{{product.img1.url}}" alt="{{product.name}}">
-                                    </a>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="shop-left-sidebar.html">{{product.category}}</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <h5 class="manufacturer">
+                                                    <a href="">{{product.product_type}}s</a>
+                                                </h5>
+                                              
+                                            </div>
+                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                            <div class="price-box">
+                                                {% if product.discount == 0 %}
+                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                {% else %}
+                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                <span class="old-price">N{{product.discount_price}}</span>
+                                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">N{{product.price}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        {% if user.is_authenticated %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
-                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
-                                        </ul>
-                                        {% else %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
-                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
-                                        </ul>
-                                        {% endif %}
+                                      
                                     </div>
                                 </div>
+                                <!-- single-product-wrap end -->
                             </div>
-                            <!-- single-product-wrap end -->
+
+                            {%empty%}
+                            <div class="product_desc">
+
+                            no products 
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endif %}
-                        {% endfor %}
                     </div>
                 </div>
+               
+              
             </div>
-            
         </div>
     </div>
 </div>
 <!-- Product Area End Here -->
-<!-- Begin Li's Static Banner Area -->
-<div class="li-static-banner">
-    <div class="container">
-        <div class="row">
-            <!-- Begin Single Banner Area -->
-            <div class="col-lg-4 col-md-4 text-center">
-                <div class="single-banner">
-                    <a href="#">
-                        <img src="{% static 'images/banner/1_3.jpg' %}" alt="Li's Static Banner">
-                    </a>
-                </div>
-            </div>
-            <!-- Single Banner Area End Here -->
-            <!-- Begin Single Banner Area -->
-            <div class="col-lg-4 col-md-4 text-center pt-xs-30">
-                <div class="single-banner">
-                    <a href="#">
-                        <img src="{% static 'images/banner/1_4.jpg' %}" alt="Li's Static Banner">
-                    </a>
-                </div>
-            </div>
-            <!-- Single Banner Area End Here -->
-            <!-- Begin Single Banner Area -->
-            <div class="col-lg-4 col-md-4 text-center pt-xs-30">
-                <div class="single-banner">
-                    <a href="#">
-                        <img src="{% static 'images/banner/1_5.jpg' %}" alt="Li's Static Banner">
-                    </a>
-                </div>
-            </div>
-            <!-- Single Banner Area End Here -->
-        </div>
-    </div>
-</div>
-<!-- Li's Static Banner Area End Here -->
-<!-- Begin Li's Laptop Product Area -->
-<section class="product-area li-laptop-product pt-60 pb-45">
-    <div class="container">
-        <div class="row">
-            <!-- Begin Li's Section Area -->
-            <div class="col-lg-12">
-                <div class="li-section-title">
-                    <h2>
-                        <span>HOT</span>
-                    </h2>
-                    
-                </div>
-                <div class="row">
-                    <div class="product-active owl-carousel">
-                        {% for product in products %}
-                        {% if product.is_hot %}
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="{% url 'product' product.slug %}">
-                                        <img src="{{product.img1.url}}" alt="{{product.name}}">
-                                    </a>
-                                    <span class="sticker">Hot</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="shop-left-sidebar.html">{{product.category}}</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">N{{product.price}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        {% if user.is_authenticated %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
-                                            <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                        </ul>
-                                        {% else %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button style="border:none; cursor:pointer" onclick="loginRequiredAction(this)">Add to cart </button></li>
-                                            <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        {% endif %}
-                        {% empty %}
-                        No products to show 
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <!-- Li's Section Area End Here -->
-        </div>
-    </div>
-</section>
-<!-- Li's Laptop Product Area End Here -->
+
 
 <!-- Begin Li's Static Home Area -->
 <div class="li-static-home">
@@ -385,76 +217,71 @@
 </div>
 <!-- Li's Static Home Area End Here -->
 <!-- Begin Li's Trending Product Area -->
-<section class="product-area li-laptop-product pt-60 pb-45">
+<div class="product-area pt-60 pb-50">
     <div class="container">
-        <div class="row">
-            <!-- Begin Li's Section Area -->
-            <div class="col-lg-12">
-                <div class="li-section-title">
-                    <h2>
-                        <span>Trending</span>
-                    </h2>
-                    
-                </div>
-                <div class="row">
-                    <div class="product-active owl-carousel">
-                        {% for product in products %}
-                        {% if product.is_trending %}
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="{% url 'product' product.slug %}">
-                                        <img src="{{product.img1.url}}" alt="{{product.name}}">
-                                    </a>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="shop-left-sidebar.html">{{product.category}}</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">N{{product.price}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        {% if user.is_authenticated %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></li>
-                                            <li> <button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name">{{product.slug}}</span></button></li>
-                                        </ul>
-                                        {% else %}
-                                        <ul class="add-actions-link" >
-                                            <li class="add-cart "><button class="btn" style="border:none;  cursor:pointer" onclick="loginRequiredAction()">Add to cart</li>
-                                            <li> <button onclick="loginRequiredAction()"><i class="fa fa-heart-o"></i> </button></li>
-                                        </ul>
+        <div class="shop-products-wrapper">
+            <div class="tab-content">
+                <div id="grid-view" >
+                    <div class="product-area shop-product-area ">
+                        <div class="li-section-title">
+                            <h2>Trending Products
+                                {% comment %} <span></span> {% endcomment %}
+                            </h2>
+                            
+                        </div>
+                        <div class="row px-3" >
+                            {% for product in hot_products  %}
+                            <div class="mt-40 ">
+                                <!-- single-product-wrap start -->
+                                <div class="single-product-wrap ">
+                                    <div class="product-image ">
+                                        <a href="{% url 'product' product.slug %}">
+                                            <img style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
+                                        </a>
+                                        {% if product.is_new %}
+                                        <span class="sticker">New</span>
                                         {% endif %}
                                     </div>
+                                    <div class="product_desc">
+                                        <div class="product_desc_info">
+                                            <div class="product-review">
+                                                <h5 class="manufacturer">
+                                                    <a href="">{{product.product_type}}s</a>
+                                                </h5>
+                                              
+                                            </div>
+                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                            <div class="price-box">
+                                                {% if product.discount == 0 %}
+                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                {% else %}
+                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                <span class="old-price">N{{product.discount_price}}</span>
+                                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                      
+                                    </div>
                                 </div>
+                                <!-- single-product-wrap end -->
                             </div>
-                            <!-- single-product-wrap end -->
+
+                            {%empty%}
+                            <div class="product_desc">
+
+                            no products 
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endif %}
-                        {% endfor %}
                     </div>
                 </div>
+               
+              
             </div>
-            <!-- Li's Section Area End Here -->
         </div>
     </div>
-</section>
+</div>
 <!-- Li's Trending Product Area End Here -->
 
 <script >

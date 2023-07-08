@@ -1,4 +1,4 @@
-from .models import Product, Category, SubCategory, ProductType, Cart, WishList, NewsLetter, Review, Brand, Order,OrderItem
+from .models import Product, Category, SubCategory, ProductType, Cart, WishList, NewsLetter, Review, Brand, Order,OrderItem, BannerProduct
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
@@ -11,7 +11,14 @@ import requests
 class HomePage(View):
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
-        return render(request, 'main/index.html', {"products":products})
+        context={
+            "latest_products":products.order_by('-date')[:15],
+            "hot_products":products.order_by('-no_sold')[:15],
+            "products":products,
+            "banners":BannerProduct.objects.all(),
+            
+        }
+        return render(request, 'main/index.html', context)
 
 
 def marketPlace(request):
@@ -36,7 +43,6 @@ def marketPlace(request):
 
 def marketCategory(request, slug):
     query=request.GET.get("q")
-    print(f'query is {query}')
     filter_category = Category.objects.filter(slug=slug).first()
     if filter_category:
         products = Product.objects.filter(category=filter_category, status='approved')
@@ -47,7 +53,6 @@ def marketCategory(request, slug):
         products = Product.objects.filter(sub_category=filter_category, status='approved')
     elif ProductType.objects.filter(slug=slug).exists() :
         filter_category = ProductType.objects.filter(slug=slug).first()
-        print(filter_category)          
         brands = Brand.objects.filter(category=filter_category.sub_category.category)
         products = Product.objects.filter(product_type=filter_category, status='approved')
     else:
@@ -56,12 +61,11 @@ def marketCategory(request, slug):
         products=products.order_by(query)
                 
     page_number = request.GET.get('page')
-    items_per_page = 3
+    items_per_page = 1
     paginator = Paginator(products, items_per_page)
     page = paginator.get_page( page_number)
     start_index = (page.number - 1) * items_per_page + 1
     end_index = min(start_index + items_per_page - 1, page.paginator.count)
-    print(start_index, end_index)
 
     context = {
             "products":products,
@@ -109,7 +113,20 @@ def addCartItem(request):
             "quantity":item.number_of_items,
             "slug":item.product.slug
         })
-    
+
+
+@login_required()
+def UpdateCartItem(request, id):
+    quantity = request.GET.get('quantity')
+    print(quantity, id)
+    item  = get_object_or_404(Cart, id=id)
+    print(item)
+    item.number_of_items += int(quantity)
+    item.save()
+    return JsonResponse({
+            "info":"cart item updated successfully"
+        })
+
 
 @login_required()
 def addWishListItem(request):
@@ -138,8 +155,8 @@ def getCartItems(request):
     total_amt = 0
     for item in cart_items:
         total_amt += item.product.price
-        number_of_items += item.number_of_items
-    return JsonResponse({"cart":items, 'number_of_items':number_of_items, "total_amt":total_amt})
+    #     number_of_items += item.number_of_items
+    return JsonResponse({"cart":items, 'number_of_items':len(cart_items), "total_amt":total_amt})
 
 
 @login_required()
@@ -199,7 +216,6 @@ def aboutUs(request):
 
 def searchProducts(request):
     search_str = request.GET['item']
-    print(search_str)
     products = Product.objects.filter( name__icontains=search_str, status='approved' )
     page_number = request.GET.get('page')
     paginator = Paginator(products, 20)
@@ -279,7 +295,6 @@ def payment(request):
             order_amt += (item.number_of_items * item.product.price) 
         # # Set up the API endpoint and headers
         order = Order.objects.create(user=request.user)
-        print(order.tracking_id)
         order.save()
         url = 'https://api.paystack.co/transaction/initialize'
         headers = {
@@ -300,16 +315,15 @@ def payment(request):
         if response.status_code == 200:
             data = response.json()
             authorization_url = data['data']['authorization_url']
-            print(authorization_url)
             return redirect(authorization_url)
         else:
             # Handle the error response
             return HttpResponse(response.text, status=response.status_code)
     except Exception as e:
+        print(e)
         raise Http404("poor network")
 
 def mail(request):
     from core.utils import SendEmail
     SendEmail("Test", ["ezythrift@gmail.com"])
-    # print(s)
     return JsonResponse({"ok":""})

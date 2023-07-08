@@ -17,11 +17,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
-
 
 # Application definition
 
@@ -87,6 +86,7 @@ WSGI_APPLICATION = 'estores.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
 # Update your existing DATABASES configuration
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
@@ -154,7 +154,8 @@ STATICFILES_STORAGE="whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -165,14 +166,14 @@ MESSAGE_TAGS = {
     messages.ERROR : 'danger'
 }
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
-    'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
-    'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
-}
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
+#     'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
+#     'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
+# }
 
-if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# if not DEBUG:
+#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")

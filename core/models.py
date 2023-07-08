@@ -14,7 +14,7 @@ class Seller(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=255)
-    # thumbnail = models.ImageField(upload_to='products')
+    thumbnail = models.ImageField(upload_to='products', default="cat.png")
     slug = models.SlugField(null=True, blank=True, editable=False)
 
     class Meta:
@@ -42,7 +42,7 @@ class Brand(models.Model):
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub_category = models.CharField(max_length=255)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, editable=False)
 
     def productTypes(self):
         types = ProductType.objects.filter(sub_category=self.id)
@@ -63,7 +63,7 @@ class SubCategory(models.Model):
 class ProductType(models.Model):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     product_type = models.CharField(max_length=255)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, editable=False)
 
     def __str__(self):
         return self.product_type
@@ -105,7 +105,7 @@ class Product(models.Model):
     ))
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, editable=False)
     no_sold =models.PositiveIntegerField(default=0) #for bestseller feature
 
     def reviews(self):
@@ -228,6 +228,14 @@ class OrderItem(models.Model):
         return amt
 
 
-
+class BannerProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=(
+        ("main","Main"),
+        ("side", "Side"),
+        ("side", "Side"),
+        ("bottom", "bottom")
+    ))
+    
 
 

@@ -20,6 +20,7 @@
         </div>
         <div class="row">
             <div class="col-lg-6 col-12">
+                {% if user.is_billing_address == True %}
                 <div>
                     <h4>Your delivery address is currently set to 
                     </h4>
@@ -45,7 +46,15 @@
                         </div>
                     </div> {% endcomment %}
                 </div>
+                {% else %}
+                <div>
+                <h4 class="my-4">Your delivery address has not been set. Add Delivery address to continue</h4>
+
+                <a class="btn btn-info" href="{% url 'account' %}" > Set billing info </a>
+                </div>
+                {% endif %}
             </div>
+            
             <div class="col-lg-6 col-12">
                 <div class="your-order">
                     <h3>Your order</h3>
@@ -66,10 +75,7 @@
                                 {% endfor %}
                             </tbody>
                             <tfoot>
-                                <tr class="cart-subtotal">
-                                    <th>Cart Subtotal</th>
-                                    <td><span class="amount">£</span></td>
-                                </tr>
+                                
                                 <tr class="order-total">
                                     <th>Grand Total</th>
                                     <td><strong><span class="amount">£{{order_amt}}</span></strong></td>
@@ -82,7 +88,11 @@
                             
                             <div class="order-button-payment">
                                 {% comment %} <input value="Place order" type="submit"> {% endcomment %}
+                                {% if user.is_billing_address == True and order_amt != 0 %}
                                 <a class="btn btn-success" href="{% url 'payment' %}" > Pay Now </a>
+                                
+                                {% endif %}
+
                                 {% comment %} <button  class="btn btn-dark" onclick="payWithPaystack()"> Pay Now</button> {% endcomment %}
                             </div>
                         </div>

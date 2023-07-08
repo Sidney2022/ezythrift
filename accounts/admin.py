@@ -6,7 +6,7 @@ from .models import Profile
 
 class ProfileAdmin(UserAdmin):
     model = Profile
-    list_display = [ 'username', 'email', 'first_name', 'last_name', 'is_staff',  'last_login']
+    list_display = [ 'username', 'email', 'first_name', 'last_name', 'is_staff',  'last_login', 'is_billing_address']
     fieldsets = UserAdmin.fieldsets + (
         ('Additional Info', {'fields': ( 'country', 'state', 'city', 'address', 'apartment', 'phone_number')}),
     )

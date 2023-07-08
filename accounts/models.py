@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from datetime import datetime
 import random
-# from core.models import Cart
+
 
 class Profile(AbstractUser):
     """ custom user model """
@@ -14,14 +14,18 @@ class Profile(AbstractUser):
     apartment = models.CharField(max_length=255)
 
     email = models.EmailField(unique=True)
-    # def cart_items(self):
-    #     cart = Cart.objects.all()
-    #     return cart
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'password']
     def __str__(self):
         return self.email
+    
+    def is_billing_address(self):
+        print(self.phone_number, self.address)
+        if self.phone_number !='' and self.country != "" and self.state !='' and self.city !='' and self.address != "" :
+            return True
+        else:
+            return False
 
 
 class SocialLink(models.Model):

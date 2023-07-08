@@ -20,6 +20,7 @@ urlpatterns = [
    path('products/<slug:slug>', views.getProduct, name='product'),
 
    path('users/add-to-cart', views.addCartItem, name='add-cart'),
+   path('users/update-cart/<id>', views.UpdateCartItem, name='update-cart'),
    path('users/add-to-wishlist', views.addWishListItem, name='add-wishlist'),
 
    path('search', views.searchProducts, name='search'),

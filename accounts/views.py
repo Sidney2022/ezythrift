@@ -162,9 +162,10 @@ def register(request):
             new_user.save()
             from core.utils import SendEmail
             msg=f"You are welcome to Ezythrift. we are delighted to have you onboard and we hope you enjoy your shopping experience with us"
-            s = SendEmail("Welcome To EzyThrift", email, {"email_content":msg, "user_name":first_name},"emails/admin.html")
+            # SendEmail("Welcome To EzyThrift", email, {"email_content":msg, "user_name":first_name},"emails/admin.html")
             user = auth.authenticate(email=email, password=password)
             auth.login(request, user)
+            return JsonResponse({"success":"registration was successful"})
         except Exception as err:
             return JsonResponse({'password_strength':str(err)})
     raise Http404("invalid request")
