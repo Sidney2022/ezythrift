@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 from django.contrib import messages
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -144,7 +144,7 @@ LOGIN_URL = '/accounts/auth'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
-STATIC_URL = 'https://ezystore-staticss.netlify.app'
+STATIC_URL = 'https://ezystore-staticss.netlify.app/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
