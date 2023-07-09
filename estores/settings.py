@@ -87,14 +87,22 @@ WSGI_APPLICATION = 'estores.wsgi.application'
 # }
 
 # Update your existing DATABASES configuration
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+# }
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': "django.db.backends.postgresql_psycopg2",
+        'NAME': os.getenv("PGDATABASE"),
+        'USER': os.getenv("PGUSER"),
+        'PASSWORD': os.getenv("PGPASSWORD"),
+        'HOST': os.getenv("PGHOST"),
+        'PORT': os.getenv("PGPORT"),
+    }
 }
-
 AUTHENTICATION_BACKENDS = [
         'accounts.backends.EmailBackend',
         'django.contrib.auth.backends.ModelBackend',
-        # 'rest_framework.authentication.TokenAuthentication',
 
         ]
 
