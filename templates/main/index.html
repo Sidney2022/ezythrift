@@ -91,13 +91,13 @@
                         </div>
                         <div class="row">
                             {% for category in product_categories  %}
-                            <div class="col-lg-2 col-md-4 col-sm-4 mt-40">
+                            <div class=" col-2 mt-40">
                                 
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap">
                                     <div class="product-image">
                                         <a href="{% url 'shop' category.slug %}">
-                                            <img src="{{category.thumbnail.url}}" height="100" alt="{{category.category}}">
+                                            <img src="{{category.thumbnail.url}}"  height="70" alt="{{category.category}}">
                                         </a>
                                     </div>
                                     <div class="product_desc">
@@ -135,12 +135,12 @@
                         </div>
                         <div class="row px-3" >
                             {% for product in latest_products  %}
-                            <div class="mt-40 ">
+                            <div class="  mt-40 ">
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap ">
                                     <div class="product-image ">
                                         <a href="{% url 'product' product.slug %}">
-                                            <img style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
+                                            <img width="" style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
                                         </a>
                                         {% if product.is_new %}
                                         <span class="sticker">New</span>
@@ -159,8 +159,8 @@
                                                 {% if product.discount == 0 %}
                                                 <span class="new-price new-price-2">N{{product.price}}</span>
                                                 {% else %}
-                                                <span class="new-price new-price-2">N{{product.price}}</span>
-                                                <span class="old-price">N{{product.discount_price}}</span>
+                                                <span class="new-price new-price-2">N{{product.discount_price}}</span>
+                                                <span class="old-price">N{{product.price}}</span>
                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                 {% endif %}
                                             </div>
