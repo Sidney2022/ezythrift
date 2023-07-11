@@ -145,9 +145,8 @@ LOGIN_URL = '/accounts/auth'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
 STATIC_URL = 'static/'
-STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
-# STATIC_URL = 'http://localhost:5500/static/'
+STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
 
@@ -262,38 +261,29 @@ JAZZMIN_SETTINGS = {
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
     "order_with_respect_to": ["auth", "books", "products.name"],
 
-    # Custom links to append to app groups, keyed on app name
-    "custom_links": {
-        "core": [{
-            "name": "Send Email ", 
-            "url": "send_mail", 
-            "icon": "fa fa-email",
-            "permissions": ["core.sendEmail"]
-        }]
-    },
-
+   
     # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
     # for the full list of 5.13.0 free icon classes
     "icons": {
-        "auth": "fa fa-users-cog",
-        "accounts.Profile": "fa fa-user",
-        "core.Seller": "fa fa-user",
-        "core.WishList": "fa fa-heart",
-        "core.Cart": "fa fa-shopping-cart",
-        "core.Newsletter": "fa fa-mail-bulk",
-        "auth.Group": "fa fa-users",
-        "core.Product":"fa fa-shopping-bag",
-        "core.BannerProduct":"fa fa-shopping-bag",
-        "core.Order":"fa fa-cart-plus",
-        "core.OrderItem":"fa fa-luggage-cart",
-        "core.Category":"fa fa-layer-group",
-        "core.ProductType":"fa fa-layer-group",
-        "core.SubCategory":"fa fa-layer-group",
-        "core.Brand":"fa fa-building",
-        "core.Review":"fa fa-edit",
+        "auth": "fas fa-users-cog",
+        "accounts.Profile": "fas fa-user",
+        "core.Seller": "fas fa-user",
+        "core.WishList": "fas fa-heart",
+        "core.Cart": "fas fa-shopping-cart",
+        "core.Newsletter": "fas fa-mail-bulk",
+        "auth.Group": "fas fa-users",
+        "core.Product":"fas fa-shopping-bag",
+        "core.BannerProduct":"fas fa-shopping-bag",
+        "core.Order":"fas fa-cart-plus",
+        "core.OrderItem":"fas fa-luggage-cart",
+        "core.Category":"fas fa-layer-group",
+        "core.ProductType":"fas fa-layer-group",
+        "core.SubCategory":"fas fa-layer-group",
+        "core.Brand":"fas fa-building",
+        "core.Review":"fas fa-edit",
     },
     # Icons that are used when one is not manually specified
-    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_parents": "fa fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
 
     #################
