@@ -27,7 +27,7 @@ class ProductAdmin(admin.ModelAdmin):
         return qs
     
     def Edit_button(self, obj):
-        return format_html('<a style="display: inline-block; padding: 6px 12px;background-color: ; color: #fff;text-decoration: none;border-radius: 4px;"  class="button button-warning" href="{}">Edit</a>', obj.pk)
+        return format_html('<a style="display: inline-block; padding: 6px 12px;background-color: teal; color: #fff;text-decoration: none;border-radius: 4px;"  class="button btn-warning" href="{}">Edit</a>', obj.pk)
 
     Edit_button.short_description = 'Actions'
 
