@@ -144,14 +144,10 @@ LOGIN_URL = '/accounts/auth'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
-# STATIC_URL = 'https://ezystore-staticss.netlify.app/static/'
-STATIC_URL = 'http://localhost:5500/static/'
-
+STATIC_URL = 'https://ezystore-staticss.netlify.app/static/'
 
 MEDIA_URL = 'media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
-MEDIA_ROOT = 'C:/Users/USER/desktop/proj/estores/media/'
+MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -181,7 +177,6 @@ DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_UESR')
 EMAIL_PORT = os.getenv('PORT')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# STATIC_ROOT=os.path.join(BASE_DIR, 'static')
 
 # SECURE_HSTS_SECONDS = 3600
 # SECURE_SSL_REDIRECT = True
