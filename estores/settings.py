@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', 'localhost:8000']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 # Application definition
@@ -144,7 +144,9 @@ LOGIN_URL = '/accounts/auth'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
-STATIC_URL = 'https://ezystore-staticss.netlify.app/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'),]
 # STATIC_URL = 'http://localhost:5500/static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'

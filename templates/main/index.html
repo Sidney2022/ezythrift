@@ -239,7 +239,7 @@
                                             <img style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
                                         </a>
                                         {% if product.is_new %}
-                                        <span class="sticker">New</span>
+                                        <span class="sticker">Hot</span>
                                         {% endif %}
                                     </div>
                                     <div class="product_desc">
@@ -255,8 +255,8 @@
                                                 {% if product.discount == 0 %}
                                                 <span class="new-price new-price-2">N{{product.price}}</span>
                                                 {% else %}
-                                                <span class="new-price new-price-2">N{{product.price}}</span>
-                                                <span class="old-price">N{{product.discount_price}}</span>
+                                                <span class="new-price new-price-2">N{{product.discount_price}}</span>
+                                                <span class="old-price">N{{product.price}}</span>
                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                 {% endif %}
                                             </div>
