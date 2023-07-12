@@ -112,7 +112,7 @@ class Product(models.Model):
         reviews = Review.objects.filter(product=self.id)
         return reviews
 
-    def save(self,request, obj, form, change, *args, **kwargs):
+    def save(self, *args, **kwargs):
         if not self.discount == 0:
             self.discount_price = self.price - (self.price * (self.discount/100))
         self.slug = slugify(self.name)
