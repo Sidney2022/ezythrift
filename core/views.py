@@ -20,8 +20,8 @@ class HomePage(View):
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
         context={
-            "latest_products":products.order_by('-date')[:15],
-            "hot_products":products.order_by('-no_sold')[:15],
+            "latest_products":products.order_by('-date')[:20],
+            "hot_products":products.order_by('-no_sold')[:20],
             "products":products,
             "banners":BannerProduct.objects.all(),
             
