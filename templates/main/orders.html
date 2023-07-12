@@ -43,9 +43,9 @@
                                     <tr>
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img src="{{item.product.img1.url}}" width=80 alt=""></td>
-                                        <td class="li-product-price"><span class="amount">N{{item.product.price}}</span></td>
+                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.price}}</span></td>
                                         <td class="li-product-price"><span class="amount">{{item.quantity}}</span></td>
-                                        <td class="li-product-"><a id="del-cart" style="cursor:pointer" >N{{item.amount}}</a>
+                                        <td class="li-product-"><a id="del-cart" style="cursor:pointer" >&#8358;{{item.amount}}</a>
                                             {%empty%}
                                             <td colspan="6">No items in wishlist</td>
                                     </tr>
@@ -59,7 +59,7 @@
                 <div class="col-md-5 ml-auto">
                     <div class="cart-page-total">
                         <ul>
-                            <li>Total <span>N{{order.total}}  </span></li>
+                            <li>Total <span>&#8358;{{order.total}}  </span></li>
                         </ul>
                     </div>
                 </div>

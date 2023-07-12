@@ -7,6 +7,14 @@ from django.db.models import Q
 from django.views import View
 import requests
 
+def checkSort(query, products):
+    if query:
+        try:
+            products = products.order_by(query)
+        except Exception as e:
+            pass 
+    return products
+   
 
 class HomePage(View):
     def get(self, request, *args, **kwargs):
@@ -22,12 +30,12 @@ class HomePage(View):
 
 
 def marketPlace(request):
+    query=request.GET.get("sort")
     products = Product.objects.filter(status='approved')
     page_number = request.GET.get('page')
-    
-    paginator = Paginator(products, 20)
-    page = paginator.get_page( page_number)
     items_per_page = 20
+    paginator = Paginator(checkSort(query, products), items_per_page)
+    page = paginator.get_page( page_number)
     start_index = (page.number - 1) * items_per_page + 1
     end_index = min(start_index + items_per_page - 1, page.paginator.count)
 
@@ -37,12 +45,13 @@ def marketPlace(request):
             'start_index': start_index,
             'end_index': end_index,
             "brands":Brand.objects.all(),
+            "sort_query":query
     }
     return render(request, 'main/shop.html', context)
 
 
 def marketCategory(request, slug):
-    query=request.GET.get("q")
+    query=request.GET.get("sort")
     filter_category = Category.objects.filter(slug=slug).first()
     if filter_category:
         products = Product.objects.filter(category=filter_category, status='approved')
@@ -57,12 +66,10 @@ def marketCategory(request, slug):
         products = Product.objects.filter(product_type=filter_category, status='approved')
     else:
         raise Http404("invalid category")
-    if query:
-        products=products.order_by(query)
                 
     page_number = request.GET.get('page')
-    items_per_page = 1
-    paginator = Paginator(products, items_per_page)
+    items_per_page = 20
+    paginator = Paginator(checkSort(query, products), items_per_page)
     page = paginator.get_page( page_number)
     start_index = (page.number - 1) * items_per_page + 1
     end_index = min(start_index + items_per_page - 1, page.paginator.count)
@@ -72,7 +79,8 @@ def marketCategory(request, slug):
             'page':page,
             'start_index': start_index,
             'end_index': end_index,
-            "brands":brands
+            "brands":brands,
+            "sort_query":query
             
 
     }
@@ -216,15 +224,23 @@ def aboutUs(request):
 
 def searchProducts(request):
     search_str = request.GET['item']
+    sort_query = request.GET['sort']
     products = Product.objects.filter( name__icontains=search_str, status='approved' )
     page_number = request.GET.get('page')
-    paginator = Paginator(products, 20)
+    items_per_page = 20
+    paginator = Paginator(checkSort(sort_query, products), items_per_page)
     page = paginator.get_page( page_number)
+    start_index = (page.number - 1) * items_per_page + 1
+    end_index = min(start_index + items_per_page - 1, page.paginator.count)
     context = {
             "products":products,
             'page':page,
             "item":search_str,
-            "brands":Brand.objects.all()
+            "brands":Brand.objects.all(),
+            "sort_query":sort_query,
+            'start_index': start_index,
+            'end_index': end_index,
+            "item":search_str
     }
     return render(request, 'main/shop.html', context)
 

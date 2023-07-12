@@ -40,32 +40,16 @@
         <link rel="stylesheet" href="{% static 'css/helper.css' %}">
         <!-- Main Style CSS -->
         <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="stylesheet" href="{% static 'custom.css' %}">
+
         <link rel="stylesheet" href="{% static 'style2.css' %}">
         <!-- Responsive CSS -->
         <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
         <!-- Modernizr js -->
         <script src="{% static 'js/vendor/modernizr-2.8.3.min.js' %}"></script>
-        <style>
-            button{
-                cursor:pointer
-            }
-            #prod-name {
-                display:none
-            }
-            <style>
-                #product-to-add{
-                    display:none
-                }
-                .add-actions-link button, .add-cart button {
-                    border:none;
-                    background:transparent;
-                    color:#333
-                }
-                .product-additional-info button {
-
-                }
-            </style>
+       
 </head>
+
 <body>
     <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -141,6 +125,7 @@
                                 <form action="{% url 'search' %}" class="hm-searchbox">
                                   {% comment %} {% csrf_token %} {% endcomment %}
                                     <input name="item" type="text" placeholder="Enter your search key ..." required>
+                                    <input name="sort" type="hidden" value="{{sort_query}}" required>
                                     <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                                 </form>
                                 <!-- Header Middle Searchbox Area End Here -->
@@ -467,7 +452,7 @@
                 .then((data) => {
                 console.log("data", data);
                     cartElem.innerHTML = `
-                    £${data['total_amt']}
+                    &#8358;${data['total_amt']}
                     <span class="cart-item-count">${data['number_of_items']}</span>`
                     
                     data.cart.forEach(entry => {

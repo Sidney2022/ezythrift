@@ -5,7 +5,7 @@ from django.urls import reverse
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'is_in_stock', "Edit_button", 'delete_button']
+    list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
 
     def get_search_results(self, request, queryset, search_term):

@@ -135,7 +135,7 @@
                         </div>
                         <div class="row px-3" >
                             {% for product in latest_products  %}
-                            <div class="  mt-40 ">
+                            <div  id="prod-wrapper-index" class="mt-5 p-3">
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap ">
                                     <div class="product-image ">
@@ -157,10 +157,10 @@
                                             <h4><a class="product_name" href="">{{product.name}}</a></h4>
                                             <div class="price-box">
                                                 {% if product.discount == 0 %}
-                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                <span class="new-price new-price-2">&#8358;{{product.price}}</span>
                                                 {% else %}
-                                                <span class="new-price new-price-2">N{{product.discount_price}}</span>
-                                                <span class="old-price">N{{product.price}}</span>
+                                                <span class="new-price new-price-2">&#8358;{{product.discount_price}}</span>
+                                                <span class="old-price">&#8358;{{product.price}}</span>
                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                 {% endif %}
                                             </div>
@@ -207,7 +207,7 @@
                         <span> $1209.00</span>
                     </p>
                     <div class="default-btn">
-                        <a href="{% url 'market' %}" class="links">Shopping Now</a>
+                        <a href="{% url 'market' %}" class="links">Start Shopping Now</a>
                     </div>
                 </div>
                 <!-- Li's Static Home Content Area End Here -->
@@ -231,15 +231,15 @@
                         </div>
                         <div class="row px-3" >
                             {% for product in hot_products  %}
-                            <div class="mt-40 ">
+                            <div  id="prod-wrapper-index" class="mt-5 p-3">
                                 <!-- single-product-wrap start -->
                                 <div class="single-product-wrap ">
                                     <div class="product-image ">
                                         <a href="{% url 'product' product.slug %}">
-                                            <img style ="max-width:200px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
+                                            <img width="" style ="max-width:150px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
                                         </a>
                                         {% if product.is_new %}
-                                        <span class="sticker">Hot</span>
+                                        <span class="sticker">New</span>
                                         {% endif %}
                                     </div>
                                     <div class="product_desc">
@@ -253,10 +253,10 @@
                                             <h4><a class="product_name" href="">{{product.name}}</a></h4>
                                             <div class="price-box">
                                                 {% if product.discount == 0 %}
-                                                <span class="new-price new-price-2">N{{product.price}}</span>
+                                                <span class="new-price new-price-2">&#8358;{{product.price}}</span>
                                                 {% else %}
-                                                <span class="new-price new-price-2">N{{product.discount_price}}</span>
-                                                <span class="old-price">N{{product.price}}</span>
+                                                <span class="new-price new-price-2">&#8358;{{product.discount_price}}</span>
+                                                <span class="old-price">&#8358;{{product.price}}</span>
                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                 {% endif %}
                                             </div>

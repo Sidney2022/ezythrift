@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', '*']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 # Application definition
@@ -149,6 +149,7 @@ STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
+# MEDIA_ROOT = 'C:/Users/USER/desktop/proj/estores/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -185,12 +186,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # SESSION_COOKIE_SECURE = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS =True
 # SECURE_HSTS_PRELOAD=True
+
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "EzyThrift Admin",
 
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
-    "site_header": "Admin",
+    "site_header": "EzyThrift Admin",
 
     # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "EzyThrift",
@@ -216,9 +218,7 @@ JAZZMIN_SETTINGS = {
     # Copyright on the footer
     "copyright": "EzyThrift  Ltd",
 
-    # List of model admins to search from the search bar, search bar omitted if excluded
-    # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["accounts.Profile", "core.Product"],
+   
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -233,15 +233,10 @@ JAZZMIN_SETTINGS = {
         # Url that gets reversed (Permissions can be added)
         {"name": "Home",  "url": "admin:index", "permissions": ["accounts.view_user"]},
 
-       
-        # model admin to link to (Permissions checked against model)
-        {"model": "accounts.Profile"},
-
         # App with dropdown menu to all its models pages (Permissions checked against models)
         {"app": "core"},
     ],
 
-  
     #############
     # Side Menu #
     #############
@@ -253,13 +248,13 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
 
     # Hide these apps when generating side menu e.g (auth)
-    "hide_apps": [],
+    "hide_apps": ['auth'],
 
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
 
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["auth", "books", "products.name"],
+    "order_with_respect_to": [ "products.name"],
 
    
     # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
@@ -286,12 +281,7 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fa fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
 
-    #################
-    # Related Modal #
-    #################
-    # Use modals instead of popups
-    "related_modal_active": False,
-
+  
     #############
     # UI Tweaks #
     #############
@@ -332,7 +322,7 @@ JAZZMIN_UI_TWEAKS = {
     "no_navbar_border": False,
     "navbar_fixed": True,
     "layout_boxed": False,
-    "footer_fixed": True,
+    "footer_fixed": False,
     "sidebar_fixed": True,
     "sidebar": "sidebar-dark-info",
     "sidebar_nav_small_text": False,

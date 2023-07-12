@@ -79,7 +79,7 @@ class ProductType(models.Model):
 
 class Product(models.Model):
     id_product = models.UUIDField(default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=255)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
@@ -112,11 +112,14 @@ class Product(models.Model):
         reviews = Review.objects.filter(product=self.id)
         return reviews
 
-    def save(self, *args, **kwargs):
+    def save(self,request, obj, form, change, *args, **kwargs):
         if not self.discount == 0:
             self.discount_price = self.price - (self.price * (self.discount/100))
         self.slug = slugify(self.name)
-        if self.status == "approved":
+        super(Product, self).save(*args, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        if obj.status != 'approved' and 'status' in form.changed_data and obj.status == 'approved':
             from core.utils import SendEmail 
             msg=f"Your product {self.name} has been approved. "
             SendEmail(
@@ -128,17 +131,21 @@ class Product(models.Model):
                 },
                 "emails/admin.html"
                 )
-           
-        super(Product, self).save(*args, **kwargs)
+        super().save_model(request, obj, form, change)
 
     def __str__(self):
         return self.name
 
-    def is_in_stock(self):
+    def in_stock(self):
         if self.no_stock != 0:
             return True
         else:
             return False
+        
+    def prod_imgs(self):
+        img_list = [self.img1, self.img2, self.img3, self.img4, self.img5]
+        img_list = [img.url for img in img_list]
+        return img_list
     # create color model and get it here via a method
 
 

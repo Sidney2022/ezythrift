@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
+
     <!-- Begin Li's Breadcrumb Area -->
     <div class="breadcrumb-area">
         <div class="container">
@@ -36,13 +37,23 @@
                             </div>
                         </div>
                         <!-- product-select-box start -->
-                        {% if not request.path == '/search' %}
                         <div class="product-select-box">
                             <form id="sortForm" onchange="submit()" >  
+                                <input type="hidden" value="{{item}}" name="item">
                             <div class="product-short">
                                     <p>Sort By:</p>
-                                    <select class="nice-select" name="q">
-                                        <option value="trending">Relevance</option>
+                                    <select class="nice-select" name="sort">
+                                        {% if sort_query == 'name' %}
+                                        <option selected value="name">Name (A - Z)</option>
+                                        {% elif sort_query == '-name' %}
+                                        <option selected value="-name">Name (Z - A)</option>
+                                        {% elif sort_query == 'price' %}
+                                        <option selected value="price">Price (Low &gt; High)</option>
+                                        {% elif sort_query == '-price' %}
+                                        <option selected value="-price">Price (High &gt; Low)</option>
+                                        {% else %}
+                                        <option selected >Relevance</option>
+                                        {% endif %}
                                         <option value="name">Name (A - Z)</option>
                                         <option value="-name">Name (Z - A)</option>
                                         <option value="price">Price (Low &gt; High)</option>
@@ -52,7 +63,6 @@
                                 </div>
                             </form>
                         </div>
-                        {% endif %}
                         <!-- product-select-box end -->
                     </div>
                     <!-- shop-top-bar end -->
@@ -63,49 +73,51 @@
                                 <div class="product-area shop-product-area">
                                     <div class="row">
                                         {% for product in page  %}
-                                        <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
+                                        {% comment %} <div class="col-lg-4 col-md-4 col-sm-6 mt-40"> {% endcomment %}
                                             <!-- single-product-wrap start -->
-                                            <div class="single-product-wrap">
-                                                <div class="product-image">
-                                                    <a href="{% url 'product' product.slug %}">
-                                                        <img height="100" src="{{product.img1.url}}" alt="Li's Product Image">
-                                                    </a>
-                                                    {% if product.is_new %}
-                                                    <span class="sticker">New</span>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="product_desc">
-                                                    <div class="product_desc_info">
-                                                        <div class="product-review">
-                                                            <h5 class="manufacturer">
-                                                                <a href="">{{product.product_type}}</a>
-                                                            </h5>
-                                                            <div class="rating-box">
-                                                                <ul class="rating">
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                </ul>
+                                            <div  id="prod-wrapper" class="mt-5 p-3">
+                                                <div class="single-product-wrap">
+                                                    <div class="product-image">
+                                                        <a href="{% url 'product' product.slug %}">
+                                                            <img height="100" src="{{product.img1.url}}" alt="Li's Product Image">
+                                                        </a>
+                                                        {% if product.is_new %}
+                                                        <span class="sticker">New</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="product_desc">
+                                                        <div class="product_desc_info">
+                                                            <div class="product-review">
+                                                                <h5 class="manufacturer">
+                                                                    <a href="">{{product.product_type}}</a>
+                                                                </h5>
+                                                                <div class="rating-box">
+                                                                    <ul class="rating">
+                                                                        <li><i class="fa fa-star-o"></i></li>
+                                                                        <li><i class="fa fa-star-o"></i></li>
+                                                                        <li><i class="fa fa-star-o"></i></li>
+                                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                                            <div class="price-box">
+                                                                {% if product.discount == 0 %}
+                                                                <span class="new-price new-price-2">&#8358;{{product.price}}</span>
+                                                                {% else %}
+                                                                <span class="new-price new-price-2">&#8358;{{product.discount_price}}</span>
+                                                                <span class="old-price">&#8358;{{product.price}}</span>
+                                                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
-                                                        <h4><a class="product_name" href="">{{product.name}}</a></h4>
-                                                        <div class="price-box">
-                                                            {% if product.discount == 0 %}
-                                                            <span class="new-price new-price-2">N{{product.price}}</span>
-                                                            {% else %}
-                                                            <span class="new-price new-price-2">N{{product.price}}</span>
-                                                            <span class="old-price">N{{product.discount_price}}</span>
-                                                            <span class="discount-percentage">-{{product.discount}}%</span>
-                                                            {% endif %}
-                                                        </div>
+                                                    
                                                     </div>
-                                                  
                                                 </div>
                                             </div>
                                             <!-- single-product-wrap end -->
-                                        </div>
+                                        {% comment %} </div> {% endcomment %}
 
                                         {%empty%}
                                         <div class="product_desc">
@@ -129,9 +141,9 @@
                                             {% if page.has_previous %}
                                             <li class=" ">
                                                 {% if request.path == '/search' %}
-                                                <a class="Previous" href="?item={{item}}&page={{ page.previous_page_number }}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
+                                                <a class="Previous" href="?item={{item}}&page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
                                                 {% else %}
-                                                <a class="Previous" href="?page={{ page.previous_page_number }}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
+                                                <a class="Previous" href="?page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
                                                 {% endif %}
                                             </li>
                                             {% else %}
@@ -145,9 +157,9 @@
                                             {% else %}
 
                                             {% if request.path == '/search' %}
-                                            <li class=""><a class="" href="?item={{item}}&page={{ page_num }}">{{ page_num }}</a></li>
+                                            <li class=""><a class="" href="?item={{item}}&page={{ page_num }}&sort={{sort_query}}">{{ page_num }}</a></li>
                                             {% else %}
-                                            <li class=""><a class="" href="?page={{ page_num }}">{{ page_num }}</a></li>
+                                            <li class=""><a class="" href="?page={{ page_num }}&sort={{sort_query}}">{{ page_num }}</a></li>
                                             {% endif %}
 
                                             {% endif %}
@@ -157,9 +169,9 @@
                                             <li class="">
 
                                                 {% if request.path == '/search' %}
-                                                <a class="Next" href="?item={{item}}&page={{ page.next_page_number }}">Next <i class="fa fa-chevron-right"></i></a>
+                                                <a class="Next" href="?item={{item}}&page={{ page.next_page_number }}&sort={{sort_query}}">Next <i class="fa fa-chevron-right"></i></a>
                                                 {% else %}
-                                                <a class="Next" href="?page={{ page.next_page_number }}">Next <i class="fa fa-chevron-right"></i></a>
+                                                <a class="Next" href="?page={{ page.next_page_number }}&sort={{sort_query}}">Next <i class="fa fa-chevron-right"></i></a>
                                                 {% endif %}
 
                                             </li>

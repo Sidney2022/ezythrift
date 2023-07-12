@@ -40,7 +40,7 @@
                                     <tr>
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img src="{{item.product.img1.url}}" width=80 alt=""></td>
-                                        <td class="li-product-price"><span class="amount">${{item.product.price}}</span></td>
+                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.price}}</span></td>
 
                                         {% if item.product.is_in_stock == True %}
                                         <td class="li-product-stock-status " ><span class="in-stock text-white btn btn-success btn-sm">in stock</span></td>

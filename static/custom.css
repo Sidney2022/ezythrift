@@ -1,0 +1,40 @@
+#prod-wrapper{
+    width:25%;
+    
+}
+#prod-wrapper-index{
+    width:20%;
+    
+}
+
+@media only screen and (max-width: 670px) 
+{
+    #prod-wrapper, #prod-wrapper-index{
+        width:33%
+    }   
+}
+@media only screen and (max-width: 500px) 
+{
+    #prod-wrapper, #prod-wrapper-index{
+        width:50%
+    }   
+}
+
+button{
+    cursor:pointer
+}
+#prod-name {
+    display:none
+}
+
+#product-to-add{
+    display:none
+}
+.add-actions-link button, .add-cart button {
+    border:none;
+    background:transparent;
+    color:#333
+}
+.product-additional-info button {
+
+}

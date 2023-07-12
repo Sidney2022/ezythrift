@@ -25,29 +25,18 @@
                            <!-- Product Details Left -->
                             <div class="product-details-left">
                                 <div class="product-details-images slider-navigation-1">
+                                    {% for img in product.prod_imgs %}
                                     <div class="lg-image">
-                                        <img  src="{{product.img1.url}}" alt="product image">
+                                        <img  src="{{img}}" alt="product image">
                                     </div>
-                                    <div class="lg-image">
-                                        <img src="{{product.img2.url}}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{product.img3.url}}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{product.img4.url}}" alt="product image">
-                                    </div>
-                                    <div class="lg-image">
-                                        <img src="{{product.img5.url}}" alt="product image">
-                                    </div>
+                                    {% endfor %}
+                                   
                                   
                                 </div>
                                 <div class="product-details-thumbs slider-thumbs-1">
-                                    <div class="sm-image"><img src="{{product.img1.url}}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{product.img2.url}}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{product.img3.url}}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{product.img4.url}}" alt="product image thumb"></div>
-                                    <div class="sm-image"><img src="{{product.img5.url}}" alt="product image thumb"></div>
+                                    {% for img in product.prod_imgs %}
+                                    <div class="sm-image"><img src="{{img}}" alt="product image thumb"></div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <!--// Product Details Left -->
@@ -59,10 +48,10 @@
                                     <h2>{{product.name}}</h2>
                                     <div class="price-box pt-20">
                                         {% if product.discount == 0 %}
-                                        <span class="new-price new-price-2">N{{product.price}}</span>
+                                        <span class="new-price new-price-2">&#8358;{{product.price}}</span>
                                         {% else %}
-                                        <span class="new-price new-price-2">N{{product.price}}</span>
-                                        <span class="old-price">N{{product.discount_price}}</span>
+                                        <span class="new-price new-price-2">&#8358;{{product.price}}</span>
+                                        <span class="old-price">&#8358;{{product.discount_price}}</span>
                                         <span class="discount-percentage">-{{product.discount}}%</span>
                                         {% endif %}
                                     </div>
@@ -241,21 +230,21 @@
                                                     <h4><a class="product_name" href="{% url 'product' item.slug %}">{{item.name}}</a></h4>
                                                     <div class="price-box">
                                                         {% if item.discount == 0 %}
-                                                        <span class="new-price new-price-2">N{{item.price}}</span>
+                                                        <span class="new-price new-price-2">&#8358;{{item.price}}</span>
                                                         {% else %}
-                                                        <span class="new-price new-price-2">N{{item.price}}</span>
-                                                        <span class="old-price">N{{item.discount_price}}</span>
+                                                        <span class="new-price new-price-2">&#8358;{{item.discount_price}}</span>
+                                                        <span class="old-price">&#8358;{{item.price}}</span>
                                                         <span class="discount-percentage">-{{item.discount}}%</span>
                                                         {% endif %}
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="add-actions">
+                                                {% comment %} <div class="add-actions">
                                                     <ul class="add-actions-link">
                                                         <li class="add-cart active"><button onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
                                                         <li><button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name"> {{item.slug}}</span></button></li>
                                                     </ul>
-                                                </div>
+                                                </div> {% endcomment %}
                                             </div>
                                         </div>
                                         <!-- single-product-wrap end -->
