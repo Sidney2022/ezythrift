@@ -2,12 +2,34 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem, BannerProduct
 from django.urls import reverse
-
+from django import forms
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
+    readonly_fields = []  # Fields that should be read-only for all users
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'seller' and not request.user.is_superuser:
+            kwargs['initial'] = request.user.id
+            kwargs['widget'] = forms.HiddenInput()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        if not request.user.is_superuser:
+            fieldsets[0][1]['fields'] = tuple(
+                field for field in fieldsets[0][1]['fields'] if field != 'status'
+            )
+        return fieldsets
+
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            # Hide the 'status' field for non-superusers
+            return self.readonly_fields + ['status']
+        return self.readonly_fields
+    
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         # Custom search logic

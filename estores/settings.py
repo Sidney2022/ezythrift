@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com']
+ALLOWED_HOSTS = ['ezythrift.pythonanywhere.com', 'www.ezythrift.pythonanywhere.com', 'localhost']
 EMAIL_TIMEOUT = 60  # Increase the timeout value (in seconds)
 
 # Application definition
