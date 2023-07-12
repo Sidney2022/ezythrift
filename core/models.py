@@ -107,7 +107,11 @@ class Product(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(null=True, blank=True, editable=False)
     no_sold =models.PositiveIntegerField(default=0) #for bestseller feature
+# add specification
 
+    class Meta:
+        ordering = ['-date']
+        
     def reviews(self):
         reviews = Review.objects.filter(product=self.id)
         return reviews

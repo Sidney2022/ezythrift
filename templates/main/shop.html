@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block content %}
-
+{% load humanize  %}
     <!-- Begin Li's Breadcrumb Area -->
     <div class="breadcrumb-area">
         <div class="container">
@@ -104,10 +104,10 @@
                                                             <h4><a class="product_name" href="">{{product.name}}</a></h4>
                                                             <div class="price-box">
                                                                 {% if product.discount == 0 %}
-                                                                <span class="new-price new-price-2">&#8358;{{product.price}}</span>
+                                                                <span class="new-price new-price-2">&#8358;{{product.price |intcomma }}</span>
                                                                 {% else %}
-                                                                <span class="new-price new-price-2">&#8358;{{product.discount_price}}</span>
-                                                                <span class="old-price">&#8358;{{product.price}}</span>
+                                                                <span class="new-price new-price-2">&#8358;{{product.discount_price |intcomma }}</span>
+                                                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
                                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                                 {% endif %}
                                                             </div>
