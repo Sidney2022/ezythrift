@@ -8,7 +8,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
     readonly_fields = []  # Fields that should be read-only for all users
-
+    list_per_page = 20
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'seller' and not request.user.is_superuser:
             kwargs['initial'] = request.user.id
