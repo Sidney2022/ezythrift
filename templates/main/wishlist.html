@@ -27,8 +27,8 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="li-product-thumbnail">images</th>
                                         <th class="cart-product-name">Product</th>
+                                        <th class="li-product-thumbnail">image</th>
                                         <th class="li-product-price">Unit Price</th>
                                         <th class="li-product-stock-status">Stock Status</th>
                                         <th class="li-product-add-cart">add to cart</th>
@@ -40,15 +40,18 @@
                                     <tr>
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img src="{{item.product.img1.url}}" width=80 alt=""></td>
+                                        {% if product.discount == 0 %}
                                         <td class="li-product-price"><span class="amount">&#8358;{{item.product.price}}</span></td>
-
-                                        {% if item.product.is_in_stock == True %}
+                                        {% else %}
+                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.discount_price}}</span></td>
+                                        {% endif %}
+                                        {% if item.product.in_stock == True %}
                                         <td class="li-product-stock-status " ><span class="in-stock text-white btn btn-success btn-sm">in stock</span></td>
                                         {% else %}
                                         <td class="li-product-stock-status"><span class="text-white btn btn-warning btn-sm">out of stock</span></td>
                                         {% endif %}
 
-                                        {% if item.product.is_in_stock == True %}
+                                        {% if item.product.in_stock == True %}
                                         <td ><span style="border:none; cursor:pointer" class="btn text-white btn-warning" onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{item.product.slug}}</span></span></td>
                                         {% else %}
                                         <td ><span class="btn btn-secondary"> Out Of Stock</span></td>

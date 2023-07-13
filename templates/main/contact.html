@@ -5,8 +5,8 @@
         <!-- Li's Breadcrumb Area End Here -->     
         <!-- Begin Contact Main Page Area -->
         <div class="contact-main-page mt-60 mb-40 mb-md-40 mb-sm-40 mb-xs-40">
-            
             <div class="container">
+                {% include 'messages.html' %}
                 <div class="row">
                     <div class="col-lg-5 offset-lg-1 col-md-12 order-1 order-lg-2">
                         <div class="contact-page-side-content">
@@ -31,29 +31,29 @@
                         <div class="contact-form-content pt-sm-55 pt-xs-55">
                             <h3 class="contact-page-title">Tell Us Your Message</h3>
                             <div class="contact-form">
-                                <form  id="contact-form" action="" method="post">
+                                <form  id="contact-form" action="{% url 'contact' %}" method="post">
+                                    {% csrf_token %}
                                     <div class="form-group">
                                         <label>Your Name <span class="required">*</span></label>
-                                        <input type="text" name="customerName" id="customername" required>
+                                        <input type="text" name="name" id="customername" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Your Email <span class="required">*</span></label>
-                                        <input type="email" name="customerEmail" id="customerEmail" required>
+                                        <input type="email" name="email" id="customerEmail" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Subject</label>
-                                        <input type="text" name="contactSubject" id="contactSubject">
+                                        <input type="text" name="subject" id="contactSubject" required>
                                     </div>
                                     <div class="form-group mb-30">
                                         <label>Your Message</label>
-                                        <textarea name="contactMessage" id="contactMessage" ></textarea>
+                                        <textarea name="message" id="contactMessage" required></textarea>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" value="submit" id="submit" class="li-btn-3" name="submit">send</button>
                                     </div>
                                 </form>
                             </div>
-                            <p class="form-messege"></p>
                         </div>
                     </div>
                 </div>

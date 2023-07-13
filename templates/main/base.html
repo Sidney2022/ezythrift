@@ -1,4 +1,5 @@
 {% load static %}
+
 <!doctype html>
 <html class="no-js" lang="zxx">
     
@@ -157,7 +158,6 @@
                                                   
                                                 </span>
                                             </div>
-                                            <span></span>
                                             {% if user.is_authenticated %}
                                             <div class="minicart">
                                                 <ul class="minicart-product-list" id="cart-list">
@@ -309,8 +309,8 @@
                                         <h3 class="footer-block-title">Quick links</h3>
                                         <ul>
                                             <li><a href="{% url 'about' %}">About us</a></li>
-                                            {% comment %} <li><a href="{% url 'faq' %}">FAQs</a></li> {% endcomment %}
-                                            {% comment %} <li><a href="{% url 'contact' %}">Contact us</a></li> {% endcomment %}
+                                            <li><a href="{% url 'faq' %}">FAQs</a></li>
+                                            <li><a href="{% url 'contact' %}">Contact us</a></li>
                                             <li><a href="#">terms and conditions</a></li>
                                             <li><a href="#">Privacy Policy</a></li>
                                         </ul>

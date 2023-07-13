@@ -1,11 +1,15 @@
 from .models import Product, Category, SubCategory, ProductType, Cart, WishList, NewsLetter, Review, Brand, Order,OrderItem, BannerProduct
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from core.utils import SendEmail
 from django.db.models import Q
 from django.views import View
 import requests
+from django.conf import settings
+from django.contrib import messages
+
 
 def checkSort(query, products):
     if query:
@@ -18,7 +22,7 @@ def checkSort(query, products):
 
 class HomePage(View):
     def get(self, request, *args, **kwargs):
-        products = Product.objects.all()
+        products = Product.objects.filter( status='approved')
         context={
             "latest_products":products.order_by('-date')[:20],
             "hot_products":products.order_by('-no_sold')[:20],
@@ -211,6 +215,23 @@ def delWishlistItem(request):
 
 
 def contact(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        if name and email and subject and message:
+            context ={
+                "name":name,
+                "message":message
+            }
+            e = SendEmail(subject, settings.DEFAULT_FROM_EMAIL,context,'emails/contact.html' )
+            print(e)
+            messages.success(request, 'email sent successfully, or failed')
+            return redirect('contact')
+        else:
+            messages.error(request, 'fields can not be blank')
+            return redirect('contact')
     return render(request, 'main/contact.html')
 
 
@@ -263,7 +284,7 @@ def writeReview(request, slug):
         product = get_object_or_404(Product, slug=slug, status='approved')
         new_review = Review.objects.create(user=request.user, product=product, rating=rating, review=review)
         new_review.save()
-        return JsonResponse({"status":200})
+        return redirect('product', slug)
     
 
 @login_required()
@@ -339,7 +360,8 @@ def payment(request):
         print(e)
         raise Http404("poor network")
 
+
 def mail(request):
-    from core.utils import SendEmail
     SendEmail("Test", ["ezythrift@gmail.com"])
     return JsonResponse({"ok":""})
+

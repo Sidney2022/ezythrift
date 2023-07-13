@@ -94,19 +94,19 @@ class Product(models.Model):
     img3 = models.ImageField(upload_to='products')
     img4 = models.ImageField(upload_to='products')
     img5 = models.ImageField(upload_to='products')
-    price = models.PositiveIntegerField()
+    price = models.PositiveIntegerField(default=0, blank=True)
     discount = models.PositiveIntegerField(default=0)
-    discount_price = models.PositiveIntegerField(null=True, blank=True)
-    no_reviews = models.PositiveIntegerField(default=0)
+    discount_price = models.PositiveIntegerField(null=True, blank=True, default=0) 
+    actual_price = models.PositiveIntegerField(default=0) 
     status = models.CharField(max_length=20, choices=(
         ("under review","Under Review"),
         ("approved", "Approved"),
         ("declined", "Declined")
-    ))
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    ), default='under review', blank=True)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(null=True, blank=True, editable=False)
-    no_sold =models.PositiveIntegerField(default=0) #for bestseller feature
+    no_sold =models.PositiveIntegerField(default=0, blank=True) #for bestseller feature
 # add specification
 
     class Meta:
@@ -118,7 +118,11 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.discount == 0:
-            self.discount_price = self.price - (self.price * (self.discount/100))
+            discount_price = self.actual_price - (self.actual_price * (self.discount/100))
+            self.discount_price = discount_price
+            self.price = self.actual_price
+        else:
+            self.price = self.actual_price
         self.slug = slugify(self.name)
         super(Product, self).save(*args, **kwargs)
 

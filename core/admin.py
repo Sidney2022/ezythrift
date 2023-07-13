@@ -5,21 +5,23 @@ from django.urls import reverse
 from django import forms
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name',  'category', 'date', 'status', 'sub_category', 'product_type', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
+    list_display = ['name',  'category', 'date', 'status', 'price', 'discount_price', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
     readonly_fields = []  # Fields that should be read-only for all users
     list_per_page = 20
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'seller' and not request.user.is_superuser:
-            kwargs['initial'] = request.user.id
+            seller_obj = Seller.objects.get(profile=request.user)
+            kwargs['initial'] = seller_obj
             kwargs['widget'] = forms.HiddenInput()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
         if not request.user.is_superuser:
+            read_only = ['status', 'discount_price', 'price', 'no_reviews', 'no_sold']
             fieldsets[0][1]['fields'] = tuple(
-                field for field in fieldsets[0][1]['fields'] if field != 'status'
+                field for field in fieldsets[0][1]['fields'] if not field in read_only
             )
         return fieldsets
 

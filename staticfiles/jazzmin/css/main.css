@@ -12,7 +12,9 @@ div.inline-related {
     margin: 10px 0 0 15px;
     padding: 0;
 }
-
+.admin-logo-login{
+    width: 10px !important;
+}
 
 /** Fix bug of adminLTE, since django is using th headers in middle of table **/
 .card-body.p-0 .table thead > tr > th:first-of-type,

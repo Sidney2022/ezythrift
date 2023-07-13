@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load humanize  %}
 {% block content %}
             <!-- Begin Li's Breadcrumb Area -->
             <div class="breadcrumb-area">
@@ -48,10 +49,10 @@
                                     <h2>{{product.name}}</h2>
                                     <div class="price-box pt-20">
                                         {% if product.discount == 0 %}
-                                        <span class="new-price new-price-2">&#8358;{{product.price}}</span>
+                                        <span class="new-price new-price-2">&#8358;{{product.price|intcomma}}</span>
                                         {% else %}
-                                        <span class="new-price new-price-2">&#8358;{{product.price}}</span>
-                                        <span class="old-price">&#8358;{{product.discount_price}}</span>
+                                        <span class="new-price new-price-2">&#8358;{{product.price|intcomma}}</span>
+                                        <span class="old-price">&#8358;{{product.discount_price|intcomma}}</span>
                                         <span class="discount-percentage">-{{product.discount}}%</span>
                                         {% endif %}
                                     </div>
@@ -208,8 +209,6 @@
                                                 <span class="sticker">New</span>
                                                 {% elif item.is_hot %}
                                                 <span class="sticker">hot</span>
-                                                {% else %}
-                                                <span class="sticker"></span>
                                                 {% endif %}
                                             </div>
                                             <div class="product_desc">
@@ -230,10 +229,10 @@
                                                     <h4><a class="product_name" href="{% url 'product' item.slug %}">{{item.name}}</a></h4>
                                                     <div class="price-box">
                                                         {% if item.discount == 0 %}
-                                                        <span class="new-price new-price-2">&#8358;{{item.price}}</span>
+                                                        <span class="new-price new-price-2">&#8358;{{item.price|intcomma}}</span>
                                                         {% else %}
-                                                        <span class="new-price new-price-2">&#8358;{{item.discount_price}}</span>
-                                                        <span class="old-price">&#8358;{{item.price}}</span>
+                                                        <span class="new-price new-price-2">&#8358;{{item.discount_price|intcomma}}</span>
+                                                        <span class="old-price">&#8358;{{item.price|intcomma}}</span>
                                                         <span class="discount-percentage">-{{item.discount}}%</span>
                                                         {% endif %}
                                                     </div>

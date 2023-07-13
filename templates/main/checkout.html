@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% load humanize  %}
 {% block content %}
 <div class="breadcrumb-area">
     <div class="container">
@@ -85,7 +86,9 @@
                     </div>
                     <div class="payment-method">
                         <div class="payment-accordion">
-                            
+                           <p class="text-sm text-warning mb-2" > <span class ="fa fa-info" ></span> this is a simulated payment from paystack. you are
+                             not required to use any card. just follow the prompts. click on success or 
+                             authorize if the success button doesn't work  </p>
                             <div class="order-button-payment">
                                 {% comment %} <input value="Place order" type="submit"> {% endcomment %}
                                 {% if user.is_billing_address == True and order_amt != 0 %}
