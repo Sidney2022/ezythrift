@@ -70,7 +70,7 @@
                                 {% for item in cart_items %}
                                 <tr class="cart_item">
                                     <td class="cart-product-name"> {{item.product.name}} <strong class="product-quantity"> × {{item.number_of_items}} </strong></td>
-                                    <td class="cart-product-total"><span class="amount">&#8358;{{item product.price}} </span></td>  
+                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.product.price}} </span></td>  
                                 </tr>
                                 {% endfor %}
                             </tbody>
