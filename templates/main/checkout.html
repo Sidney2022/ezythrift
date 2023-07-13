@@ -71,7 +71,7 @@
                                 {% for item in cart_items %}
                                 <tr class="cart_item">
                                     <td class="cart-product-name"> {{item.product.name}} <strong class="product-quantity"> × {{item.number_of_items}} </strong></td>
-                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.product.price}} </span></td>  
+                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.product.price|intcomma}} </span></td>  
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -79,7 +79,7 @@
                                 
                                 <tr class="order-total">
                                     <th>Grand Total</th>
-                                    <td><strong><span class="amount">&#8358;{{order_amt}}</span></strong></td>
+                                    <td><strong><span class="amount">&#8358;{{order_amt|intcomma}}</span></strong></td>
                                 </tr>
                             </tfoot>
                         </table>
