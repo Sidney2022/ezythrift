@@ -1,6 +1,6 @@
+from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem, BannerProduct, Faq
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Product, Category, SubCategory, Review, Cart, Brand, ProductType, Seller, WishList, NewsLetter, Order, OrderItem, BannerProduct
 from django.urls import reverse
 from django import forms
 
@@ -59,7 +59,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['slug',  'category']
 
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['user',  'product', 'number_of_items', 'timestamp']
+    list_display = ['user',  'product', 'number_of_items', 'CartTotal', 'timestamp']
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['user',  'product', 'quantity', 'order']
@@ -76,6 +76,10 @@ class BrandAdmin(admin.ModelAdmin):
 class BannerProductAdmin(admin.ModelAdmin):
     list_display = ['product',  'role']
 
+class FaqAdmin(admin.ModelAdmin):
+    list_display = ['question']
+
+admin.site.register(Faq, FaqAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductType, )
 admin.site.register(Seller, )

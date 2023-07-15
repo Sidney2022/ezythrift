@@ -47,6 +47,7 @@
                             <div class="product-details-view-content sp-sale-content pt-60">
                                 <div class="product-info">
                                     <h2>{{product.name}}</h2>
+                                    <span class="btn btn-secondary">{{product.no_stock}} units left</span>
                                     <div class="price-box pt-20">
                                         {% if product.discount == 0 %}
                                         <span class="new-price new-price-2">&#8358;{{product.price|intcomma}}</span>
@@ -69,8 +70,14 @@
                                 <div class="product-additional-info pt-25">
                                         
                                         {% if user.is_authenticated %}
-                                        <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <span id="prod-name"> {{product.slug}}</span></button>
+                                        {% if product.in_stock %}
+                                        <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
                                         <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                        {% else %}
+                                        <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
+                                        <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+
+                                        {% endif %}
                                         {% else %}
                                         <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
                                         <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
@@ -191,7 +198,7 @@
                         <div class="col-lg-12">
                             <div class="li-section-title">
                                 <h2>
-                                    <span> Other products from the same brand and category </span>
+                                    <span> Other products from the same brand or category </span>
                                 </h2>
                             </div>
                             <div class="row">
@@ -236,14 +243,24 @@
                                                         <span class="discount-percentage">-{{item.discount}}%</span>
                                                         {% endif %}
                                                     </div>
+                                                    
+                                                    <div class="my-4">
+                                                        {% if user.is_authenticated %}
+                                                        {% if product.in_stock %}
+                                                        <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                        <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                        {% else %}
+                                                        <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
+                                                        <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+                
+                                                        {% endif %}
+                                                        {% else %}
+                                                        <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
+                                                        <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                        {% endif %} 
+                                                    </div>
                                                 </div>
                                                 
-                                                {% comment %} <div class="add-actions">
-                                                    <ul class="add-actions-link">
-                                                        <li class="add-cart active"><button onclick="AddTocart(this)">Add to cart <span id="prod-name"> {{product.slug}}</span></button></li>
-                                                        <li><button onclick="AddToWishList(this)"><i class="fa fa-heart-o"></i> <span id="prod-name"> {{item.slug}}</span></button></li>
-                                                    </ul>
-                                                </div> {% endcomment %}
                                             </div>
                                         </div>
                                         <!-- single-product-wrap end -->

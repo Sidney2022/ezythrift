@@ -2,3 +2,10 @@
     message goes here
 <button class="close" id="msgCloseBtn" >×</button>
 </div>
+<script>
+function HidemsgArea() {
+    const msgArea = document.getElementById("msgArea")
+    msgArea.style.display='none'
+}
+setInterval(HidemsgArea, 30000)
+</script>

@@ -7,6 +7,7 @@
         <div class="breadcrumb-content">
             <ul>
                 <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'cart-page' %}">Cart</a></li>
                 <li class="active">Checkout</li>
             </ul>
         </div>
@@ -36,7 +37,7 @@
                 <div class="different-address">
                     <div class="ship-different-title">
                             <p>Ship to a different address? 
-                            <a href="{% url 'account' %}" > change you shipping info here </a>
+                            <a href="{% url 'account' %}" > change you shipping/delivery info here </a>
                         </p>
                     </div>
                     
@@ -64,14 +65,14 @@
                             <thead>
                                 <tr>
                                     <th class="cart-product-name">Product</th>
-                                    <th class="cart-product-total">Total</th>
+                                    <th class="cart-product-total">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for item in cart_items %}
                                 <tr class="cart_item">
                                     <td class="cart-product-name"> {{item.product.name}} <strong class="product-quantity"> × {{item.number_of_items}} </strong></td>
-                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.product.price|intcomma}} </span></td>  
+                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.CartTotal|intcomma}} </span></td>  
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -79,23 +80,44 @@
                                 
                                 <tr class="order-total">
                                     <th>Grand Total</th>
-                                    <td><strong><span class="amount">&#8358;{{order_amt|intcomma}}</span></strong></td>
+                                    <td><strong><span class="amount">&#8358;{{order_total|intcomma}}</span></strong></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                     <div class="payment-method">
                         <div class="payment-accordion">
-                           <p class="text-sm text-warning mb-2" > <span class ="fa fa-info" ></span> this is a simulated payment from paystack. you are
-                             not required to use any card. just follow the prompts. click on success or 
-                             authorize if the success button doesn't work  </p>
                             <div class="order-button-payment">
                                 {% comment %} <input value="Place order" type="submit"> {% endcomment %}
                                 {% if user.is_billing_address == True and order_amt != 0 %}
-                                <a class="btn btn-success" href="{% url 'payment' %}" > Pay Now </a>
                                 
+                                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#mymodal">Place Order</a>
                                 {% endif %}
-
+                               
+                                <div class="modal fade modal-wrapper" id="mymodal" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content p-2">
+                                            <div class="modal-body">
+                                                <div class="modal-inner-area row mb-5" style="font-size:15px">
+                                                    <p class=" text-warning " > <i class ="fa fa-info" ></i> The next page is a simulated (demo) payment to test 
+                                                        paystack integration. You are not required to enter any card details. Just follow the prompts. click on success or 
+                                                        authorize if the success button doesn't work. 
+                                                        <br>
+                                                        <i class ="fa fa-info" ></i> No refund After payment is made
+                                                    </p>
+                                                    <span > <i class="fa fa-info text-secondary"></i> NOTE: payment includes the paystack fee/commission of 1.8% 
+                                                        <p class="text-secondary"> Total amount payable is &#8358;{{payable_amt|intcomma}} </p>
+                                                    </span>
+                                                    
+                                                </div>
+                                                <div class=" mt-4 ">
+                                                    <a href="#" class="btn btn-warning mr-5" class="close" data-dismiss="modal" aria-label="Close">Cancel</a>
+                                                    <a class="btn btn-success ml-5" href="{% url 'payment' %}" >Continue </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 {% comment %} <button  class="btn btn-dark" onclick="payWithPaystack()"> Pay Now</button> {% endcomment %}
                             </div>
                         </div>

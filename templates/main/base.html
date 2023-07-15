@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load humanize %}
 <!doctype html>
 <html class="no-js" lang="zxx">
     
@@ -311,8 +311,8 @@
                                             <li><a href="{% url 'about' %}">About us</a></li>
                                             <li><a href="{% url 'faq' %}">FAQs</a></li>
                                             <li><a href="{% url 'contact' %}">Contact us</a></li>
-                                            <li><a href="#">terms and conditions</a></li>
-                                            <li><a href="#">Privacy Policy</a></li>
+                                            <li><a href="{% url 'terms' %}">terms and conditions</a></li>
+                                            <li><a href="{% url 'policy' %}">Privacy Policy</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -325,7 +325,7 @@
                                             {% csrf_token %}
                                            <div id="mc_embed_signup_scroll">
                                               <div id="mc-form" class="mc-form subscribe-form form-group" >
-                                                <input name="email" id="mc-email" type="email" autocomplete="off" placeholder="Enter your email" />
+                                                <input name="email" id="mc-email" type="email"  placeholder="Enter your email" required/>
                                                 <button  class="btn" id="mc-submit">Subscribe</button>
                                               </div>
                                            </div>
@@ -343,7 +343,7 @@
                 </div>
                 <!-- Footer Static Middle Area End Here -->
                 <div class="copyright text-center pt-25 pb-25">
-                    <span><a target="_blank" href="">&copy EzyThrift Stores 2023</a></span>
+                    <span><a target="_blank" href="">&copy EzyThrift Stores {{date}}</a></span>
                 </div>
             </div>
             <!-- Footer Area End Here -->
@@ -452,7 +452,7 @@
                 .then((data) => {
                 console.log("data", data);
                     cartElem.innerHTML = `
-                    &#8358;${data['total_amt']}
+                    &#8358;${data['total_amt'].toLocaleString()}
                     <span class="cart-item-count">${data['number_of_items']}</span>`
                     
                     data.cart.forEach(entry => {
@@ -464,7 +464,7 @@
                             </a>
                             <div class="minicart-product-details">
                                 <h6><a href="/products/${entry['slug']}">${entry['product_name']} </a></h6>
-                                <span>£${entry['price']} x  ${entry['quantity']} </span>
+                                <span>&#8358;${entry['price'].toLocaleString()} x  ${entry['quantity']} </span>
                             </div>
                             {% comment %} <button class="close" title="Remove">
                                 <i class="fa fa-close"></i>
@@ -478,7 +478,8 @@
 
             //    add to cart
         function AddTocart(btn) {
-                const slug = "{{product.slug}}"
+              //  const trElem = btn.parentNode.parentNode
+                const slug = btn.querySelector("#prod-name").value
                 const cartCtaBtns = document.getElementById("cart-cta-btn")
                 fetch(`{% url 'add-cart'   %}?slug=${slug}`, {
                     method: "GET",

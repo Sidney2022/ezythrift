@@ -20,7 +20,7 @@ urlpatterns = [
    path('products/<slug:slug>', views.getProduct, name='product'),
 
    path('users/add-to-cart', views.addCartItem, name='add-cart'),
-   path('users/update-cart/<id>', views.UpdateCartItem, name='update-cart'),
+   path('users/update-cart/<id>', views.UpdateCartItem, name='update-cart-item'),
    path('users/add-to-wishlist', views.addWishListItem, name='add-wishlist'),
 
    path('search', views.searchProducts, name='search'),
@@ -34,6 +34,8 @@ urlpatterns = [
    path("orders/<pk>", views.getOrderItems, name="order-items"),
    path('users/checkout/payment', views.payment, name='payment'),
    path('payment-callback/<uuid:id>', views.payment_success, name='payment-callback'),
+   path('terms-and-conditions', views.terms_and_conditions, name='terms'),
+   path('privacy-policy', views.privacy_policy, name='policy'),
    path('mail', views.mail, name='mail'),
 
 

@@ -170,11 +170,22 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     number_of_items = models.PositiveIntegerField(default=1)
     timestamp =models.DateTimeField( auto_now_add=True)
+
     def cartNum(self):
         cart = 0
         for item in Cart.objects.filter(user=self.user):
             cart += item.product.price
         return cart
+    
+    def CartTotal(self):
+        if self.product.discount == 0:
+            total = self.product.price * self.number_of_items
+        else:
+            total = self.product.discount_price * self.number_of_items
+        return total
+
+        
+
 
 
 class WishList(models.Model):
@@ -205,8 +216,6 @@ class Order(models.Model):
     ), default= "in progress")
     badge = models.CharField(max_length=30, null=True,  blank=True)
 
-    # at checkout, all products in cart are emptied.
-
 
     def save(self, *args, **kwargs):
         if self.status == 'cancelled':
@@ -222,11 +231,13 @@ class Order(models.Model):
         return items
     
     def total(self):
+        order_items = OrderItem.objects.filter(order=self.tracking_id)
         amt = 0
-        for item in self.items():
-            amt += (item.product.price * item.quantity)
+        for item in order_items:
+            amt += item.CartTotal()
         return amt
-
+    
+   
 
     class Meta:
         ordering = ['-date']
@@ -237,10 +248,21 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, editable=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, editable=False)
     quantity = models.PositiveIntegerField(default=1, editable=False)
+    unit_price = models.PositiveIntegerField(default=0)
+    amount = models.PositiveIntegerField(default=0)
+    
 
-    def amount(self):
+    def amt(self):
         amt = self.product.price * self.quantity
         return amt
+
+    def CartTotal(self):
+        if self.product.discount == 0:
+            total = self.product.price * self.quantity
+        else:
+            total = self.product.discount_price * self.quantity
+        print(total)
+        return total
 
 
 class BannerProduct(models.Model):
@@ -254,3 +276,9 @@ class BannerProduct(models.Model):
     
 
 
+class Faq(models.Model):
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question

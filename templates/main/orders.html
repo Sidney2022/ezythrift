@@ -31,8 +31,8 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="li-product-thumbnail">images</th>
                                         <th class="cart-product-name">Product</th>
+                                        <th class="li-product-thumbnail">image</th>
                                         <th class="li-product-price">Unit Price</th>
                                         <th class="li-product-price">Quantity</th>
                                         <th class="li-product-remove">amount</th>
@@ -43,9 +43,9 @@
                                     <tr>
                                         <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
                                         <td class="li-product-thumbnail"><img src="{{item.product.img1.url}}" width=80 alt=""></td>
-                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.price}}</span></td>
+                                        <td class="li-product-price"><span class="amount">&#8358;{{item.unit_price}}</span></td>
                                         <td class="li-product-price"><span class="amount">{{item.quantity}}</span></td>
-                                        <td class="li-product-"><a id="del-cart" style="cursor:pointer" >&#8358;{{item.amount}}</a>
+                                        <td class="li-product-price"><a id="del-cart" style="cursor:pointer" >&#8358;{{item.amount}}</a>
                                             {%empty%}
                                             <td colspan="6">No items in wishlist</td>
                                     </tr>

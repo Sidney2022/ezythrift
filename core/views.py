@@ -1,4 +1,4 @@
-from .models import Product, Category, SubCategory, ProductType, Cart, WishList, NewsLetter, Review, Brand, Order,OrderItem, BannerProduct
+from .models import Product, Category, SubCategory, ProductType, Cart, WishList, NewsLetter, Review, Brand, Order,OrderItem, BannerProduct, Faq
 from django.http import JsonResponse, HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -93,7 +93,7 @@ def marketCategory(request, slug):
 
 def getProduct(request, slug):
     product = get_object_or_404(Product, slug=slug, status='approved')
-    products = Product.objects.filter( Q(category=product.category) | Q(brand=product.brand)).exclude(slug=slug)
+    products = Product.objects.filter( Q(category=product.category, status='approved') | Q(brand=product.brand, status='approved')).exclude(slug=slug)
     context = {
         "product":product,
         "products":products
@@ -129,15 +129,21 @@ def addCartItem(request):
 
 @login_required()
 def UpdateCartItem(request, id):
-    quantity = request.GET.get('quantity')
-    print(quantity, id)
-    item  = get_object_or_404(Cart, id=id)
-    print(item)
-    item.number_of_items += int(quantity)
+    quantity = request.GET.get('p')
+    if not Cart.objects.filter(id=id, user=request.user).exists():
+         return JsonResponse({ "error":"cart item could not be updated"})
+    item  = get_object_or_404(Cart, id=id, user=request.user)
+    if not item.product.in_stock():
+        return JsonResponse({"error":"out of stock"})
+    elif item.product.in_stock() and item.product.no_stock < int(quantity):
+        return JsonResponse({"error":f"please retry a lesser quantity. there are only {item.product.no_stock} units left"})
+    item.number_of_items = int(quantity)
     item.save()
-    return JsonResponse({
-            "info":"cart item updated successfully"
-        })
+    total = 0
+    cart_items =Cart.objects.filter(user=request.user)
+    for item in cart_items:
+        total += item.CartTotal()
+    return JsonResponse({ "info":"cart item updated successfully", "total":total})
 
 
 @login_required()
@@ -155,30 +161,29 @@ def addWishListItem(request):
 @login_required()
 def getCartItems(request):
     cart_items = Cart.objects.filter(user=request.user)
-    number_of_items = 0
     items  = [{
             "product_name":item.product.name,
             "img":item.product.img1.url,
-            "price":item.product.price,
+            "price":item.product.price if item.product.discount == 0 else item.product.discount_price,
             "quantity":item.number_of_items,
             "slug":item.product.slug
         } for item in cart_items]
    
     total_amt = 0
     for item in cart_items:
-        total_amt += item.product.price
+            total_amt += item.CartTotal()
     #     number_of_items += item.number_of_items
     return JsonResponse({"cart":items, 'number_of_items':len(cart_items), "total_amt":total_amt})
 
 
 @login_required()
 def cartPage(request):
+    total = 0
     cart_items =Cart.objects.filter(user=request.user)
-    no_items = 0
     for item in cart_items:
-        no_items += (item.product.price * item.number_of_items)
-       
-    return render(request, 'main/cart-page.html', {"no_items":no_items})
+        total += item.CartTotal()
+    products = Product.objects.filter(status='approved')
+    return render(request, 'main/cart-page.html', { "products":products, "total":total})
 
 
 @login_required()
@@ -188,12 +193,19 @@ def wishListPage(request):
 
 @login_required()
 def checkout(request):
-    order_amt = 0
+    if request.user.state.strip() == '' or request.user.city.strip() == '':
+        messages.info(request, 'Shipping details not set. Set delivery/shipping info and then proceed to checkout')
+        return redirect('account')
+    elif len(Cart.objects.filter(user=request.user)) == 0:
+        messages.info(request, 'you do not have any items to checkout!')
+        return redirect('market')
+    order_total = 0
     cart_items =  Cart.objects.filter(user=request.user)
     for item in cart_items:
-        order_amt += (item.number_of_items * item.product.price) 
+        order_total += item.CartTotal()
+    payable_amt = order_total + (order_total * 0.015)
         
-    return render(request, 'main/checkout.html', )
+    return render(request, 'main/checkout.html', {"payable_amt":payable_amt, "order_total":order_total})
 
 
 @login_required()
@@ -212,35 +224,6 @@ def delWishlistItem(request):
     wishlist_item = get_object_or_404(WishList, product=product, user=request.user)
     wishlist_item.delete()
     return JsonResponse({"success":"item deleted"})
-
-
-def contact(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        email = request.POST['email']
-        subject = request.POST['subject']
-        message = request.POST['message']
-        if name and email and subject and message:
-            context ={
-                "name":name,
-                "message":message
-            }
-            e = SendEmail(subject, settings.DEFAULT_FROM_EMAIL,context,'emails/contact.html' )
-            print(e)
-            messages.success(request, 'email sent successfully, or failed')
-            return redirect('contact')
-        else:
-            messages.error(request, 'fields can not be blank')
-            return redirect('contact')
-    return render(request, 'main/contact.html')
-
-
-def faqs(request):
-    return render(request, 'main/faq.html')
-
-
-def aboutUs(request):
-    return render(request, 'main/about.html')
 
 
 def searchProducts(request):
@@ -291,16 +274,20 @@ def writeReview(request, slug):
 def createOrder(request, id):
     # only after successful payment
     order = get_object_or_404(Order, tracking_id=id)
-
     cart_items = Cart.objects.filter(user=request.user)
     for item in cart_items:
-        new_order_item = OrderItem.objects.create(user=item.user, order=order, product=item.product, quantity=item.number_of_items)
+        if item.product.discount == 0:
+            amount = item.number_of_items * item.product.price
+            unit_price = item.product.price
+        else:
+            amount = item.number_of_items * item.product.discount_price
+            unit_price = item.product.discount_price
+        new_order_item = OrderItem.objects.create(user=item.user, order=order, product=item.product, quantity=item.number_of_items, amount=amount, unit_price=unit_price)
         new_order_item.save()
         product = Product.objects.get(slug=item.product.slug)
-        product.no_stock -= item.number_of_items
+        product.no_stock -= item.number_of_items # calculate the product quantity ordered, and deduct from available_stock
         product.save()
         item.delete()
-    # also calculate the product quantity, and deduct from no_stock
     return redirect('account')
 
 
@@ -329,7 +316,7 @@ def payment(request):
         order_amt = 0
         cart_items =  Cart.objects.filter(user=request.user)
         for item in cart_items:
-            order_amt += (item.number_of_items * item.product.price) 
+            order_amt +=  item.CartTotal()
         # # Set up the API endpoint and headers
         order = Order.objects.create(user=request.user)
         order.save()
@@ -339,8 +326,9 @@ def payment(request):
             'Content-Type': 'application/json'
         }
         # Set up the request payload
+        amt= order_amt * 100
         payload = {
-            'amount': order_amt * 100,  # Amount in kobo (e.g., 5000 Naira)
+            'amount':amt + (amt*0.015) ,  # Amount in kobo (e.g., 5000 Naira)
             'email': request.user.email,
             'callback_url': request.build_absolute_uri(f'/place-order/{order.tracking_id}'),
             'channels': ['card'],
@@ -365,3 +353,38 @@ def mail(request):
     SendEmail("Test", ["ezythrift@gmail.com"])
     return JsonResponse({"ok":""})
 
+
+def contact(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        if name and email and subject and message:
+            context ={
+                "name":name,
+                "message":message
+            }
+            e = SendEmail(subject, settings.DEFAULT_FROM_EMAIL,context,'emails/contact.html' )
+            print(e)
+            messages.success(request, 'email sent successfully, or failed')
+            return redirect('contact')
+        else:
+            messages.error(request, 'fields can not be blank')
+            return redirect('contact')
+    return render(request, 'main/contact.html')
+
+
+def faqs(request):
+    return render(request, 'main/faq.html', {"faqs":Faq.objects.all()})
+
+
+def aboutUs(request):
+    return render(request, 'main/about.html')
+
+
+def terms_and_conditions(request):
+    return render(request, 'main/terms.html')
+
+def privacy_policy(request):
+    return render(request, 'main/policy.html')

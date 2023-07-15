@@ -87,20 +87,7 @@
                                                     </div>
                                                     <div class="product_desc">
                                                         <div class="product_desc_info">
-                                                            <div class="product-review">
-                                                                <h5 class="manufacturer">
-                                                                    <a href="">{{product.product_type}}</a>
-                                                                </h5>
-                                                                <div class="rating-box">
-                                                                    <ul class="rating">
-                                                                        <li><i class="fa fa-star-o"></i></li>
-                                                                        <li><i class="fa fa-star-o"></i></li>
-                                                                        <li><i class="fa fa-star-o"></i></li>
-                                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
+                                                         
                                                             <h4><a class="product_name" href="">{{product.name}}</a></h4>
                                                             <div class="price-box">
                                                                 {% if product.discount == 0 %}
@@ -110,6 +97,21 @@
                                                                 <span class="old-price">&#8358;{{product.price |intcomma }}</span>
                                                                 <span class="discount-percentage">-{{product.discount}}%</span>
                                                                 {% endif %}
+                                                            </div>
+                                                            <div class="my-4">
+                                                                {% if user.is_authenticated %}
+                                                                {% if product.in_stock %}
+                                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                                <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                                {% else %}
+                                                                <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
+                                                                <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+                        
+                                                                {% endif %}
+                                                                {% else %}
+                                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
+                                                                <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                                {% endif %} 
                                                             </div>
                                                         </div>
                                                     
