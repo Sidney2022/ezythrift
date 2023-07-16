@@ -14,7 +14,7 @@
 
 # Overview
 
-Go-chunk is an ecommerce platform where users can purchase products at affordble prices free and reliable file splitter that allows you to split your large CSV or JSON files into smaller bits called CHUNKS. These chunks are converted into Zip for download and also made available to save for later download. On Go-chunk your data is secured and protected from security breach and also files are splitted in the fastest way possible.
+EzyThrift is an eCommerce platform where users can purchase products at affordble prices 
 
 
 # Features
