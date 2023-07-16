@@ -9,6 +9,7 @@ from django.views import View
 import requests
 from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponseNotAllowed
 
 
 def checkSort(query, products):
@@ -96,8 +97,11 @@ def getProduct(request, slug):
     products = Product.objects.filter( Q(category=product.category, status='approved') | Q(brand=product.brand, status='approved')).exclude(slug=slug)
     context = {
         "product":product,
-        "products":products
+        "products":products,
+        "reviews":Review.objects.filter(product=product),
         }
+    if request.user.is_authenticated:
+        context["can_write_review"] = product.can_write_review(product=product, request_user=request.user) 
     return render(request, 'main/product.html', context)
 
 
@@ -136,13 +140,14 @@ def UpdateCartItem(request, id):
     if not item.product.in_stock():
         return JsonResponse({"error":"out of stock"})
     elif item.product.in_stock() and item.product.no_stock < int(quantity):
-        return JsonResponse({"error":f"please retry a lesser quantity. there are only {item.product.no_stock} units left"})
+        return JsonResponse({"error":f"please retry with a lesser quantity. there are only {item.product.no_stock} units left"})
     item.number_of_items = int(quantity)
     item.save()
     total = 0
     cart_items =Cart.objects.filter(user=request.user)
     for item in cart_items:
-        total += item.CartTotal()
+        if item.product.in_stock():
+            total += item.CartTotal()
     return JsonResponse({ "info":"cart item updated successfully", "total":total})
 
 
@@ -171,6 +176,7 @@ def getCartItems(request):
    
     total_amt = 0
     for item in cart_items:
+        if item.product.in_stock():
             total_amt += item.CartTotal()
     #     number_of_items += item.number_of_items
     return JsonResponse({"cart":items, 'number_of_items':len(cart_items), "total_amt":total_amt})
@@ -181,7 +187,8 @@ def cartPage(request):
     total = 0
     cart_items =Cart.objects.filter(user=request.user)
     for item in cart_items:
-        total += item.CartTotal()
+        if item.product.in_stock():
+            total += item.CartTotal()
     products = Product.objects.filter(status='approved')
     return render(request, 'main/cart-page.html', { "products":products, "total":total})
 
@@ -202,7 +209,8 @@ def checkout(request):
     order_total = 0
     cart_items =  Cart.objects.filter(user=request.user)
     for item in cart_items:
-        order_total += item.CartTotal()
+        if item.product.in_stock():
+            order_total += item.CartTotal()
     payable_amt = order_total + (order_total * 0.015)
         
     return render(request, 'main/checkout.html', {"payable_amt":payable_amt, "order_total":order_total})
@@ -265,9 +273,15 @@ def writeReview(request, slug):
         review = request.POST['comment']
         rating = request.POST['rating']
         product = get_object_or_404(Product, slug=slug, status='approved')
+        if not product.can_write_review(product=product, request_user=request.user):
+            messages.error(request, 'you cannot write a review because you have not purchased product')
+            return redirect('product', slug) 
         new_review = Review.objects.create(user=request.user, product=product, rating=rating, review=review)
         new_review.save()
+        messages.success(request, 'review added successfully')
         return redirect('product', slug)
+    raise Http404('invalid request')
+
     
 
 @login_required()

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django import forms
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name',  'category', 'date', 'status', 'price', 'discount_price', 'no_stock', 'in_stock', "Edit_button", 'delete_button']
+    list_display = ['name',  'category', 'date', 'status', 'price', 'discount_price', 'no_stock', 'in_stock', 'average_rating', "Edit_button", 'delete_button']
     search_fields = ['name', 'description']  # Fields to be searched
     readonly_fields = []  # Fields that should be read-only for all users
     list_per_page = 20
@@ -79,6 +79,9 @@ class BannerProductAdmin(admin.ModelAdmin):
 class FaqAdmin(admin.ModelAdmin):
     list_display = ['question']
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'rating', 'review', 'date']
+
 admin.site.register(Faq, FaqAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductType, )
@@ -86,7 +89,7 @@ admin.site.register(Seller, )
 admin.site.register(NewsLetter, )
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory)
-admin.site.register(Review)
+admin.site.register(Review, ReviewAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Brand)

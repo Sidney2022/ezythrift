@@ -25,7 +25,7 @@
                             <div class="slider-content">
                                 <h5>Sale Offer <span>-20% Off</span> This Week</h5>
                                 <h2>Chamcham Galaxy S9 | S9+</h2>
-                                <h3>Starting at <span>$1209.00</span></h3>
+                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
                                 <div class="default-btn slide-btn">
                                     <a class="links" href="{% url 'market' %}">Shopping Now</a>
                                 </div>
@@ -38,7 +38,7 @@
                             <div class="slider-content">
                                 <h5>Sale Offer <span>Black Friday</span> This Week</h5>
                                 <h2>Work Desk Surface Studio 2018</h2>
-                                <h3>Starting at <span>$824.00</span></h3>
+                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
                                 <div class="default-btn slide-btn">
                                     <a class="links" href="{% url 'market' %}">Shopping Now</a>
                                 </div>
@@ -51,7 +51,7 @@
                             <div class="slider-content">
                                 <h5>Sale Offer <span>-10% Off</span> This Week</h5>
                                 <h2>Phantom 4 Pro+ Obsidian</h2>
-                                <h3>Starting at <span>$1849.00</span></h3>
+                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
                                 <div class="default-btn slide-btn">
                                     <a class="links" href="{% url 'market' %}">Shopping Now</a>
                                 </div>
@@ -65,12 +65,12 @@
             <!-- Begin Li Banner Area -->
             <div class="col-lg-4 col-md-4 text-center pt-xs-30">
                 <div class="li-banner">
-                    <a href="#">
+                    <a href="{% url 'market' %}">
                         <img src="{% static 'images/banner/1_1.jpg' %}" alt="">
                     </a>
                 </div>
                 <div class="li-banner mt-15 mt-sm-30 mt-xs-30">
-                    <a href="#">
+                    <a href="{% url 'market' %}">
                         <img src="{% static 'images/banner/1_2.jpg' %}" alt="">
                     </a>
                 </div>
@@ -85,7 +85,7 @@
                 <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
                     <div class="product-area shop-product-area">
                         <div class="li-section-title">
-                            <h2>Our Categories
+                            <h2>Shop By Category
                                 {% comment %} <span></span> {% endcomment %}
                             </h2>
                             
@@ -163,17 +163,16 @@
                                             <div class="my-4">
                                                 {% if user.is_authenticated %}
                                                 {% if product.in_stock %}
-                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                                                <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
                                                 {% else %}
-                                                <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
-                                                <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+                                                <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
         
                                                 {% endif %}
                                                 {% else %}
-                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
-                                                <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% endif %} 
+                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
+                                                <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                {% endif %}  
                                             </div>
                                         </div>
                                     </div>
@@ -209,12 +208,12 @@
                 <!-- Li's Static Home Image Area End Here -->
                 <!-- Begin Li's Static Home Content Area -->
                 <div class="li-static-home-content">
-                    <p>Sale Offer<span>-20% Off</span>This Week</p>
+                    {% comment %} <p>Sale Offer<span>-20% Off</span>This Week</p> {% endcomment %}
                     <h2>Featured Product</h2>
                     <h2>Meito Accessories 2018</h2>
                     <p class="schedule">
                         Starting at
-                        <span> $1209.00</span>
+                        <span> &#8358;120,000.00</span>
                     </p>
                     <div class="default-btn">
                         <a href="{% url 'market' %}" class="links">Start Shopping Now</a>
@@ -268,17 +267,16 @@
                                             <div class="my-4">
                                                 {% if user.is_authenticated %}
                                                 {% if product.in_stock %}
-                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                                                <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
                                                 {% else %}
-                                                <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
-                                                <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+                                                <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm" id="add-cart-btn" type="submit"> Out Of Stock </button>
         
                                                 {% endif %}
                                                 {% else %}
-                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
-                                                <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% endif %} 
+                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
+                                                <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                {% endif %}  
                                             </div>
                                         </div>
                                       

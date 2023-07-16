@@ -154,6 +154,26 @@ class Product(models.Model):
         img_list = [self.img1, self.img2, self.img3, self.img4, self.img5]
         img_list = [img.url for img in img_list]
         return img_list
+    
+    def average_rating(self):
+        reviews = Review.objects.filter(product=self.id)
+        totaL_reviews = len(reviews)
+        totaL_rating_reviews = 0
+        for review in reviews:
+            totaL_rating_reviews += review.rating
+        if totaL_rating_reviews !=0:
+            avg_rating = totaL_rating_reviews/totaL_reviews
+        else:
+            avg_rating = 0
+        return round(avg_rating,1)
+    
+    def can_write_review(self, request_user, product):
+        item = OrderItem.objects.filter(product=product, user=request_user).first()
+        if not item:
+            return False
+        elif  not Order.objects.filter(tracking_id=item.order.tracking_id, status="completed").exists():
+            return False
+        return True
     # create color model and get it here via a method
 
 
@@ -163,6 +183,7 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()
     review = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    
 
 
 class Cart(models.Model):
@@ -184,9 +205,6 @@ class Cart(models.Model):
             total = self.product.discount_price * self.number_of_items
         return total
 
-        
-
-
 
 class WishList(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -199,12 +217,6 @@ class NewsLetter(models.Model):
         return self.email
 
 
-# class Billing(models.Model):
-#     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
-# class FeaturedProduct(models.Model):
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
 class Order(models.Model):
     tracking_id = models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -215,7 +227,6 @@ class Order(models.Model):
         ("cancelled", "Cancelled")
     ), default= "in progress")
     badge = models.CharField(max_length=30, null=True,  blank=True)
-
 
     def save(self, *args, **kwargs):
         if self.status == 'cancelled':
@@ -237,8 +248,6 @@ class Order(models.Model):
             amt += item.CartTotal()
         return amt
     
-   
-
     class Meta:
         ordering = ['-date']
 
@@ -261,7 +270,6 @@ class OrderItem(models.Model):
             total = self.product.price * self.quantity
         else:
             total = self.product.discount_price * self.quantity
-        print(total)
         return total
 
 
@@ -282,3 +290,4 @@ class Faq(models.Model):
 
     def __str__(self):
         return self.question
+    

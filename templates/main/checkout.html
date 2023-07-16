@@ -2,6 +2,12 @@
 {% load static %}
 {% load humanize  %}
 {% block content %}
+<style>
+    .fa-info {
+        border :1px solid #ffc107;
+        border-radius:50%
+    }
+</style>
 <div class="breadcrumb-area">
     <div class="container">
         <div class="breadcrumb-content">
@@ -34,19 +40,14 @@
                     </ul>
 
                 </div>
-                <div class="different-address">
+                <div class="different-address mb-4">
                     <div class="ship-different-title">
                             <p>Ship to a different address? 
                             <a href="{% url 'account' %}" > change you shipping/delivery info here </a>
                         </p>
                     </div>
                     
-                    {% comment %} <div class="order-notes">
-                        <div class="checkout-form-list">
-                            <label>Order Notes</label>
-                            <textarea id="checkout-mess" cols="30" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
-                        </div>
-                    </div> {% endcomment %}
+                    
                 </div>
                 {% else %}
                 <div>
@@ -70,10 +71,12 @@
                             </thead>
                             <tbody>
                                 {% for item in cart_items %}
+                                {% if item.product.in_stock %}
                                 <tr class="cart_item">
                                     <td class="cart-product-name"> {{item.product.name}} <strong class="product-quantity"> × {{item.number_of_items}} </strong></td>
                                     <td class="cart-product-total"><span class="amount">&#8358;{{item.CartTotal|intcomma}} </span></td>  
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                             </tbody>
                             <tfoot>
@@ -98,14 +101,14 @@
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content p-2">
                                             <div class="modal-body">
-                                                <div class="modal-inner-area row mb-5" style="font-size:15px">
-                                                    <p class=" text-warning " > <i class ="fa fa-info" ></i> The next page is a simulated (demo) payment to test 
+                                                <div class="modal-inner-area row " style="font-size:15px">
+                                                    <p class=" text-warning my-3" > <i class ="fa fa-info p-1" ></i> The next page is a simulated (demo) payment to test 
                                                         paystack integration. You are not required to enter any card details. Just follow the prompts. click on success or 
                                                         authorize if the success button doesn't work. 
                                                         <br>
-                                                        <i class ="fa fa-info" ></i> No refund After payment is made
+                                                        <i class ="fa fa-info p-1" ></i> No refund After payment is made
                                                     </p>
-                                                    <span > <i class="fa fa-info text-secondary"></i> NOTE: payment includes the paystack fee/commission of 1.8% 
+                                                    <span class="mb-3" > <i class="fa fa-info p-1 text-warning "></i> NOTE: payment includes the paystack fee/commission of 1.8% 
                                                         <p class="text-secondary"> Total amount payable is &#8358;{{payable_amt|intcomma}} </p>
                                                     </span>
                                                     

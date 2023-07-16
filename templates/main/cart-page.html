@@ -28,9 +28,12 @@
                         <div class="table-content table-responsive">
                             <table class="table">
                                 <thead>
-                                    <span class="text-primary">
-                                        <i class="fa fa-info"></i>   you can increase your order quantity.  select desired quantity, and hit the refresh <i class="fa fa-refresh"></i> button
-                                    </span>
+                                    <p class="text-primary ">
+                                        <i class="fa fa-info"></i> you can increase your order quantity, and hit the refresh<i class="fa fa-refresh"></i> button to effect changes
+                                    </p>
+                                    <p class="text-primary ">
+                                        <i class="fa fa-info"></i>The Total amount excludes "out in stock" cart items. please do well to remove them from cart list
+                                    </p>
                                     <tr>
                                         <th class="cart-product-name">Product</th>
                                         <th class="li-product-thumbnail">image</th>
@@ -53,12 +56,16 @@
                                         <input  id="prod-price"  value="{{item.product.discount_price}}" type="hidden">
                                         {% endif %}
                                         <td class="quantity">
+                                            {% if item.product.in_stock %}
                                             <div style="cursor:pointer"  onclick="updateCartItem(this)">  <i class="fa fa-refresh"></i>  </div>
                                             <div class="cart-plus-minus">
                                                 <input class="cart-plus-minus-box this" id="quantity"  value="{{item.number_of_items}}" type="text">
                                                 <div class="dec qtybutton" id="i-btn"><i class="fa fa-angle-down"></i></div>
                                                 <div class="inc qtybutton" ><i class="fa fa-angle-up" id="inc-btn" ></i></div>
                                             </div>
+                                            {% else %}
+                                            <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
+                                            {% endif %}
                                         </td>
                                         <td class="product-subtotal">
                                             <span id="product-total" class="amount">&#8358;{{item.CartTotal|intcomma}}</span>
@@ -82,7 +89,6 @@
                         <div class="row">
                             <div class="col-md-65 ml-auto">
                                 <div class="cart-page-total">
-                                    <h2>Cart total</h2>
                                     <ul>
                                         {% comment %} <li>Subtotal <span>$130.00</span></li> {% endcomment %}
                                         <li >Total <span id="cart-items-total">&#8358;{{total|intcomma}}</span></li>
@@ -136,17 +142,16 @@
                                                 <div class="my-4">
                                                     {% if user.is_authenticated %}
                                                     {% if product.in_stock %}
-                                                    <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                                                    <button onclick="AddToWishList(this)" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                    <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                    <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
                                                     {% else %}
-                                                    <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
-                                                    <button disabled class="btn btn-secondary"><i class="fa fa-heart-o"></i> <span id="prod-name"></button>
+                                                    <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
             
                                                     {% endif %}
                                                     {% else %}
-                                                    <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning" id="add-cart-btn" type="submit">Add to cart <span id="prod-name"> {{product.slug}}</span></button>
-                                                    <button onclick="loginRequiredAction()" class="btn btn-warning"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                    {% endif %} 
+                                                    <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
+                                                    <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                    {% endif %}  
                                                 </div>
                                             </div>
                                           
@@ -174,7 +179,6 @@
 
 
     <script>
-
         function deleteCartItem(elem) {
 
             fetch(`{% url 'del-cart-item'  %}?item=${elem.textContent}`, {
