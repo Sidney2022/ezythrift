@@ -89,11 +89,6 @@ DATABASES = {
     }
 }
 
-# Update your existing DATABASES configuration
-# DATABASES = {
-#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
-# }
-
 AUTHENTICATION_BACKENDS = [
         'accounts.backends.EmailBackend',
         'django.contrib.auth.backends.ModelBackend',
