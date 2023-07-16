@@ -92,18 +92,18 @@
                         </div>
                         <div class="row">
                             {% for category in product_categories  %}
-                            <div class=" col-2 mt-40">
+                            <div class=" col-2 mt-40 p-2">
                                 
                                 <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
+                                <div class="single-product-wrap ">
                                     <div class="product-image">
                                         <a href="{% url 'shop' category.slug %}">
-                                            <img src="{{category.thumbnail.url}}"  height="70" alt="{{category.category}}">
+                                            <img src="{{category.thumbnail.url}}" width="50" height="50" alt="{{category.category}}">
                                         </a>
                                     </div>
                                     <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <h4><a class="product_name" href="{% url 'shop' category.slug %}">{{category.category}}</a></h4>
+                                        <div class="product_desc_info " >
+                                            <h4><a style="font-size:11px !important; padding:0 !important" class="product_name" href="{% url 'shop' category.slug %}">{{category.category}}</a></h4>
                                         </div>
                                     </div>
                                 </div>

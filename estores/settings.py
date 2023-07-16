@@ -163,15 +163,6 @@ MESSAGE_TAGS = {
     messages.ERROR : 'danger'
 }
 
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': os.getenv('CLOUD_STORAGE_NAME'),
-#     'API_KEY': os.getenv('CLOUD_STORAGE_API_KEY'),
-#     'API_SECRET': os.getenv('CLOUD_STORAGE_API_SECRET'),
-# }
-
-# if not DEBUG:
-#     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 ADMIN_MEDIA_PREFIX='/static/admin'
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -182,12 +173,12 @@ EMAIL_PORT = os.getenv('PORT')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# SECURE_HSTS_SECONDS = 3600
-# SECURE_SSL_REDIRECT = True
-# CSRF_COOKIE_SECURE  = True
-# SESSION_COOKIE_SECURE = True
-# SECURE_HSTS_INCLUDE_SUBDOMAINS =True
-# SECURE_HSTS_PRELOAD=True
+SECURE_HSTS_SECONDS = 3600
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE  = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+SECURE_HSTS_PRELOAD=True
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
