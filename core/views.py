@@ -10,7 +10,7 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseNotAllowed
-
+import json
 
 def checkSort(query, products):
     if query:
@@ -28,7 +28,7 @@ class HomePage(View):
             "latest_products":products.order_by('-date')[:20],
             "hot_products":products.order_by('-no_sold')[:20],
             "products":products,
-            "banners":BannerProduct.objects.all(),
+            "brands":Brand.objects.all(),
             
         }
         return render(request, 'main/index.html', context)
@@ -94,11 +94,13 @@ def marketCategory(request, slug):
 
 def getProduct(request, slug):
     product = get_object_or_404(Product, slug=slug, status='approved')
+    cart_item = Cart.objects.filter(user=request.user, product=product).first()
     products = Product.objects.filter( Q(category=product.category, status='approved') | Q(brand=product.brand, status='approved')).exclude(slug=slug)
     context = {
         "product":product,
         "products":products,
         "reviews":Review.objects.filter(product=product),
+        "cart_item":cart_item
         }
     if request.user.is_authenticated:
         context["can_write_review"] = product.can_write_review(product=product, request_user=request.user) 
@@ -129,6 +131,14 @@ def addCartItem(request):
             "quantity":item.number_of_items,
             "slug":item.product.slug
         })
+
+def addCartItem(request):
+    slug = request.GET.get('slug')
+    product = get_object_or_404(Product, slug=slug)
+    cart_item, created = Cart.objects.get_or_create( product=product, user=request.user)
+    cart_item.number_of_items += 1
+    cart_item.save()   
+    return JsonResponse({'success':"cart item added successfully"})
 
 
 @login_required()
@@ -166,25 +176,26 @@ def addWishListItem(request):
 @login_required()
 def getCartItems(request):
     cart_items = Cart.objects.filter(user=request.user)
-    items  = [{
+    cart_contents  = [{
             "product_name":item.product.name,
             "img":item.product.img1.url,
             "price":item.product.price if item.product.discount == 0 else item.product.discount_price,
             "quantity":item.number_of_items,
             "slug":item.product.slug
         } for item in cart_items]
-   
     total_amt = 0
+    number_of_items =0
     for item in cart_items:
         if item.product.in_stock():
             total_amt += item.CartTotal()
-    #     number_of_items += item.number_of_items
-    return JsonResponse({"cart":items, 'number_of_items':len(cart_items), "total_amt":total_amt})
+        number_of_items += item.number_of_items
+    return JsonResponse({"cart":cart_contents, 'number_of_items':number_of_items, "total_amt":total_amt})
 
 
 @login_required()
 def cartPage(request):
     total = 0
+    # if request.user.is_authenticated:
     cart_items =Cart.objects.filter(user=request.user)
     for item in cart_items:
         if item.product.in_stock():
@@ -211,7 +222,7 @@ def checkout(request):
     for item in cart_items:
         if item.product.in_stock():
             order_total += item.CartTotal()
-    payable_amt = order_total + (order_total * 0.015)
+    payable_amt = order_total + 5000 #(order_total * 0.015) paystack 1.5%
         
     return render(request, 'main/checkout.html', {"payable_amt":payable_amt, "order_total":order_total})
 
@@ -258,8 +269,8 @@ def searchProducts(request):
 
 
 def newsLetter(request):
-    if request.method =="POST":
-        email = request.POST['email']
+        data = json.loads(request.body)
+        email = data['email']
         if  NewsLetter.objects.filter(email=email).exists() or not email:
             return JsonResponse({"status":'error'})
         new_email = NewsLetter.objects.create(email=email)
@@ -342,7 +353,7 @@ def payment(request):
         # Set up the request payload
         amt= order_amt * 100
         payload = {
-            'amount':amt + (amt*0.015) ,  # Amount in kobo (e.g., 5000 Naira)
+            'amount':amt + 5000 ,# (amt*0.015) ,  # Amount in kobo (e.g., 5000 Naira)
             'email': request.user.email,
             'callback_url': request.build_absolute_uri(f'/place-order/{order.tracking_id}'),
             'channels': ['card'],

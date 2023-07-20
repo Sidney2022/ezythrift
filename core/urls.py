@@ -6,8 +6,8 @@ from . import views
 
 urlpatterns = [
    path('', HomePage.as_view(), name='homepage'),
-   path('shop', views.marketPlace, name='market'),
-   path('category/<slug:slug>', views.marketCategory, name='shop'),
+   path('shop', views.marketPlace, name='shop'),
+   path('category/<slug:slug>', views.marketCategory, name='shop-cat'),
 
    path('users/cart', views.getCartItems, name='cart'),
    path('users/cart/delete', views.delCartItem, name='del-cart-item'),
@@ -27,7 +27,7 @@ urlpatterns = [
    path('contact', views.contact, name='contact'),
    path('faqs', views.faqs, name='faq'),
    path('about-us', views.aboutUs, name='about'),
-   path('newsletter', views.newsLetter, name='newsletter'),
+   path('newsletter', csrf_exempt(views.newsLetter), name='newsletter'),
    path('products/<slug:slug>/review', views.writeReview, name='review'),
 
    path('place-order/<uuid:id>', views.createOrder, name="order"),

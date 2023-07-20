@@ -1,168 +1,135 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Account</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
 
-<div class="my-account-wrapper my-5">
-    <div class="container">
-        {% include 'messages.html' %}
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- My Account Page Start -->
-                <div class="myaccount-page-wrapper">
-                    <!-- My Account Tab Menu Start -->
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4">
-                            <div class="myaccount-tab-menu nav" role="tablist">
-                                <a href="#dashboad" class="active" data-toggle="tab"><i class="fa fa-dashboard"></i>
-                                    Dashboard</a>
-                                <a href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
-                                
-                                <a href="#shipping-info" data-toggle="tab"><i class="fa fa-user"></i> Shipping Info</a>
-                                <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Logout</a>
+                        <aside class="col-md-4 col-lg-3">
+                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'logout' %}">Sign Out</a>
+                                </li>
+                            </ul>
+                        </aside><!-- End .col-lg-3 -->
+
+                        <div class="col-md-8 col-lg-9">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                    <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+                                    <br>
+                                    From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                                </div><!-- .End .tab-pane -->
+
+                                <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                    <p>No order has been made yet.</p>
+                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- .End .tab-pane -->
+
+                                <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
+                                    <p>No downloads available yet.</p>
+                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- .End .tab-pane -->
+
+                                <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                    <p>The following addresses will be used on the checkout page by default.</p>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+
+                                                    <p>User Name<br>
+                                                    User Company<br>
+                                                    John str<br>
+                                                    New York, NY 10001<br>
+                                                    1-234-987-6543<br>
+                                                    yourmail@mail.com<br>
+                                                    <a href="#">Edit <i class="icon-edit"></i></a></p>
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
+
+                                                    <p>You have not set up this type of address yet.<br>
+                                                    <a href="#">Edit <i class="icon-edit"></i></a></p>
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- .End .tab-pane -->
+
+                                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                    <form action="#">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>First Name *</label>
+                                                <input type="text" class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>Last Name *</label>
+                                                <input type="text" class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <label>Display Name *</label>
+                                        <input type="text" class="form-control" required>
+                                        <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
+
+                                        <label>Email address *</label>
+                                        <input type="email" class="form-control" required>
+
+                                        <label>Current password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control">
+
+                                        <label>New password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control">
+
+                                        <label>Confirm new password</label>
+                                        <input type="password" class="form-control mb-2">
+
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div><!-- .End .tab-pane -->
                             </div>
-                        </div>
-                        <!-- My Account Tab Menu End -->
-
-                        <!-- My Account Tab Content Start -->
-                        <div class="col-lg-9 col-md-8">
-                            {% include 'asyncMessages.html' %}
-                            <div class="tab-content" id="myaccountContent">
-                                <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
-                                    <div class="myaccount-content">
-                                        <h3>Dashboard</h3>
-                                        <div class="welcome">
-                                            <p>Hello, <strong>{{user.first_name}} {{user.last_name}}</strong> </p>
-                                        </div>
-                                        <p class="mb-0">From your account dashboard. you can easily check &amp; view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
-                                    </div>
-                                </div>
-                                <!-- Single Tab Content End -->
-
-                                <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="orders" role="tabpanel">
-                                    <div class="myaccount-content">
-                                        <h3>Orders</h3>
-                                        <div class="myaccount-table table-responsive text-center">
-                                            <table class="table table-bordered">
-                                                <thead class="thead-light">
-                                                   
-                                                    <tr>
-                                                        <th>Order id</th>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Total</th>
-                                                        <th colspan="2">Actions</th>
-                                                    </tr>
-                                                    
-                                                </thead>
-                                                <tbody>
-                                                    {% for order in myorders %}
-                                                    <tr>
-                                                        <td>{{order.tracking_id}}</td>
-                                                        <td>{{order.date}}</td>
-                                                        <td> <span class=" btn-sm btn-{{order.badge}} ">{{order.status}}</span> </td>
-                                                        <td>&#8358;{{order.total}}</td>
-                                                        <td><a href="" class="btn-info btn  btn-sm">Cancel</a></td>
-                                                        <td><a href="{% url 'order-items' order.tracking_id %}" class="btn-info btn  btn-sm">View</a></td>
-                                                    </tr>
-                                                    {%empty%}
-                                                    <td colspan="6">No order history</td>
-                                                    {% endfor %}
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Tab Content End -->
-
-                              
-                                <div class="tab-pane fade" id="shipping-info" role="tabpanel">
-                                
-                                    <div class="contact-form-content pt-sm-55 pt-xs-55">
-                                        <h3>Shipping Details</h3>
-                                        <div class="contact-form pt-3">
-                                            <form action="" method="post" id="shipping-form">
-                                                {% csrf_token %}
-                                                <div class="row">
-                                                    <div class="form-group col-12">
-                                                        <label>Country <span class="required">*</span></label>
-                                                        <select class="nice-select wide" name="country">
-                                                        <option selected value="{{user.country}}">{{user.country}}</option>
-                                                        <option value="london">London</option>
-                                                        <option value="romania">Romania</option>
-                                                        <option value="france">French</option>
-                                                        <option value="germany">Germany</option>
-                                                        <option value="australia">Australia</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-6">
-                                                        <label>State/County <span class="required">*</span></label>
-                                                        <input type="text" name="state" id="customername" required="" value="{{user.state}}">
-                                                    </div>
-                                                    <div class="form-group col-6">
-                                                        <label>Town/City <span class="required">*</span></label>
-                                                        <input type="text" name="town" id="customerEmail" required="" value="{{user.city}}">
-                                                    </div>
-                                                    <div class="form-group col-12">
-                                                        <label>Delivery Address  (your order will be delivered to this address) <span class="required">*</span></label>
-                                                        <input type="text" name="address" id="contactSubject" value="{{user.address}}">
-                                                    </div>
-                                                    <div class="form-group col-6">
-                                                        <label>Apartment <span class="required">*</span></label>
-                                                        <input type="text" name="apartment" id="contactSubject" value="{{user.apartment}}">
-                                                    </div>
-                                                    <div class="form-group col-6">
-                                                        <label>Phone <span class="required">*</span></label>
-                                                        <input type="text" name="phone" id="contactSubject" value="{{user.phone_number}}">
-                                                    </div>
-                                                    <div class="form-group col-12">
-                                                        <button type="submit" value="submit" id="shipping-btn" class="li-btn-3" name="submit">send</button>
-                                                    </div>
-                                                 </div>
-                                            </form>
-                                        </div>
-                                        <p class="form-messege"></p>
-                                    </div>
-                                </div> <!-- Single Tab Content End -->
-                            </div>
-                        </div> <!-- My Account Tab Content End -->
-                    </div>
-                </div> <!-- My Account Page End -->
-            </div>
-        </div>
-    </div>
-</div>
-
-<script >  
-    const ShippingForm = document.getElementById("shipping-form")
-    ShippingForm.addEventListener("submit", (e) => {
-        e.preventDefault()
-        const shipformData = new FormData(ShippingForm)
-        const ShippingFormSubmitBtn = document.getElementById("shipping-btn")
-        ShippingFormSubmitBtn.innerHTML="please wait..."
-        ShippingFormSubmitBtn.disabled = true;
-    fetch("{% url 'shipping'   %}", {
-        body: shipformData,
-        method: "POST",
-      })
-        .then((res) => res.json())
-        .then((data) => {
-         console.log("data", data);
-        ShippingFormSubmitBtn.innerHTML="Save Changes"
-        const msgArea = document.getElementById('msgArea')
-        msgArea.setAttribute("style", "display:block")
-        msgArea.classList.remove('alert-danger')
-        msgArea.classList.add('alert-success')
-        msgArea.innerHTML = 'shipping details changed successfully'
-        alert('shipping details changed successfully')
-          ShippingFormSubmitBtn.removeAttribute("disabled");
-         
-        });
-    })
-
-</script>
-
-  
-{% endblock  %}
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+{%endblock%}

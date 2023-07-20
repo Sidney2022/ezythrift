@@ -4,7 +4,6 @@ import uuid
 from django.utils.text import slugify
 
 
-
 class Seller(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -19,6 +18,12 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = 'Categories'
+
+    def short_name(self):
+        return self.category.split(' ')[0]
+
+    def no_products(self):
+        return len(Product.objects.filter(category=self.id))
 
     def SubCategories(self):
         sub_categories = SubCategory.objects.filter(category=self.id)
@@ -151,7 +156,7 @@ class Product(models.Model):
             return False
         
     def prod_imgs(self):
-        img_list = [self.img1, self.img2, self.img3, self.img4, self.img5]
+        img_list = [self.img2, self.img1, self.img3, self.img4]
         img_list = [img.url for img in img_list]
         return img_list
     
@@ -165,7 +170,9 @@ class Product(models.Model):
             avg_rating = totaL_rating_reviews/totaL_reviews
         else:
             avg_rating = 0
-        return round(avg_rating,1)
+
+        percentage = (avg_rating/5) * 100
+        return {"percentage":percentage, "no_reviews":totaL_reviews}
     
     def can_write_review(self, request_user, product):
         item = OrderItem.objects.filter(product=product, user=request_user).first()
@@ -183,7 +190,8 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()
     review = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-    
+    def percentage_rating(self):
+        return ((self.rating/5) * 100)
 
 
 class Cart(models.Model):
@@ -195,6 +203,25 @@ class Cart(models.Model):
     def cartNum(self):
         cart = 0
         for item in Cart.objects.filter(user=self.user):
+            cart += item.product.price
+        return cart
+    
+    def CartTotal(self):
+        if self.product.discount == 0:
+            total = self.product.price * self.number_of_items
+        else:
+            total = self.product.discount_price * self.number_of_items
+        return total
+
+
+class Cart_Item(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    number_of_items = models.PositiveIntegerField(default=1)
+    session = models.CharField(max_length=255)
+
+    def cartNum(self):
+        cart = 0
+        for item in Cart_Item.objects.filter(user=self.user):
             cart += item.product.price
         return cart
     
@@ -282,7 +309,6 @@ class BannerProduct(models.Model):
         ("bottom", "bottom")
     ))
     
-
 
 class Faq(models.Model):
     question = models.CharField(max_length=255)

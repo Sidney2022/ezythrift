@@ -1,309 +1,367 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% load humanize  %}
 {% block content %}
-<style>
-    #product-to-add{
-        display:none
-    }
-    .add-actions-link button {
-        border:none;
-        background:transparent;
-        color:#333
-    }
-</style>
-<div class="slider-with-banner">
-    <div class="container">
-        <div class="row">
-            <!-- Begin Slider Area -->
-            <div class="col-lg-8 col-md-8">
-                <div class="slider-area">
-                    <div class="slider-active owl-carousel">
-                        <!-- Begin Single Slide Area -->
-                        <div class="single-slide align-center-left  animation-style-01 bg-1">
-                            <div class="slider-progress"></div>
-                            <div class="slider-content">
-                                <h5>Sale Offer <span>-20% Off</span> This Week</h5>
-                                <h2>Chamcham Galaxy S9 | S9+</h2>
-                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
-                                <div class="default-btn slide-btn">
-                                    <a class="links" href="{% url 'market' %}">Shopping Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Slide Area End Here -->
-                        <!-- Begin Single Slide Area -->
-                        <div class="single-slide align-center-left animation-style-02 bg-2">
-                            <div class="slider-progress"></div>
-                            <div class="slider-content">
-                                <h5>Sale Offer <span>Black Friday</span> This Week</h5>
-                                <h2>Work Desk Surface Studio 2018</h2>
-                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
-                                <div class="default-btn slide-btn">
-                                    <a class="links" href="{% url 'market' %}">Shopping Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Slide Area End Here -->
-                        <!-- Begin Single Slide Area -->
-                        <div class="single-slide align-center-left animation-style-01 bg-3">
-                            <div class="slider-progress"></div>
-                            <div class="slider-content">
-                                <h5>Sale Offer <span>-10% Off</span> This Week</h5>
-                                <h2>Phantom 4 Pro+ Obsidian</h2>
-                                <h3>Starting at <span>&#8358;181,449.00</span></h3>
-                                <div class="default-btn slide-btn">
-                                    <a class="links" href="{% url 'market' %}">Shopping Now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Slide Area End Here -->
-                    </div>
-                </div>
-            </div>
-            <!-- Slider Area End Here -->
-            <!-- Begin Li Banner Area -->
-            <div class="col-lg-4 col-md-4 text-center pt-xs-30">
-                <div class="li-banner">
-                    <a href="{% url 'market' %}">
-                        <img src="{% static 'images/banner/1_1.jpg' %}" alt="">
+{% load humanize %}
+<main class="main">
+    <div class="intro-section pt-3 pb-3 mb-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="intro-slider-container slider-container-ratio mb-2 mb-lg-0">
+                        <div class="intro-slider owl-carousel owl-simple owl-dark owl-nav-inside" data-toggle="owl" data-owl-options='{
+                                "nav": false, 
+                                "dots": true,
+                                "responsive": {
+                                    "768": {
+                                        "nav": true,
+                                        "dots": false
+                                    }
+                                }
+                            }'>
+                            <div class="intro-slide">
+                                <figure class="slide-image">
+                                    <picture>
+                                        <source media="(max-width: 480px)" srcset="static/assets/images/demos/demo-3/slider/slide-1-480w.jpg' %}">
+                                        <img src="{% static 'assets/images/demos/demo-3/slider/slide-1.jpg' %}" alt="Image Desc">
+                                    </picture>
+                                </figure><!-- End .slide-image -->
+
+                                <div class="intro-content">
+                                    <h3 class="intro-subtitle text-primary">Daily Deals</h3><!-- End .h3 intro-subtitle -->
+                                    <h1 class="intro-title">
+                                        AirPods <br>Earphones
+                                    </h1><!-- End .intro-title -->
+
+                                    <div class="intro-price">
+                                        <sup>Today:</sup>
+                                        <span class="text-primary">
+                                            $247<sup>.99</sup>
+                                        </span>
+                                    </div><!-- End .intro-price -->
+
+                                    <a href="{% url 'shop' %}" class="btn btn-primary btn-round">
+                                        <span>Click Here</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </a>
+                                </div><!-- End .intro-content -->
+                            </div><!-- End .intro-slide -->
+
+                            <div class="intro-slide">
+                                <figure class="slide-image">
+                                    <picture>
+                                        <source media="(max-width: 480px)" srcset="{% static 'assets/images/demos/demo-3/slider/slide-2-480w.jpg' %}">
+                                        <img src="{% static 'assets/images/demos/demo-3/slider/slide-2.jpg' %}" alt="Image Desc">
+                                    </picture>
+                                </figure><!-- End .slide-image -->
+
+                                <div class="intro-content">
+                                    <h3 class="intro-subtitle text-primary">Deals and Promotions</h3><!-- End .h3 intro-subtitle -->
+                                    <h1 class="intro-title">
+                                        Echo Dot <br>3rd Gen
+                                    </h1><!-- End .intro-title -->
+
+                                    <div class="intro-price">
+                                        <sup class="intro-old-price">$49,99</sup>
+                                        <span class="text-primary">
+                                            $29<sup>.99</sup>
+                                        </span>
+                                    </div><!-- End .intro-price -->
+
+                                    <a href="{% url 'shop' %}" class="btn btn-primary btn-round">
+                                        <span>Click Here</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </a>
+                                </div><!-- End .intro-content -->
+                            </div><!-- End .intro-slide -->
+                        </div><!-- End .intro-slider owl-carousel owl-simple -->
+                        
+                        <span class="slider-loader"></span><!-- End .slider-loader -->
+                    </div><!-- End .intro-slider-container -->
+                </div><!-- End .col-lg-8 -->
+
+                <div class="col-lg-4">
+                    <div class="intro-banners">
+                        <div class="banner mb-lg-1 mb-xl-2">
+                            <a href="{% url 'shop' %}">
+                                <img src="{% static 'assets/images/demos/demo-3/banners/banner-1.jpg' %}" alt="Banner">
+                            </a>
+
+                            <div class="banner-content">
+                                <h4 class="banner-subtitle d-lg-none d-xl-block"><a href="#">Top Product</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title"><a href="{% url 'shop' %}">Edifier <br>Stereo Bluetooth</a></h3><!-- End .banner-title -->
+                                <a href="#" class="banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+
+                        <div class="banner mb-lg-1 mb-xl-2">
+                            <a href="{% url 'shop' %}">
+                                <img src="{% static 'assets/images/demos/demo-3/banners/banner-2.jpg' %}" alt="Banner">
+                            </a>
+
+                            <div class="banner-content">
+                                <h4 class="banner-subtitle d-lg-none d-xl-block"><a href="#">Clearance</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title"><a href="{% url 'shop' %}">GoPro - Fusion 360 <span>Save $70</span></a></h3><!-- End .banner-title -->
+                                <a href="{% url 'shop' %}" class="banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+
+                        <div class="banner mb-0">
+                            <a href="{% url 'shop' %}">
+                                <img src="{% static 'assets/images/demos/demo-3/banners/banner-3.jpg' %}" alt="Banner">
+                            </a>
+
+                            <div class="banner-content">
+                                <h4 class="banner-subtitle d-lg-none d-xl-block"><a href="#">Featured</a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title"><a href="{% url 'shop' %}">Apple Watch 4 <span>Our Hottest Deals</span></a></h3><!-- End .banner-title -->
+                                <a href="{% url 'shop' %}" class="banner-link">Shop Now<i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+                    </div><!-- End .intro-banners -->
+                </div><!-- End .col-lg-4 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .intro-section -->
+
+    <div class="container featured">
+        <div class="heading heading-flex">
+            <div class="heading-left">
+                <h2 class="title">Shop by Category </h2><!-- End .title -->
+            </div><!-- End .heading-left -->
+
+            <div class="heading-right">
+                <a href="{% url 'shop' %}" class="title-link">Shop All<i class="icon-long-arrow-right"></i></a>
+            </div><!-- End .heading-right -->
+        </div>
+        <hr class=" mb-4">
+        <div class="row justify-content-center">
+            {% for category in product_categories %}
+            <div class="col-md-3 col-lg-2  col-sm-2">
+                <div class="banner banner-cat">
+                    <a href="{% url 'shop-cat' category.slug %}">
+                        <img style="height:150px !important; max-height:150px !important" src="{{category.thumbnail.url}}" alt="Banner">
                     </a>
-                </div>
-                <div class="li-banner mt-15 mt-sm-30 mt-xs-30">
-                    <a href="{% url 'market' %}">
-                        <img src="{% static 'images/banner/1_2.jpg' %}" alt="">
-                    </a>
-                </div>
-            </div>
-            <!-- Li Banner Area End Here -->
-        </div>
-    </div>
-</div>
-<div class="container my-5 p-2 ">
-   <div class="shop-products-wrapper">
-            <div class="tab-content">
-                <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
-                    <div class="product-area shop-product-area">
-                        <div class="li-section-title">
-                            <h2>Shop By Category
-                                {% comment %} <span></span> {% endcomment %}
-                            </h2>
-                            
-                        </div>
-                        <div class="row">
-                            {% for category in product_categories  %}
-                            <div class=" col-2 mt-40 p-2">
-                                
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap ">
-                                    <div class="product-image">
-                                        <a href="{% url 'shop' category.slug %}">
-                                            <img src="{{category.thumbnail.url}}" width="50" height="50" alt="{{category.category}}">
-                                        </a>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info " >
-                                            <h4><a style="font-size:11px !important; padding:0 !important" class="product_name" href="{% url 'shop' category.slug %}">{{category.category}}</a></h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            {%empty%}
-                            <div class="product_desc">
-                            no categories 
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
-<!-- Slider With Banner Area End Here -->
-<!-- Begin Product Area -->
-<div class="product-area pt-60 pb-50">
-    <div class="container">
-        <div class="shop-products-wrapper">
-            <div class="tab-content">
-                <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
-                    <div class="product-area shop-product-area ">
-                        <div class="li-section-title">
-                            <h2>Latest Products
-                                {% comment %} <span></span> {% endcomment %}
-                            </h2>
-                            
-                        </div>
-                        <div class="row px-3" >
-                            {% for product in latest_products  %}
-                            <div  id="prod-wrapper-index" class="mt-5 p-3">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap ">
-                                    <div class="product-image ">
-                                        <a href="{% url 'product' product.slug %}">
-                                            <img width="" style ="max-width:150px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
-                                        </a>
-                                        {% if product.is_new %}
-                                        <span class="sticker">New</span>
-                                        {% endif %}
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            
-                                            <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                            <div class="price-box">
-                                                {% if product.discount == 0 %}
-                                                <span class="new-price new-price-2">&#8358;{{product.price|intcomma}}</span>
-                                                {% else %}
-                                                <span class="new-price new-price-2">&#8358;{{product.discount_price|intcomma}}</span>
-                                                <span class="old-price">&#8358;{{product.price|intcomma}}</span>
-                                                <span class="discount-percentage">-{{product.discount}}%</span>
-                                                {% endif %}
-                                            </div>
-                                            <div class="my-4">
-                                                {% if user.is_authenticated %}
-                                                {% if product.in_stock %}
-                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                                                <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% else %}
-                                                <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
+
+                    <div class="banner-content banner-content-overlay text-center">
+                        <h3 class="banner-title text-sm">{{category.category}}</h3><!-- End .banner-title -->
+                        <h4 class="banner-subtitle">{{category.no_products}} Products</h4><!-- End .banner-subtitle -->
+                        <a href="{% url 'shop-cat' category.slug %}" class="banner-link">Shop Now</a>
+                    </div><!-- End .banner-content -->
+                </div><!-- End .banner -->
+            </div><!-- End .col-md-6 -->
+            {% endfor %}
         
-                                                {% endif %}
-                                                {% else %}
-                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
-                                                <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% endif %}  
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-
-                            {%empty%}
-                            <div class="product_desc">
-
-                            no products 
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-               
-              
-            </div>
         </div>
     </div>
-</div>
-<!-- Product Area End Here -->
 
+    <div class="container featured">
+        <div class="heading heading-flex">
+            <div class="heading-left">
+                <h2 class="title">Latest Arrivals </h2><!-- End .title -->
+            </div><!-- End .heading-left -->
 
-<!-- Begin Li's Static Home Area -->
-<div class="li-static-home">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Begin Li's Static Home Image Area -->
-                <div class="li-static-home-image"></div>
-                <!-- Li's Static Home Image Area End Here -->
-                <!-- Begin Li's Static Home Content Area -->
-                <div class="li-static-home-content">
-                    {% comment %} <p>Sale Offer<span>-20% Off</span>This Week</p> {% endcomment %}
-                    <h2>Featured Product</h2>
-                    <h2>Meito Accessories 2018</h2>
-                    <p class="schedule">
-                        Starting at
-                        <span> &#8358;120,000.00</span>
-                    </p>
-                    <div class="default-btn">
-                        <a href="{% url 'market' %}" class="links">Start Shopping Now</a>
-                    </div>
-                </div>
-                <!-- Li's Static Home Content Area End Here -->
-            </div>
+            <div class="heading-right">
+                <a href="{% url 'shop' %}" class="title-link">Click here to view More<i class="icon-long-arrow-right"></i></a>
+            </div><!-- End .heading-right -->
         </div>
-    </div>
-</div>
-<!-- Li's Static Home Area End Here -->
-<!-- Begin Li's Trending Product Area -->
-<div class="product-area pt-60 pb-50">
+        <hr class=" mb-4">
+        <div class="products mb-3">
+            <div class="row justify-content-center">
+                {% for product in latest_products %}
+                <div class="col-4 col-md-3 col-lg-2 col-xl-2">
+                    <div class="product product-7 text-center">
+                        <figure class="product-media">
+                            <a href="{% url 'product' product.slug %}">
+                                <img style="height:150px !important" src="{{product.img1.url}}" alt="Product image" class="product-image">
+                            </a>
+                            <div class="product-action-vertical">
+                                {% comment %} <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> {% endcomment %}
+                                <button style="border:0" onclick="AddToWishList(this)" class="btn-product-icon btn-wishlist btn-expandable" id="add-cart-btn"> <i class="fa fa-shopping-cart"> </i><span>add to wishlist</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+
+                            </div><!-- End .product-action-vertical -->
+
+                            <div class="product-action">
+                                {% comment %} <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> {% endcomment %}
+                                <button style="border:0" onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" > <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+
+                            </div><!-- End .product-action -->
+                        </figure><!-- End .product-media -->
+
+                        <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#">{{product.category}}</a>
+                            </div><!-- End .product-cat -->
+                            <h3 class="product-title"><a href="{% url 'product' product.slug %}">{{product.name}}</a></h3><!-- End .product-title -->
+                           
+                            <div class="product-price">
+                                {% if product.discount == 0 %}
+                                <span class="new-price ">&#8358;{{product.price |intcomma }}</span>
+                                {% else %}
+                                <span class="new-price ">&#8358;{{product.discount_price |intcomma }}</span>
+                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
+                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                {% endif %}
+                            </div>
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: {{product.average_rating.percentage}}%;"></div><!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                                <span class="ratings-text">( {{product.average_rating.no_reviews}} Reviews )</span>
+                            </div><!-- End .rating-container -->
+                        </div><!-- End .product-body -->
+                    </div><!-- End .product -->
+                </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                {% endfor %}
+            </div><!-- End .row -->
+        </div><!-- End .products -->
+    </div><!-- End .container -->
+
+    <div class="mb-7 mb-lg-11"></div><!-- End .mb-7 -->
+
     <div class="container">
-        <div class="shop-products-wrapper">
-            <div class="tab-content">
-                <div id="grid-view" >
-                    <div class="product-area shop-product-area ">
-                        <div class="li-section-title">
-                            <h2>Trending Products
-                                {% comment %} <span></span> {% endcomment %}
-                            </h2>
+        <div class="cta cta-border cta-border-image mb-5 mb-lg-7" style="background-image: url(static/assets/images/demos/demo-3/bg-1.jpg);">
+            <div class="cta-border-wrapper bg-white">
+                <div class="row justify-content-center">
+                    <div class="col-md-11 col-xl-11">
+                        <div class="cta-content">
+                            <div class="cta-heading">
+                                <h3 class="cta-title text-right"><span class="text-primary">New Deals</span> <br>Start Daily at 12pm e.t.</h3><!-- End .cta-title -->
+                            </div><!-- End .cta-heading -->
                             
-                        </div>
-                        <div class="row px-3" >
-                            {% for product in hot_products  %}
-                            <div  id="prod-wrapper-index" class="mt-4 p-3">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap ">
-                                    <div class="product-image ">
-                                        <a href="{% url 'product' product.slug %}">
-                                            <img width="" style ="max-width:150px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
-                                        </a>
-                                        {% if product.is_new %}
-                                        <span class="sticker">New</span>
-                                        {% endif %}
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            
-                                            <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
-                                            <div class="price-box">
-                                                {% if product.discount == 0 %}
-                                                <span class="new-price new-price-2">&#8358;{{product.price |intcomma }}</span>
-                                                {% else %}
-                                                <span class="new-price new-price-2">&#8358;{{product.discount_price |intcomma }}</span>
-                                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
-                                                <span class="discount-percentage">-{{product.discount}}%</span>
-                                                {% endif %}
-                                            </div>
-                                            <div class="my-4">
-                                                {% if user.is_authenticated %}
-                                                {% if product.in_stock %}
-                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                                                <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% else %}
-                                                <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm" id="add-cart-btn" type="submit"> Out Of Stock </button>
-        
-                                                {% endif %}
-                                                {% else %}
-                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
-                                                <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
-                                                {% endif %}  
-                                            </div>
-                                        </div>
-                                      
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
+                            <div class="cta-text">
+                                <p>Get <span class="text-dark font-weight-normal">FREE SHIPPING* & 5% rewards</span> on <br>every order with Molla Theme rewards program</p>
+                            </div><!-- End .cta-text -->
+                            <a href="#" class="btn btn-primary btn-round"><span>Add to Cart for $50.00/yr</span><i class="icon-long-arrow-right"></i></a>
+                        </div><!-- End .cta-content -->
+                    </div><!-- End .col-xl-7 -->
+                </div><!-- End .row -->
+            </div><!-- End .bg-white -->
+        </div><!-- End .cta -->
+    </div><!-- End .container -->
 
-                            {%empty%}
-                            <div class="product_desc">
+    <div class="container featured">
+        <div class="heading heading-flex">
+            <div class="heading-left">
+                <h2 class="title">Trending  </h2><!-- End .title -->
+            </div><!-- End .heading-left -->
 
-                            no products 
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-               
-              
-            </div>
+            <div class="heading-right">
+                <a href="{% url 'shop' %}" class="title-link">Click here to view More<i class="icon-long-arrow-right"></i></a>
+            </div><!-- End .heading-right -->
         </div>
-    </div>
-</div>
-<!-- Li's Trending Product Area End Here -->
+        <hr class=" mb-4">
+        <div class="products mb-3">
+            <div class="row justify-content-center">
+                {% for product in hot_products %}
+                <div class="col-4 col-md-3 col-lg-2 col-xl-2">
+                    <div class="product product-7 text-center">
+                        <figure class="product-media">
+                            <a href="{% url 'product' product.slug %}">
+                                <img style="height:150px !important" src="{{product.img1.url}}" alt="Product image" class="product-image">
+                            </a>
+                            <div class="product-action-vertical">
+                                {% comment %} <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> {% endcomment %}
+                                <button style="border:0" onclick="AddToWishList(this)" class="btn-product-icon btn-wishlist btn-expandable" id="add-cart-btn"> <i class="fa fa-shopping-cart"> </i><span>add to wishlist</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
 
-<script >
+                            </div><!-- End .product-action-vertical -->
 
+                            <div class="product-action">
+                                {% comment %} <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> {% endcomment %}
+                                <button style="border:0" onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
 
-</script>
+                            </div><!-- End .product-action -->
+                        </figure><!-- End .product-media -->
+
+                        <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#">{{product.category}}</a>
+                            </div><!-- End .product-cat -->
+                            <h3 class="product-title"><a href="{% url 'product' product.slug %}">{{product.name}}</a></h3><!-- End .product-title -->
+                           
+                            <div class="product-price">
+                                {% if product.discount == 0 %}
+                                <span class="new-price ">&#8358;{{product.price |intcomma }}</span>
+                                {% else %}
+                                <span class="new-price ">&#8358;{{product.discount_price |intcomma }}</span>
+                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
+                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                {% endif %}
+                            </div>
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: {{product.average_rating.percentage}}%;"></div><!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                                <span class="ratings-text">( {{product.average_rating.no_reviews}} Reviews )</span>
+                            </div><!-- End .rating-container -->
+                        </div><!-- End .product-body -->
+                    </div><!-- End .product -->
+                </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                {% endfor %}
+            </div><!-- End .row -->
+        </div><!-- End .products -->
+    </div><!-- End .container -->
+    
+    <div class="container">
+        <h2 class="title">Find Popular Brands</h2>
+        <div class="owl-carousel mt-5 mb-5 owl-simple" data-toggle="owl" 
+                data-owl-options='{
+                    "nav": false, 
+                    "dots": false,
+                    "margin": 30,
+                    "loop": false,
+                    "responsive": {
+                        "0": {
+                            "items":2
+                        },
+                        "420": {
+                            "items":3
+                        },
+                        "600": {
+                            "items":4
+                        },
+                        "900": {
+                            "items":5
+                        },
+                        "1024": {
+                            "items":6
+                        }
+                    }
+                }'>
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/1.png' %}" alt="Brand Name">
+                </a>
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/1.png' %}" alt="Brand Name">
+                </a>
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/1.png' %}" alt="Brand Name">
+                </a>
+
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/2.png' %}" alt="Brand Name">
+                </a>
+
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/3.png' %}" alt="Brand Name">
+                </a>
+
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/4.png' %}" alt="Brand Name">
+                </a>
+
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/5.png' %}" alt="Brand Name">
+                </a>
+
+                <a href="#" class="brand">
+                    <img src="{% static 'assets/images/brands/6.png' %}" alt="Brand Name">
+                </a>
+            </div><!-- End .owl-carousel -->
+    </div><!-- End .container -->
+
+    <div class="container">
+        <hr class="mt-3 mb-6">
+    </div><!-- End .container -->
+
+</main><!-- End .main -->
+{% include 'js.html' %}
 {% endblock  %}

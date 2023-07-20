@@ -56,7 +56,7 @@ class ProductAdmin(admin.ModelAdmin):
     Edit_button.short_description = 'Actions'
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['slug',  'category']
+    list_display = ['slug',  'category', 'short_name']
 
 class CartAdmin(admin.ModelAdmin):
     list_display = ['user',  'product', 'number_of_items', 'CartTotal', 'timestamp']

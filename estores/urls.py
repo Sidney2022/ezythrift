@@ -10,6 +10,7 @@ urlpatterns = [
     path('ezystores-admin/', admin.site.urls),
     path('accounts/', include("accounts.urls")),
     path('', include("core.urls")),
+    path('accounts/', include("allauth.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
