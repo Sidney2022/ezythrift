@@ -18,6 +18,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-9">
+                            {% include 'asyncMessages.html' %}
                             <table class="table table-cart table-mobile">
                                 <thead>
                                     <tr>
@@ -31,52 +32,80 @@
 
                                 <tbody>
                                     {% for item in cart_items %}
+                                    {% if user.is_authenticated %}
                                     <tr>
                                         <td class="product-col">
                                             <div class="product">
                                                 <figure class="product-media">
                                                     <a href="{% url 'product' item.product.slug %}">
-                                                        <img src="{{item.img1.url}}" alt="Product image">
+                                                        <img src="{{item.product.img1.url}}" alt="Product image">
                                                     </a>
                                                 </figure>
 
                                                 <h3 class="product-title">
-                                                    <a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a>
+                                                    <a href="{% url 'product' item.product.slug %}">{{item.product.name|truncatechars:30}}</a>
                                                 </h3><!-- End .product-title -->
                                             </div><!-- End .product -->
                                         </td>
+
                                         {% if item.product.discount == 0 %}
-                                        <td class="price-col">&#8358;{{item.product.price|intcomma}}</td>
+                                        <td class="price-col" >&#8358;{{item.product.price|intcomma}}</td>
+                                        <input type="hidden" id="prod-price" value="{{item.product.price}}">
                                         {% else %}
-                                        <td class="price-col">&#8358;{{item.product.discount_price|intcomma}}</td>
+                                        <td class="price-col" >&#8358;{{item.product.discount_price|intcomma}}</td>
+                                        <input type="hidden" id="prod-price" value="{{item.product.discount_price}}">
                                         {% endif %}
                                         <td class="quantity-col">
                                             <div class="cart-product-quantity">
-                                                <input type="number" class="form-control" value="{{item.number_of_items}}" min="1" max="10" step="1" data-decimals="0" required>
+                                                <input type="number" class="form-control" id="cart-quantity" value="{{item.number_of_items}}" min="1" max="10" step="1" data-decimals="0" required>
+
                                             </div><!-- End .cart-product-quantity -->
                                         </td>
-                                        <td class="total-col">&#8358;{{item.CartTotal|intcomma}}</td>
+                                        <td class="total-col" id="product-total">&#8358;{{item.CartTotal|intcomma}}</td>
+                                        <td  class=""><button onclick="updateCartItem(this)" style="background:none; font-size:20px; border:0"><i class="icon-refresh"></i>
+                                            <input type="hidden" id ="prod-name" value="{{item.product.name}}"> 
+
+
                                         <td class="remove-col"><button onclick="deleteCartItem(this)" class="btn-remove"><i class="icon-close"> </i> <input id="slug" type="hidden" value="{{item.product.slug}}"></button></td>
+
                                     </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td class="product-col">
+                                            <div class="product">
+                                                <figure class="product-media">
+                                                    <a href="{% url 'product' item.slug %}">
+                                                        <img src="{{item.img}}" alt="Product image">
+                                                    </a>
+                                                </figure>
+
+                                                <h3 class="product-title">
+                                                    <a href="{% url 'product' item.slug %}">{{item.product_name|truncatechars:30}}</a>
+                                                </h3><!-- End .product-title -->
+                                            </div><!-- End .product -->
+                                        </td>
+
+                                        <td class="price-col" >&#8358;{{item.price|intcomma}}</td>
+                                        <input type="hidden" id="prod-price" value="{{item.price}}">
+                                        
+                                        <td class="quantity-col">
+                                            <div class="cart-product-quantity">
+                                                <input type="number" class="form-control" id="cart-quantity" value="{{item.quantity}}" min="1" max="10" step="1" data-decimals="0" required>
+
+                                            </div><!-- End .cart-product-quantity -->
+                                        </td>
+                                        <td class="total-col" id="product-total">&#8358;{{item.item_total|intcomma}}</td>
+                                        <td  class=""><button onclick="updateCartItem(this)" style="background:none; font-size:20px; border:0"><i class="icon-refresh"></i>
+                                            <input type="hidden" id ="prod-name" value="{{item.slug}}"> 
+                                        <td class="remove-col"><button onclick="deleteCartItem(this)" class="btn-remove"><i class="icon-close"> </i> <input id="slug" type="hidden" value="{{item.slug}}"></button></td>
+
+                                    </tr>
+                                    {% endif %}
                                     {% endfor %}
                                    
                                 </tbody>
                             </table><!-- End .table table-wishlist -->
 
-                            <div class="cart-bottom">
-                                <div class="cart-discount">
-                                    <form action="#">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" required placeholder="coupon code">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
-                                            </div><!-- .End .input-group-append -->
-                                        </div><!-- End .input-group -->
-                                    </form>
-                                </div><!-- End .cart-discount -->
-
-                                <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
-                            </div><!-- End .cart-bottom -->
                         </div><!-- End .col-lg-9 -->
                         <aside class="col-lg-3">
                             <div class="summary summary-cart">
@@ -86,7 +115,7 @@
                                     <tbody>
                                         <tr class="summary-subtotal">
                                             <td>Subtotal:</td>
-                                            <td>&#8358;{{total|intcomma}}</td> 
+                                            <td id="sub-total">&#8358;{{cart_total|intcomma}}</td> 
                                         </tr><!-- End .summary-subtotal -->
                                         <tr class="summary-shipping">
                                             <td>Shipping:</td>
@@ -94,56 +123,114 @@
                                         </tr>
 
                                         <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>$0.00</td>
+                                          
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
                                             <td>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="standart-shipping">Standart:</label>
+                                                    <label class="custom-control-label" for="standart-shipping">Flat Shipping Fee:</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$10.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="express-shipping">Express:</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>$20.00</td>
+                                            <td>&#8358;3,000 </td>
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-total">
                                             <td>Total:</td>
-                                            <td>&#8358;{{total|intcomma}}</td> 
+                                            <td id="sum-total">&#8358;{{total|intcomma}}</td> 
                                         </tr><!-- End .summary-total -->
+                                        
                                     </tbody>
                                 </table><!-- End .table table-summary -->
 
                                 <a href="{% url 'checkout' %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
                             </div><!-- End .summary -->
 
-                            <a href="{% url 'shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+                            <a href="{% url 'shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-long-arrow-right"></i></a>
                         </aside><!-- End .col-lg-3 -->
                     </div><!-- End .row -->
                 </div><!-- End .container -->
             </div><!-- End .cart -->
         </div><!-- End .page-content -->
+
+        <div class="container">
+            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                data-owl-options='{
+                    "nav": false, 
+                    "dots": true,
+                    "margin": 20,
+                    "loop": false,
+                    "responsive": {
+                        "0": {
+                            "items":2
+                        },
+                        "480": {
+                            "items":3
+                        },
+                        "768": {
+                            "items":4
+                        },
+                        "992": {
+                            "items":5
+                        },
+                        "1200": {
+                            "items":6,
+                            "nav": true,
+                            "dots": true
+                        }
+                    }
+                }'>
+                {% for product in products %}
+                <div class="product product-7 text-center">
+                    <figure class="product-media">
+                        <a href="{% url 'product' product.slug %}">
+                            <img style="height:200px" src="{{product.img1.url}}" alt="Product image" class="product-image">
+                        </a>
+
+                        <div class="product-action-vertical">
+                            <button style="border:0"  {% if user.is_authenticated %} onclick="AddToWishList(this)" {% else %} onclick="loginRequired()" {% endif %} class="btn-product-icon btn-wishlist btn-expandable" id="add-cart-btn"> <i class="fa fa-shopping-cart"> </i><span>add to wishlist</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                            
+                        </div><!-- End .product-action-vertical -->
+
+                        <div class="product-action">
+                            <button style="border:0" onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                        </div><!-- End .product-action -->
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+                        <div class="product-cat">
+                            <a href="#">{{product.sub_category}}</a>
+                        </div><!-- End .product-cat -->
+                        <h3 class="product-title"><a href="product.html">{{product.name|truncatechars:20}}</a></h3><!-- End .product-title -->
+                        <div class="product-price">
+                            {% if product.discount == 0 %}
+                            <span class="new-price ">&#8358;{{product.price |intcomma }}</span>
+                            {% else %}
+                            <span class="new-price ">&#8358;{{product.discount_price |intcomma }}</span>
+                            <span class="old-price">&#8358;{{product.price |intcomma }}</span>
+                            <span class="discount-percentage">-{{product.discount}}%</span>
+                            {% endif %}
+                        </div><!-- End .product-price -->
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width: {{product.average_rating.percentage}}%;"></div><!-- End .ratings-val -->
+                            </div><!-- End .ratings -->
+                            <span class="ratings-text">( {{product.average_rating.no_reviews}} Reviews )</span>
+                        </div><!-- End .rating-container -->
+                    </div><!-- End .product-body -->
+                </div><!-- End .product -->
+                {% endfor %}
+            </div><!-- End .owl-carousel -->
+        </div><!-- End .container -->
     </main><!-- End .main -->
 
     <script>
+        const CartSubTotal = document.getElementById('sub-total')
+        const CartItemsTotal = document.getElementById('sum-total')
         function deleteCartItem(elem) {
             const slug = elem.querySelector('#slug').value
+
             fetch(`{% url 'del-cart-item'  %}?item=${slug}`, {
                 method:"GET"
             })
@@ -152,22 +239,23 @@
                 console.log('data', data)
                 elem.parentNode.parentNode.innerHTML = ''
                 fetchCartData();
+                CartSubTotal.innerHTML = `&#8358;${data['cart_total'].toLocaleString()}`
+                CartItemsTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
              })
 
         }
       
         function updateCartItem(elem) {
-            const rowElem = elem.parentNode.parentNode
-            const quantity = rowElem.querySelector("#quantity").value
-            var cartId = rowElem.querySelector("#cart-id")
-            var price = rowElem.querySelector("#prod-price").value
-            var DispTotal = rowElem.querySelector("#product-total")
+            const trElem = elem.parentNode.parentNode
+            const quantity = trElem.querySelector("#cart-quantity").value
+            var slug = trElem.querySelector("#slug")
+            var price = trElem.querySelector("#prod-price").value
+            var DispTotal = trElem.querySelector("#product-total")
             const msgArea = document.getElementById('msgArea')
-            const CartItemsTotal = document.getElementById('cart-items-total')
             var amount = Number(quantity) * Number(price)
-            cartId = `${cartId.value}`
+            slug = `${slug.value}`
             msgArea.innerHTML = ''
-            fetch(`/users/update-cart/${cartId}?p=${quantity}`, {
+            fetch(`/users/update-cart/${slug}?p=${quantity}`, {
                 method:"GET"
             })
             .then((res) => res.json())
@@ -181,7 +269,8 @@
                else {
                    fetchCartData();
                    DispTotal.innerHTML = `&#8358;${amount.toLocaleString()}`
-                   CartItemsTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
+                   CartSubTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
+                   CartItemsTotal.innerHTML = `&#8358;${data['sumTotal'].toLocaleString()}`
                    msgArea.setAttribute("style", "display:block")
                    msgArea.classList.remove('alert-danger')
                     msgArea.classList.add('alert-success')
@@ -190,6 +279,11 @@
              })
             
         }
+
+        function loginRequired() {
+            alert('please login to save items')
+        }
+        
     </script>
     {% include 'js.html' %}
 {% endblock %}

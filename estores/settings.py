@@ -43,13 +43,13 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
 
     'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
-# SITE_ID = 1
-# SOCIALACCOUNT_LOGIN_ON_GET = True
+SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -100,7 +100,7 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
         'accounts.backends.EmailBackend',
         'django.contrib.auth.backends.ModelBackend',
-        # 'allauth.account.auth_backends.AuthenticationBackend'
+        'allauth.account.auth_backends.AuthenticationBackend'
 
         ]
 SOCIALACCOUNT_PROVIDERS = {
@@ -120,7 +120,7 @@ SOCIALACCOUNT_PROVIDERS = {
         
     }
 }
-# settings.py
+
 
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # SOCIALACCOUNT_QUERY_EMAIL = True

@@ -17,11 +17,6 @@
         <div class="page-content">
             <div class="checkout">
                 <div class="container">
-                    <div class="checkout-discount">
-                            <input type="text" class="form-control" required id="checkout-discount-input">
-                            <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-                        </form>
-                    </div><!-- End .checkout-discount -->
                     <form action="#">
                         <div class="row">
                             {% comment %} <div class="col-lg-9">
@@ -88,18 +83,18 @@
                                     <label>Order notes (optional)</label>
                                     <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
                             </div> {% endcomment %}
-                            <div class="col-lg-7">
+                            <div class="col-lg-7 upper">
                                 <div class="card card-dashboard">
                                     <div class="card-body">
                                         <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
 
-                                        <p>User Name<br>
-                                        User Company<br>
-                                        John str<br>
-                                        New York, NY 10001<br>
-                                        1-234-987-6543<br>
-                                        yourmail@mail.com<br>
-                                        <a href="{% url 'account' %}">Change Billing info <i class="icon-edit"></i></a></p>
+                                        <p>{{user.first_name}} {{user.last_name}}<br>
+                                         {{user.billing.country}}<br>
+                                         {{user.billing.state}}<br>
+                                        {{user.billing.city}}, {{user.billing.address}}<br>
+                                        {{user.billing.phone_number}}<br>
+                                        {{user.email}}<br>
+                                        <a href="{% url 'billing' %}">Change Billing info <i class="icon-edit"></i></a></p>
                                     </div><!-- End .card-body -->
                                 </div><!-- End .card-dashboard -->
                             </div>
@@ -130,7 +125,7 @@
                                             </tr><!-- End .summary-subtotal -->
                                             <tr>
                                                 <td>Shipping:</td>
-                                                <td>&#8358;5,000</td>
+                                                <td>&#8358;3,000</td>
                                             </tr>
                                             <tr class="summary-total">
                                                 <td>Total:</td>
@@ -141,13 +136,13 @@
 
                                     
 
-                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    {% comment %} <button  class="btn btn-outline-primary-2 btn-order btn-block">
                                         <span class="btn-text">Place Order</span>
                                         <span class="btn-hover-text">Proceed to Checkout</span>
-                                    </button>
-                                    <a href="{% url 'payment' %}" >Continue</a>
+                                    </button> {% endcomment %}
+                                    <a href="#checkout-modal" class="btn btn-outline-primary-2 btn-order btn-block" data-toggle="modal">Checkout</a>
 
-                                    <a href="#checkout-modal" data-toggle="modal">Checkout</a>
+
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
@@ -178,13 +173,14 @@
                                         <br>
                                         <i class ="fa fa-info p-1" ></i> No refund After payment is made
                                         <br>
-                                        <span class="mb-3" > <i class="fa fa-info p-1 text-warning "></i>  Payment includes the flat shipping fee of &#8358;5,000
+                                        <span class="mb-3" > <i class="fa fa-info p-1 text-warning "></i>  Payment includes the flat shipping fee of &#8358;3,000
                                             <p class="text-secondary"> Total amount payable is &#8358;{{payable_amt|intcomma}} </p>
                                         </span>
 
                                     </div><!-- End .icon-box-content -->
                                 </div><!-- End .icon-box -->
-                        
+                                <a href="{% url 'payment' %}" class="btn btn-outline-primary-2 btn-order btn-block">Continue</a>
+
 
                             <div class="tab-content" id="tab-content-5">
                          
