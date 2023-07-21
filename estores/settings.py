@@ -43,13 +43,13 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
 
     'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
-# SITE_ID = 1
-# SOCIALACCOUNT_LOGIN_ON_GET = True
+SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -100,7 +100,7 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
         'accounts.backends.EmailBackend',
         'django.contrib.auth.backends.ModelBackend',
-        # 'allauth.account.auth_backends.AuthenticationBackend'
+        'allauth.account.auth_backends.AuthenticationBackend'
 
         ]
 SOCIALACCOUNT_PROVIDERS = {
@@ -117,7 +117,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': os.getenv('CLIENT_SECRET'),
             'key':''
         }
-        
+
     }
 }
 # settings.py
@@ -237,7 +237,7 @@ JAZZMIN_SETTINGS = {
     # Copyright on the footer
     "copyright": "EzyThrift  Ltd",
 
-   
+
 
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -275,7 +275,7 @@ JAZZMIN_SETTINGS = {
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
     "order_with_respect_to": [ "products.name"],
 
-   
+
     # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
     # for the full list of 5.13.0 free icon classes
     "icons": {
@@ -301,7 +301,7 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fa fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
 
-  
+
     #############
     # UI Tweaks #
     #############
@@ -327,7 +327,7 @@ JAZZMIN_SETTINGS = {
     # "changeform_format_overrides"/: {"accounts.profile": "collapsible", "auth.group": "vertical_tabs"},
     # Add a language dropdown into the admin
     # "language_chooser": True,
-    
+
 }
 
 
