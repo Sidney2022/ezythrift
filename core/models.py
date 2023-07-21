@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import Profile
 import uuid
 from django.utils.text import slugify
+from datetime import datetime
 
 
 class Seller(models.Model):
@@ -156,7 +157,7 @@ class Product(models.Model):
             return False
         
     def prod_imgs(self):
-        img_list = [self.img2, self.img1, self.img3, self.img4]
+        img_list = [self.img1, self.img2, self.img3, self.img4, self.img5]
         img_list = [img.url for img in img_list]
         return img_list
     
@@ -193,6 +194,10 @@ class Review(models.Model):
     def percentage_rating(self):
         return ((self.rating/5) * 100)
 
+    def time_sent(self, profile):
+        time_active =   datetime.now().date() - profile.date_joined.date()
+        time = int(time_active.total_seconds()) // 86400 # Return time in days (convert from secs to days)
+        return time 
 
 class Cart(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)

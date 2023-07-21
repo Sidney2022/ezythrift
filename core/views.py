@@ -11,6 +11,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseNotAllowed
 import json
+from accounts.models import Billing
+
 
 def checkSort(query, products):
     if query:
@@ -94,16 +96,16 @@ def marketCategory(request, slug):
 
 def getProduct(request, slug):
     product = get_object_or_404(Product, slug=slug, status='approved')
-    cart_item = Cart.objects.filter(user=request.user, product=product).first()
     products = Product.objects.filter( Q(category=product.category, status='approved') | Q(brand=product.brand, status='approved')).exclude(slug=slug)
     context = {
         "product":product,
         "products":products,
         "reviews":Review.objects.filter(product=product),
-        "cart_item":cart_item
         }
     if request.user.is_authenticated:
         context["can_write_review"] = product.can_write_review(product=product, request_user=request.user) 
+        context["cart_item"]  = Cart.objects.filter(user=request.user, product=product).first()
+    
     return render(request, 'main/product.html', context)
 
 
@@ -115,50 +117,68 @@ def error_500(request):
     return render(request, 'main/500.html')
 
 
-@login_required()
-def addCartItem(request):
-    slug = request.GET.get('slug')
-    product = get_object_or_404(Product, slug=slug.strip(), status='approved')
-    if Cart.objects.filter(user=request.user, product=product).exists():
-        return JsonResponse({"status":400})
-    item  = Cart.objects.create(user=request.user, product=product)
-    item.save()
-    item = Cart.objects.filter(user=request.user, product=product).first()
-    return JsonResponse({
-            "product_name":item.product.name,
-            "img":item.product.img1.url,
-            "price":item.product.price,
-            "quantity":item.number_of_items,
-            "slug":item.product.slug
-        })
 
 def addCartItem(request):
     slug = request.GET.get('slug')
+    qty = request.GET.get('qty')
+    print(qty)
     product = get_object_or_404(Product, slug=slug)
-    cart_item, created = Cart.objects.get_or_create( product=product, user=request.user)
-    cart_item.number_of_items += 1
-    cart_item.save()   
+    if request.user.is_authenticated:
+        cart_item, created = Cart.objects.get_or_create( product=product, user=request.user)
+        if qty:
+            cart_item.number_of_items = qty
+        else:
+            cart_item.number_of_items += 1
+        cart_item.save()  
+    else:
+        cart = request.session.get('cart', {})
+        # Update the cart with the new item
+        if qty:
+            cart[slug] =  int(qty)
+        else:
+            cart[slug] = cart.get(slug, 0) + 1
+        # Save the updated cart in the session
+        request.session['cart'] = cart 
     return JsonResponse({'success':"cart item added successfully"})
 
 
-@login_required()
-def UpdateCartItem(request, id):
+def UpdateCartItem(request, slug):
     quantity = request.GET.get('p')
-    if not Cart.objects.filter(id=id, user=request.user).exists():
-         return JsonResponse({ "error":"cart item could not be updated"})
-    item  = get_object_or_404(Cart, id=id, user=request.user)
-    if not item.product.in_stock():
-        return JsonResponse({"error":"out of stock"})
-    elif item.product.in_stock() and item.product.no_stock < int(quantity):
-        return JsonResponse({"error":f"please retry with a lesser quantity. there are only {item.product.no_stock} units left"})
-    item.number_of_items = int(quantity)
-    item.save()
-    total = 0
-    cart_items =Cart.objects.filter(user=request.user)
-    for item in cart_items:
-        if item.product.in_stock():
-            total += item.CartTotal()
-    return JsonResponse({ "info":"cart item updated successfully", "total":total})
+    product =product=get_object_or_404(Product, slug=slug)
+    if request.user.is_authenticated:
+        if not Cart.objects.filter(product=product , user=request.user).exists():
+            return JsonResponse({ "error":"cart item could not be updated"})
+        item  = get_object_or_404(Cart, product=product, user=request.user)
+        if not item.product.in_stock():
+            return JsonResponse({"error":"out of stock"})
+        elif item.product.in_stock() and item.product.no_stock < int(quantity):
+            return JsonResponse({"error":f"please retry with a lesser quantity. there are only {item.product.no_stock} units left"})
+        item.number_of_items = int(quantity)
+        item.save()
+        total = 0
+        cart_items =Cart.objects.filter(user=request.user)
+        for item in cart_items:
+            if item.product.in_stock():
+                total += item.CartTotal()
+    else:
+        if not product.in_stock():
+            return JsonResponse({"error":"out of stock"})
+        elif  product.no_stock < int(quantity):
+            return JsonResponse({"error":f"please retry with a lesser quantity. there are only {product.no_stock} units left"})
+
+        cart = request.session.get('cart', {})
+        # Update the session cart dictionary  key with supplied quantity 
+        cart[slug] =  int(quantity)
+        # Save the updated cart in the session
+        request.session['cart'] = cart 
+
+        total=0
+        for slug, quantity in cart.items():
+            product = get_object_or_404(Product, slug=slug)
+            price = product.price if product.discount == 0 else product.discount_price
+            total +=  price  * quantity
+            print(slug, quantity)
+    return JsonResponse({ "info":"cart item updated successfully", "total":total, "sumTotal":total+3000})
 
 
 @login_required()
@@ -173,35 +193,83 @@ def addWishListItem(request):
     return JsonResponse({"status":200, "number_of_items":number_of_items})
     
 
-@login_required()
 def getCartItems(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    cart_contents  = [{
-            "product_name":item.product.name,
-            "img":item.product.img1.url,
-            "price":item.product.price if item.product.discount == 0 else item.product.discount_price,
-            "quantity":item.number_of_items,
-            "slug":item.product.slug
-        } for item in cart_items]
-    total_amt = 0
-    number_of_items =0
-    for item in cart_items:
-        if item.product.in_stock():
-            total_amt += item.CartTotal()
-        number_of_items += item.number_of_items
+    if request.user.is_authenticated:
+        cart_items = Cart.objects.filter(user=request.user)
+        cart_contents  = [{
+                "product_name":item.product.name,
+                "img":item.product.img1.url,
+                "price":item.product.price if item.product.discount == 0 else item.product.discount_price,
+                "quantity":item.number_of_items,
+                "slug":item.product.slug
+            } for item in cart_items]
+        total_amt = 0
+        number_of_items =0
+        for item in cart_items:
+            if item.product.in_stock():
+                total_amt += item.CartTotal()
+            number_of_items += item.number_of_items
+    else:
+        cart_contents = request.session.get('cart', {})
+        # Fetch additional product details for non-authenticated users
+        cart_contents_with_details = []
+        for slug, quantity in cart_contents.items():
+            product = get_object_or_404(Product, slug=slug)
+            cart_item_with_details = {
+                "product_name":product.name,
+                "img":product.img1.url,
+                "price":product.price if product.discount == 0 else product.discount_price,
+                "quantity":quantity,
+                "slug":product.slug,
+                "in_stock":product.in_stock()
+            }
+            cart_contents_with_details.append(cart_item_with_details)
+        cart_contents = cart_contents_with_details
+        cart_contents = cart_contents_with_details
+        number_of_items=0
+        total_amt=0
+        for item in cart_contents_with_details:
+            number_of_items += item['quantity']
+            total_amt += item['price'] * item['quantity']
+    
+    # print(cart_contents, request.session.get('cart', {}))
     return JsonResponse({"cart":cart_contents, 'number_of_items':number_of_items, "total_amt":total_amt})
 
 
-@login_required()
 def cartPage(request):
     total = 0
-    # if request.user.is_authenticated:
-    cart_items =Cart.objects.filter(user=request.user)
-    for item in cart_items:
-        if item.product.in_stock():
-            total += item.CartTotal()
+    if request.user.is_authenticated:
+        cart_contents =Cart.objects.filter(user=request.user)
+        for item in cart_contents:
+            if item.product.in_stock():
+                total += item.CartTotal()
+    else:
+        cart_contents = request.session.get('cart', {})
+
+        # Fetch additional product details for non-authenticated users
+        cart_contents_with_details = []
+        for slug, quantity in cart_contents.items():
+            product = get_object_or_404(Product, slug=slug)
+            cart_item_with_details = {
+                "product_name":product.name,
+                "img":product.img1.url,
+                "price":product.price if product.discount == 0 else product.discount_price,
+                "quantity":quantity,
+                "slug":product.slug,
+                "in_stock":product.in_stock(),
+                "item_total": (quantity * (product.price if product.discount == 0 else product.discount_price))
+            }
+            print( (quantity * (product.price if product.discount == 0 else product.discount_price)))
+            cart_contents_with_details.append(cart_item_with_details)
+        cart_contents = cart_contents_with_details
+        cart_contents = cart_contents_with_details
+        number_of_items=0
+        total_amt=0
+        for item in cart_contents_with_details:
+            number_of_items += item['quantity']
+            total += item['item_total'] 
     products = Product.objects.filter(status='approved')
-    return render(request, 'main/cart-page.html', { "products":products, "total":total})
+    return render(request, 'main/cart-page.html', {"cart_items":cart_contents, "products":products, "cart_total":total, "total":total+3000})
 
 
 @login_required()
@@ -211,9 +279,9 @@ def wishListPage(request):
 
 @login_required()
 def checkout(request):
-    if request.user.state.strip() == '' or request.user.city.strip() == '':
+    if not request.user.is_billing_address():
         messages.info(request, 'Shipping details not set. Set delivery/shipping info and then proceed to checkout')
-        return redirect('account')
+        return redirect('billing')
     elif len(Cart.objects.filter(user=request.user)) == 0:
         messages.info(request, 'you do not have any items to checkout!')
         return redirect('market')
@@ -222,18 +290,30 @@ def checkout(request):
     for item in cart_items:
         if item.product.in_stock():
             order_total += item.CartTotal()
-    payable_amt = order_total + 5000 #(order_total * 0.015) paystack 1.5%
+    payable_amt = order_total + 3000 #(order_total * 0.015) paystack 1.5%
         
     return render(request, 'main/checkout.html', {"payable_amt":payable_amt, "order_total":order_total})
 
 
-@login_required()
 def delCartItem(request):
     slug = request.GET.get('item')
     product = get_object_or_404(Product, slug=slug.strip())
-    cart_item = get_object_or_404(Cart, product=product, user=request.user)
-    cart_item.delete()
-    return JsonResponse({"success":"item deleted"})
+    total = 0
+    if request.user.is_authenticated:
+        cart_item = get_object_or_404(Cart, product=product, user=request.user)
+        cart_item.delete()
+        for item in Cart.objects.filter(user=request.user):
+            amount = item.product.price if item.product.discount == 0 else item.product.discount_price
+            total += amount * item.number_of_items
+    else:
+        cart = request.session.get('cart', {})
+        del cart[slug]
+        request.session['cart'] = cart 
+        for slug, quantity in cart.items():
+            product = get_object_or_404(Product, slug=slug)
+            amount =  product.price if product.discount == 0 else product.discount_price 
+            total += amount * quantity 
+    return JsonResponse({"success":"item deleted", 'cart_total':total, 'total':total+3000})
 
 
 @login_required()
@@ -293,7 +373,12 @@ def writeReview(request, slug):
         return redirect('product', slug)
     raise Http404('invalid request')
 
-    
+
+@login_required()
+def getOrders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'accounts/orders.html',{"orders":orders})  
+
 
 @login_required()
 def createOrder(request, id):
@@ -328,11 +413,13 @@ def getOrderItems(request, pk):
             "order_items":order_items,
             "order":order
     }
-    return render(request, 'main/orders.html', context)
+    return render(request, 'accounts/order-item.html', context)
     
 
 def payment_success(request, id ):
     return HttpResponse(f"{id}")
+
+
 
 
 @login_required()
@@ -353,7 +440,7 @@ def payment(request):
         # Set up the request payload
         amt= order_amt * 100
         payload = {
-            'amount':amt + 5000 ,# (amt*0.015) ,  # Amount in kobo (e.g., 5000 Naira)
+            'amount':amt + 3000 ,# (amt*0.015) ,  # Amount in kobo (e.g., 3000 Naira)
             'email': request.user.email,
             'callback_url': request.build_absolute_uri(f'/place-order/{order.tracking_id}'),
             'channels': ['card'],
@@ -402,10 +489,6 @@ def contact(request):
 
 def faqs(request):
     return render(request, 'main/faq.html', {"faqs":Faq.objects.all()})
-
-
-def aboutUs(request):
-    return render(request, 'main/about.html')
 
 
 def terms_and_conditions(request):

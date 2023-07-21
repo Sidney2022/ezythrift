@@ -78,7 +78,7 @@
                                         </div><!-- End .product-details-quantity -->
 
                                         {% if product.in_stock %}
-                                        <button onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                        <button onclick="AddProdTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> Add to cart <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
                                         {% else %}
                                         <button disabled  class="add-to-cart btn btn-secondary" id="add-cart-btn" type="submit"> Out Of Stock </button>
                                         {% endif %}
@@ -281,4 +281,32 @@
     <script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
     <!-- Main JS File -->
     <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+
+    
+    <script >
+        function AddProdTocart(btn) {
+            //  const trElem = btn.parentNode.parentNode
+              const slug = btn.querySelector("#prod-name").value
+              const quantity = document.getElementById("qty").value
+              fetch(`{% url 'add-cart'   %}?slug=${slug}&qty=${quantity}`, {
+                  method: "GET",
+              })
+                  .then((res) => res.json())
+                  .then((data) => {
+               //   console.log("data", data);
+                   if (data['status'] == 400) {
+                      alert(`item has already been added to cart`)
+                  } else  {
+                      alert(`item ${slug} has been added to cart`)
+
+                      fetchCartData()
+                  }
+                  });
+      }
+    </script>
+
+
+
 {% endblock %}

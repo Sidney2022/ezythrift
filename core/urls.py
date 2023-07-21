@@ -20,13 +20,12 @@ urlpatterns = [
    path('products/<slug:slug>', views.getProduct, name='product'),
 
    path('users/add-to-cart', views.addCartItem, name='add-cart'),
-   path('users/update-cart/<id>', views.UpdateCartItem, name='update-cart-item'),
+   path('users/update-cart/<slug:slug>', views.UpdateCartItem, name='update-cart-item'),
    path('users/add-to-wishlist', views.addWishListItem, name='add-wishlist'),
 
    path('search', views.searchProducts, name='search'),
    path('contact', views.contact, name='contact'),
    path('faqs', views.faqs, name='faq'),
-   path('about-us', views.aboutUs, name='about'),
    path('newsletter', csrf_exempt(views.newsLetter), name='newsletter'),
    path('products/<slug:slug>/review', views.writeReview, name='review'),
 
@@ -37,6 +36,8 @@ urlpatterns = [
    path('terms-and-conditions', views.terms_and_conditions, name='terms'),
    path('privacy-policy', views.privacy_policy, name='policy'),
    path('mail', views.mail, name='mail'),
+   path('orders', views.getOrders,  name='orders')
+
 
 
 
