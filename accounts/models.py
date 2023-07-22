@@ -14,29 +14,20 @@ class Profile(AbstractUser):
     def __str__(self):
         return self.email
     
-    def is_billing_address(self):
+    def billing_address(self):
         if Billing.objects.filter(user=self.id).exists():
-            return True
+            return Billing.objects.filter(user=self.id).first()
         else:
             return False
-    def billing(self):
-        return Billing.objects.filter(user=self.id).first()
-
-
-class SocialLink(models.Model):
-    facebook = models.CharField(max_length=100, blank=True)
-    twitter = models.CharField(max_length=100, blank=True)
-    linkedin = models.CharField(max_length=100, blank=True)
-    instagram = models.CharField(max_length=100, blank=True)
 
 
 class Billing(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=14)
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE)
     country = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     city = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     apartment = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=14)
 
 

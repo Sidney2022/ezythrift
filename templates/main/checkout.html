@@ -89,10 +89,10 @@
                                         <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
 
                                         <p>{{user.first_name}} {{user.last_name}}<br>
-                                         {{user.billing.country}}<br>
-                                         {{user.billing.state}}<br>
-                                        {{user.billing.city}}, {{user.billing.address}}<br>
-                                        {{user.billing.phone_number}}<br>
+                                         {{user.billing_address.country}}<br>
+                                         {{user.billing_address.state}}<br>
+                                        {{user.billing_address.city}}, {{user.billing_address.address}}<br>
+                                        {{user.billing_address.phone_number}}<br>
                                         {{user.email}}<br>
                                         <a href="{% url 'billing' %}">Change Billing info <i class="icon-edit"></i></a></p>
                                     </div><!-- End .card-body -->
@@ -180,7 +180,6 @@
                                     </div><!-- End .icon-box-content -->
                                 </div><!-- End .icon-box -->
                                 <a href="{% url 'payment' %}" class="btn btn-outline-primary-2 btn-order btn-block">Continue</a>
-
 
                             <div class="tab-content" id="tab-content-5">
                          

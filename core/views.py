@@ -279,12 +279,12 @@ def wishListPage(request):
 
 @login_required()
 def checkout(request):
-    if not request.user.is_billing_address():
+    if not request.user.billing_address():
         messages.info(request, 'Shipping details not set. Set delivery/shipping info and then proceed to checkout')
         return redirect('billing')
     elif len(Cart.objects.filter(user=request.user)) == 0:
         messages.info(request, 'you do not have any items to checkout!')
-        return redirect('market')
+        return redirect('shop')
     order_total = 0
     cart_items =  Cart.objects.filter(user=request.user)
     for item in cart_items:

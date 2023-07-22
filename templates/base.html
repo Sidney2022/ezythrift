@@ -4,8 +4,16 @@
 <style>
     .upper{
         text-transform:capitalize;
-
     }
+    .footer-middle::before {
+        height: 1px;
+        position: absolute;
+        top: 0;
+        left: 10px;
+        right: 10px;
+        background-color: #ebebeb;
+    }
+    
 </style>
 <body>
     <div class="page-wrapper">
@@ -151,7 +159,7 @@
 
         {% block content %}{% endblock  %}
         
-        <hr class=" mb-4">
+        <hr style="width:90%; ">
         {% include 'footer.html' %}
     <script>
 
@@ -211,7 +219,7 @@
                      if (data['status'] == 400) {
                         alert(`item has already been added to cart`)
                     } else  {
-                        alert(`item ${slug} has been added to cart`)
+                        alert(`item '${slug}' has been added to cart`)
 
                         fetchCartData()
                         cartCtaBtns.style.display='block'

@@ -11,29 +11,19 @@
                         <div class="container d-flex align-items-center">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                <li class="breadcrumb-item"><a href="/">{{product.category.category}}</a></li>
-                                <li class="breadcrumb-item"><a href="/">{{product.sub_category}}</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'shop-cat' product.category.slug %}">{{product.category.category}}</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'shop-cat' product.sub_category.slug %}">{{product.sub_category}}</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">{{product.name}}</li>
                             </ol>
 
-                            <nav class="product-pager ml-auto" aria-label="Product">
-                                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                                    <i class="icon-angle-left"></i>
-                                    <span>Prev</span>
-                                </a>
-
-                                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                                    <span>Next</span>
-                                    <i class="icon-angle-right"></i>
-                                </a>
-                            </nav><!-- End .pager-nav -->
+                            
                         </div><!-- End .container -->
                     </nav><!-- End .breadcrumb-nav -->
                     <div class="container">
                         <div class="product-gallery-carousel owl-carousel owl-full owl-nav-dark">
                             {% for img in product.prod_imgs %}
-                            <figure class="product-gallery-image " style ="height:300px !important">
-                                <img  src="{{img}}" data-zoom-image="{{img}}" alt="{{product.name}}">
+                            <figure class="product-gallery-image " style =" height:250px !important">
+                                <img  src="{{img}}" >
                             </figure><!-- End .product-gallery-image -->
                             {% endfor %}
                         </div><!-- End .owl-carousel -->
@@ -117,9 +107,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
-                        </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
                         </li>
@@ -134,25 +122,7 @@
                                 <p>{{product.description}} </p>
                             </div><!-- End .product-desc-content -->
                         </div><!-- .End .tab-pane -->
-                        <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
-                            <div class="product-desc-content">
-                                <h3>Information</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. </p>
-
-                                <h3>Fabric & care</h3>
-                                <ul>
-                                    <li>Faux suede fabric</li>
-                                    <li>Gold tone metal hoop handles.</li>
-                                    <li>RI branding</li>
-                                    <li>Snake print trim interior </li>
-                                    <li>Adjustable cross body strap</li>
-                                    <li> Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm</li>
-                                </ul>
-
-                                <h3>Size</h3>
-                                <p>one size</p>
-                            </div><!-- End .product-desc-content -->
-                        </div><!-- .End .tab-pane -->
+                     
                         <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
                             <div class="product-desc-content">
                                 <h3>Delivery & returns</h3>
@@ -269,18 +239,7 @@
     </main><!-- End .main -->
 
     <!-- Plugins JS File -->
-    <script src="{% static 'assets/js/jquery.min.js' %}"></script>
-    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'assets/js/jquery.hoverIntent.min.js' %}"></script>
-    <script src="{% static 'assets/js/jquery.waypoints.min.js' %}"></script>
-    <script src="{% static 'assets/js/superfish.min.js' %}"></script>
-    <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'assets/js/bootstrap-input-spinner.js' %}"></script>
-    <script src="{% static 'assets/js/jquery.elevateZoom.min.js' %}"></script>
-    <script src="{% static 'assets/js/bootstrap-input-spinner.js' %}"></script>
-    <script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
-    <!-- Main JS File -->
-    <script src="{% static 'assets/js/main.js' %}"></script>
+{% include 'js.html' %}
 
 
 

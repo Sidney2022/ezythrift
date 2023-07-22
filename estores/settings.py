@@ -173,7 +173,7 @@ LOGIN_URL = '/accounts/auth'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 # @Thrift124
 STATIC_URL = 'static/'
-STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT=os.path.join(BASE_DIR, 'statics')
 STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'

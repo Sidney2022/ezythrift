@@ -18,8 +18,8 @@
                     <div class="row">
                       {% include 'accounts/sidenav.html' %}
 
-                        <div class="col-md-8 col-lg-9">
-                            <table class="table table-cart ">
+                        <div class="col-md-8 col-lg-9 table-cart table-mobile">
+                            <table class="table ">
                                 <thead>
                                     <tr>
                                         <th>Order ID</th>
@@ -34,13 +34,15 @@
                                     {% for order in orders %}
                                     <tr>
                                         <td class=""> {{order.tracking_id}} </td>
-                                        <td class=""> {{order.total}} </td>
+                                        <td class=""> &#8358;{{order.total}} </td>
                                         <td class=""> {{order.date}} </td>
-                                        <td class=" " > <span class="btn  btn-{{order.badge}}"> {{order.status}} </span> </td>
+                                        <td class=" " > <span class="p-2 btn m-2 bg-{{order.badge}}"> {{order.status}} </span> </td>
                                         <td class=""> 
-                                            <a class="btn" href="{% url 'order-items' order.tracking_id %}">View </a>
+                                            <a style="max-width:7px !important" class="p-2 bg-info text-white" href="{% url 'order-items' order.tracking_id %}">View </a>
                                         </td>
                                     </tr>
+                                    {%empty%}
+                                    <td>No Orders</td>
                                     {% endfor %}
                                 </tbody>
                             </table>

@@ -8,20 +8,46 @@
         <div class="page-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <div class="toolbox">
                             <div class="toolbox-left">
                                 <div class="toolbox-info">
                                      Showing <span> {{ start_index }}-{{ end_index }} of {{ page.paginator.count }}</span> Products
                                 </div><!-- End .toolbox-info -->
                             </div><!-- End .toolbox-left -->
-
+                            <div class="toolbox-right">
+                                <div class="toolbox-sort">
+                                    <form  onchange="submit()" >
+                                        <label for="sortby">Sort by:</label>
+                                        <div class="select-custom">
+                                                <select id="sortby" class="form-control" name="sort">
+                                                    {% if sort_query == 'name' %}
+                                                    <option selected value="name">Name (A - Z)</option>
+                                                    {% elif sort_query == '-name' %}
+                                                    <option selected value="-name">Name (Z - A)</option>
+                                                    {% elif sort_query == 'price' %}
+                                                    <option selected value="price">Price (Low &gt; High)</option>
+                                                    {% elif sort_query == '-price' %}
+                                                    <option selected value="-price">Price (High &gt; Low)</option>
+                                                    {% else %}
+                                                    <option selected >Relevance</option>
+                                                    {% endif %}
+                                                    <option value="name">Name (A - Z)</option>
+                                                    <option value="-name">Name (Z - A)</option>
+                                                    <option value="price">Price (Low &gt; High)</option>
+                                                    <option value="-price">Price (High &gt; Low)</option>
+                                                    {% comment %} <option value="-pr">Rating (Lowest)</option> {% endcomment %}
+                                                </select>
+                                        </div>
+                                    </form>
+                                </div><!-- End .toolbox-sort -->
+                            </div>
                         </div><!-- End .toolbox -->
 
                         <div class="products mb-3">
-                            <div class="row justify-content-center">
+                            <div class="row">
                                 {% for product in page %}
-                                <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                                <div class="col-4 col-md-3 col-lg-6 col-xl-3">
                                     <div class="product product-7 ">
                                         <figure class="product-media">
                                             <a href="{% url 'product' product.slug %}">
@@ -44,7 +70,7 @@
                                             <div class="product-cat">
                                                 <a href="#">{{product.category}}</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="{% url 'product' product.slug %}">{{product.name}}</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title"><a href="{% url 'product' product.slug %}">{{product.name|truncatechars:20}}</a></h3><!-- End .product-title -->
                                            
                                             <div class="product-price">
                                                 {% if product.discount == 0 %}
@@ -126,7 +152,7 @@
                     
                            
                     </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3 order-lg-first">
+                    {% comment %} <aside class="col-lg-3 order-lg-first">
                         <div class="sidebar sidebar-shop">
                             <div class="widget widget-clean">
                                 <label>Filters:</label>
@@ -268,7 +294,7 @@
                             </div><!-- End .widget -->
                         
                         </div><!-- End .sidebar sidebar-shop -->
-                    </aside><!-- End .col-lg-3 -->
+                    </aside><!-- End .col-lg-3 --> {% endcomment %}
                 </div><!-- End .row -->
             </div><!-- End .container -->
         </div><!-- End .page-content -->
