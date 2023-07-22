@@ -219,24 +219,6 @@ class Cart(models.Model):
         return total
 
 
-class Cart_Item(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    number_of_items = models.PositiveIntegerField(default=1)
-    session = models.CharField(max_length=255)
-
-    def cartNum(self):
-        cart = 0
-        for item in Cart_Item.objects.filter(user=self.user):
-            cart += item.product.price
-        return cart
-    
-    def CartTotal(self):
-        if self.product.discount == 0:
-            total = self.product.price * self.number_of_items
-        else:
-            total = self.product.discount_price * self.number_of_items
-        return total
-
 
 class WishList(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
