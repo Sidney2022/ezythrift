@@ -4,12 +4,12 @@
 
 - [Overview](#overview)
 - [Features](#features)
-- [Resources](#Resources)
-- [Built with](#Built-With)
-- [Frontend development](#Frontend-Development)
-- [Backend development](#Backend-Development)
-- [Continued development](#Continued-Development)
-- [Author](#Author) 
+- [Resources](#resources)
+- [Built with](#built-with)
+- [Frontend development](#frontend-development)
+- [Backend development](#backend-development)
+- [Continued development](#continued-development)
+- [Author](#author) 
 
 ## Overview
 
@@ -80,9 +80,6 @@ These features collectively create a robust and user-friendly eCommerce platform
 
 ## Install Dependencies
 ``` pip install -r requirements.txt ```
-
-## Make migrations
-``` python manage.py makemigrations ```
 
 ## Migrate the database
 ``` python manage.py migrate ```
