@@ -2,8 +2,8 @@
 
 # Table of Contents
 
-- [Overview](#Overview)
-- [Features](#Features)
+- [Overview](#overview)
+- [Features](#features)
 - [Resources](#Resources)
 - [Development](#Development)
 - [Built with](#Built-With)
@@ -17,7 +17,7 @@
 EzyThrift is an eCommerce platform where users can purchase products at affordble prices 
 
 
-# Features
+## Features
 
 
 ## Features Overview
