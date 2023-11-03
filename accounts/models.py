@@ -6,6 +6,12 @@ import random
 
 class Profile(AbstractUser):
     """ custom user model """
+    phone_number = models.CharField(max_length=14)
+    country = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    city = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    apartment = models.CharField(max_length=255)
 
     email = models.EmailField(unique=True)
 
@@ -14,20 +20,18 @@ class Profile(AbstractUser):
     def __str__(self):
         return self.email
     
-    def billing_address(self):
-        if Billing.objects.filter(user=self.id).exists():
-            return Billing.objects.filter(user=self.id).first()
+    def is_billing_address(self):
+        print(self.phone_number, self.address)
+        if self.phone_number !='' and self.country != "" and self.state !='' and self.city !='' and self.address != "" :
+            return True
         else:
             return False
 
 
-class Billing(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    country = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    apartment = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=14)
+class SocialLink(models.Model):
+    facebook = models.CharField(max_length=100, blank=True)
+    twitter = models.CharField(max_length=100, blank=True)
+    linkedin = models.CharField(max_length=100, blank=True)
+    instagram = models.CharField(max_length=100, blank=True)
 
 

@@ -6,6 +6,9 @@ from . import views
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
+    # authentication
+    # path('signup', SignUp.as_view(), name='signup'),
+    # path('signin', SignIn.as_view(), name='login'),
     path('logout', SignOut.as_view(), name='logout'), 
     path('reset-password', views.reset_password, name='reset-pw'),
     # validations
@@ -20,6 +23,5 @@ urlpatterns = [
 
     path('shipping', views.editShippingDetail, name='shipping'),
     path('change-password', views.changePw, name='change-pw'),
-    path('billing-details', views.billing_info, name="billing")
 
 ]

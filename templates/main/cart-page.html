@@ -1,237 +1,187 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 {% load static %}
 {% load humanize %}
 {% block content %}
+<style>
+    #product-select {
+        display:none
+    }
+</style>
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Home</a></li>
+                    <li class="active">Shopping Cart</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Li's Breadcrumb Area End Here -->
+    <!--Shopping Cart Area Strat-->
+    <div class="Shopping-cart-area pt-60 pb-60">
+        <div class="container">
+            {% include 'asyncMessages.html' %}
 
-    <main class="main">
-        <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
-                </ol>
-            </div><!-- End .container -->
-        </nav><!-- End .breadcrumb-nav -->
-
-        <div class="page-content">
-            <div class="cart">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-9">
-                            {% include 'asyncMessages.html' %}
-                            <table class="table table-cart table-mobile">
+            <div class="row">
+                <div class="col-12">
+                        <div class="table-content table-responsive">
+                            <table class="table">
                                 <thead>
+                                    <p class="text-primary ">
+                                        <i class="fa fa-info"></i> you can increase your order quantity, and hit the refresh<i class="fa fa-refresh"></i> button to effect changes
+                                    </p>
+                                    <p class="text-primary ">
+                                        <i class="fa fa-info"></i>The Total amount excludes "out in stock" cart items. please do well to remove them from cart list
+                                    </p>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
-                                        <th></th>
+                                        <th class="cart-product-name">Product</th>
+                                        <th class="li-product-thumbnail">image</th>
+                                        <th class="li-product-price">Unit Price</th>
+                                        <th class="li-product-quantity">Quantity</th>
+                                        <th class="li-product-subtotal">Total</th>
+                                        <th  class="li-product-remove">Action  </th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
-                                    {% for item in cart_items %}
-                                    {% if user.is_authenticated %}
-                                    <tr>
-                                        <td class="product-col">
-                                            <div class="product">
-                                                <figure class="product-media">
-                                                    <a href="{% url 'product' item.product.slug %}">
-                                                        <img src="{{item.product.img1.url}}" alt="Product image">
-                                                    </a>
-                                                </figure>
-
-                                                <h3 class="product-title">
-                                                    <a href="{% url 'product' item.product.slug %}">{{item.product.name|truncatechars:30}}</a>
-                                                </h3><!-- End .product-title -->
-                                            </div><!-- End .product -->
-                                        </td>
-
+                                    {% for item  in cart_items  %}
+                                    <tr class="cart-row-item" id="cart-row-{{item.id}}">
+                                        <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
+                                        <td class="li-product-thumbnail"><img draggable='false' src="{{item.product.img1.url}}" alt="" width=80></td>
                                         {% if item.product.discount == 0 %}
-                                        <td class="price-col" >&#8358;{{item.product.price|intcomma}}</td>
-                                        <input type="hidden" id="prod-price" value="{{item.product.price}}">
+                                        <td class="li-product-price">&#8358;<span id ="product-price" class="amount">{{item.product.price |intcomma}}</span></td>
+                                        <input  id="prod-price"  value="{{item.product.price}}" type="hidden">
                                         {% else %}
-                                        <td class="price-col" >&#8358;{{item.product.discount_price|intcomma}}</td>
-                                        <input type="hidden" id="prod-price" value="{{item.product.discount_price}}">
+                                        <td class="li-product-price">&#8358;<span id ="product-price" class="amount">{{item.product.discount_price |intcomma}}</span></td>
+                                        <input  id="prod-price"  value="{{item.product.discount_price}}" type="hidden">
                                         {% endif %}
-                                        <td class="quantity-col">
-                                            <div class="cart-product-quantity">
-                                                <input type="number" class="form-control" id="cart-quantity" value="{{item.number_of_items}}" min="1" max="10" step="1" data-decimals="0" required>
-
-                                            </div><!-- End .cart-product-quantity -->
+                                        <td class="quantity">
+                                            {% if item.product.in_stock %}
+                                            <div style="cursor:pointer"  onclick="updateCartItem(this)">  <i class="fa fa-refresh"></i>  </div>
+                                            <div class="cart-plus-minus">
+                                                <input class="cart-plus-minus-box this" id="quantity"  value="{{item.number_of_items}}" type="text">
+                                                <div class="dec qtybutton" id="i-btn"><i class="fa fa-angle-down"></i></div>
+                                                <div class="inc qtybutton" ><i class="fa fa-angle-up" id="inc-btn" ></i></div>
+                                            </div>
+                                            {% else %}
+                                            <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
+                                            {% endif %}
                                         </td>
-                                        <td class="total-col" id="product-total">&#8358;{{item.CartTotal|intcomma}}</td>
-                                        <td  class=""><button onclick="updateCartItem(this)" style="background:none; font-size:20px; border:0"><i class="icon-refresh"></i>
-                                            <input type="hidden" id ="prod-name" value="{{item.product.name}}"> 
-
-
-                                        <td class="remove-col"><button onclick="deleteCartItem(this)" class="btn-remove"><i class="icon-close"> </i> <input id="slug" type="hidden" value="{{item.product.slug}}"></button></td>
-
+                                        <td class="product-subtotal">
+                                            <span id="product-total" class="amount">&#8358;{{item.CartTotal|intcomma}}</span>
+                                            <input class="cart-plus-minus-box this" id="cart-id"  value="{{item.id}}" type="hidden">
+                                        </td>
+                                 
+                                        <td class="li-product-remove">
+                                            <a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-trash "  style=" font-size:20px" ></i> <span id="product-select" > {{item.product.slug}} </span></a>
+                                        </td>
+                                        {%empty%}
+                                        <td colspan="6">
+                                            you have not added any items to cart
+                                        </td>
                                     </tr>
-                                    {% else %}
-                                    <tr>
-                                        <td class="product-col">
-                                            <div class="product">
-                                                <figure class="product-media">
-                                                    <a href="{% url 'product' item.slug %}">
-                                                        <img src="{{item.img}}" alt="Product image">
-                                                    </a>
-                                                </figure>
 
-                                                <h3 class="product-title">
-                                                    <a href="{% url 'product' item.slug %}">{{item.product_name|truncatechars:30}}</a>
-                                                </h3><!-- End .product-title -->
-                                            </div><!-- End .product -->
-                                        </td>
-
-                                        <td class="price-col" >&#8358;{{item.price|intcomma}}</td>
-                                        <input type="hidden" id="prod-price" value="{{item.price}}">
-                                        
-                                        <td class="quantity-col">
-                                            <div class="cart-product-quantity">
-                                                <input type="number" class="form-control" id="cart-quantity" value="{{item.quantity}}" min="1" max="10" step="1" data-decimals="0" required>
-
-                                            </div><!-- End .cart-product-quantity -->
-                                        </td>
-                                        <td class="total-col" id="product-total">&#8358;{{item.item_total|intcomma}}</td>
-                                        <td  class=""><button onclick="updateCartItem(this)" style="background:none; font-size:20px; border:0"><i class="icon-refresh"></i>
-                                            <input type="hidden" id ="prod-name" value="{{item.slug}}"> 
-                                        <td class="remove-col"><button onclick="deleteCartItem(this)" class="btn-remove"><i class="icon-close"> </i> <input id="slug" type="hidden" value="{{item.slug}}"></button></td>
-
-                                    </tr>
-                                    {% endif %}
                                     {% endfor %}
-                                   
                                 </tbody>
-                            </table><!-- End .table table-wishlist -->
+                            </table>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col-md-65 ml-auto">
+                                <div class="cart-page-total">
+                                    <ul>
+                                        {% comment %} <li>Subtotal <span>$130.00</span></li> {% endcomment %}
+                                        <li >Total <span id="cart-items-total">&#8358;{{total|intcomma}}</span></li>
+                                    </ul>
+                                    <a href="{% url 'checkout' %}">Proceed to checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-3">
-                            <div class="summary summary-cart">
-                                <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-
-                                <table class="table table-summary">
-                                    <tbody>
-                                        <tr class="summary-subtotal">
-                                            <td>Subtotal:</td>
-                                            <td id="sub-total">&#8358;{{cart_total|intcomma}}</td> 
-                                        </tr><!-- End .summary-subtotal -->
-                                        <tr class="summary-shipping">
-                                            <td>Shipping:</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-
-                                        <tr class="summary-shipping-row">
-                                          
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-shipping-row">
-                                            <td>
-                                                <div class="custom-control custom-radio">
-                                                    <label class="custom-control-label" for="standart-shipping">Flat Shipping Fee:</label>
-                                                </div><!-- End .custom-control -->
-                                            </td>
-                                            <td>&#8358;3,000 </td>
-                                        </tr><!-- End .summary-shipping-row -->
-
-                                        <tr class="summary-total">
-                                            <td>Total:</td>
-                                            <td id="sum-total">&#8358;{{total|intcomma}}</td> 
-                                        </tr><!-- End .summary-total -->
-                                        
-                                    </tbody>
-                                </table><!-- End .table table-summary -->
-
-                                <a href="{% url 'checkout' %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
-                            </div><!-- End .summary -->
-
-                            <a href="{% url 'shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-long-arrow-right"></i></a>
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .cart -->
-        </div><!-- End .page-content -->
-
+    <div class="product-area pt-60 pb-50">
         <div class="container">
-            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
-                data-owl-options='{
-                    "nav": false, 
-                    "dots": true,
-                    "margin": 20,
-                    "loop": false,
-                    "responsive": {
-                        "0": {
-                            "items":2
-                        },
-                        "480": {
-                            "items":3
-                        },
-                        "768": {
-                            "items":4
-                        },
-                        "992": {
-                            "items":5
-                        },
-                        "1200": {
-                            "items":6,
-                            "nav": true,
-                            "dots": true
-                        }
-                    }
-                }'>
-                {% for product in products %}
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="{% url 'product' product.slug %}">
-                            <img style="height:200px" src="{{product.img1.url}}" alt="Product image" class="product-image">
-                        </a>
+            <div class="shop-products-wrapper">
+                <div class="tab-content">
+                    <div id="grid-view" >
+                        <div class="product-area shop-product-area ">
+                            <div class="li-section-title">
+                                <h2>Related Items (sorted by brands, categories, or views)
+                                </h2>
+                                
+                            </div>
+                            <div class="row px-3" >
+                                {% for product in products  %}
+                                <div  id="prod-wrapper-index" class="mt-4 p-3">
+                                    <!-- single-product-wrap start -->
+                                    <div class="single-product-wrap ">
+                                        <div class="product-image ">
+                                            <a href="{% url 'product' product.slug %}">
+                                                <img width="" style ="max-width:150px; height:100px" src="{{product.img1.url}}" alt="Li's Product Image">
+                                            </a>
+                                            {% if product.is_new %}
+                                            <span class="sticker">New</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product_desc">
+                                            <div class="product_desc_info">
+                                                
+                                                <h4><a class="product_name" href="{% url 'product' product.slug %}">{{product.name}}</a></h4>
+                                                <div class="price-box">
+                                                    {% if product.discount == 0 %}
+                                                    <span class="new-price new-price-2">&#8358;{{product.price |intcomma }}</span>
+                                                    {% else %}
+                                                    <span class="new-price new-price-2">&#8358;{{product.discount_price |intcomma }}</span>
+                                                    <span class="old-price">&#8358;{{product.price |intcomma }}</span>
+                                                    <span class="discount-percentage">-{{product.discount}}%</span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="my-4">
+                                                    {% if user.is_authenticated %}
+                                                    {% if product.in_stock %}
+                                                    <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                    <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                    {% else %}
+                                                    <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm"> Out Of Stock </button>
+            
+                                                    {% endif %}
+                                                    {% else %}
+                                                    <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
+                                                    <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                    {% endif %}  
+                                                </div>
+                                            </div>
+                                          
+                                        </div>
+                                    </div>
+                                    <!-- single-product-wrap end -->
+                                </div>
+    
+                                {%empty%}
+                                <div class="product_desc">
+    
+                                no products 
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                   
+                  
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="product-action-vertical">
-                            <button style="border:0"  {% if user.is_authenticated %} onclick="AddToWishList(this)" {% else %} onclick="loginRequired()" {% endif %} class="btn-product-icon btn-wishlist btn-expandable" id="add-cart-btn"> <i class="fa fa-shopping-cart"> </i><span>add to wishlist</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                            
-                        </div><!-- End .product-action-vertical -->
 
-                        <div class="product-action">
-                            <button style="border:0" onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">{{product.sub_category}}</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">{{product.name|truncatechars:20}}</a></h3><!-- End .product-title -->
-                        <div class="product-price">
-                            {% if product.discount == 0 %}
-                            <span class="new-price ">&#8358;{{product.price |intcomma }}</span>
-                            {% else %}
-                            <span class="new-price ">&#8358;{{product.discount_price |intcomma }}</span>
-                            <span class="old-price">&#8358;{{product.price |intcomma }}</span>
-                            <span class="discount-percentage">-{{product.discount}}%</span>
-                            {% endif %}
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: {{product.average_rating.percentage}}%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( {{product.average_rating.no_reviews}} Reviews )</span>
-                        </div><!-- End .rating-container -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-                {% endfor %}
-            </div><!-- End .owl-carousel -->
-        </div><!-- End .container -->
-    </main><!-- End .main -->
 
     <script>
-        const CartSubTotal = document.getElementById('sub-total')
-        const CartItemsTotal = document.getElementById('sum-total')
         function deleteCartItem(elem) {
-            const slug = elem.querySelector('#slug').value
 
-            fetch(`{% url 'del-cart-item'  %}?item=${slug}`, {
+            fetch(`{% url 'del-cart-item'  %}?item=${elem.textContent}`, {
                 method:"GET"
             })
             .then((res) => res.json())
@@ -239,23 +189,22 @@
                 console.log('data', data)
                 elem.parentNode.parentNode.innerHTML = ''
                 fetchCartData();
-                CartSubTotal.innerHTML = `&#8358;${data['cart_total'].toLocaleString()}`
-                CartItemsTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
              })
 
         }
       
         function updateCartItem(elem) {
-            const trElem = elem.parentNode.parentNode
-            const quantity = trElem.querySelector("#cart-quantity").value
-            var slug = trElem.querySelector("#slug")
-            var price = trElem.querySelector("#prod-price").value
-            var DispTotal = trElem.querySelector("#product-total")
+            const rowElem = elem.parentNode.parentNode
+            const quantity = rowElem.querySelector("#quantity").value
+            var cartId = rowElem.querySelector("#cart-id")
+            var price = rowElem.querySelector("#prod-price").value
+            var DispTotal = rowElem.querySelector("#product-total")
             const msgArea = document.getElementById('msgArea')
+            const CartItemsTotal = document.getElementById('cart-items-total')
             var amount = Number(quantity) * Number(price)
-            slug = `${slug.value}`
+            cartId = `${cartId.value}`
             msgArea.innerHTML = ''
-            fetch(`/users/update-cart/${slug}?p=${quantity}`, {
+            fetch(`/users/update-cart/${cartId}?p=${quantity}`, {
                 method:"GET"
             })
             .then((res) => res.json())
@@ -269,8 +218,7 @@
                else {
                    fetchCartData();
                    DispTotal.innerHTML = `&#8358;${amount.toLocaleString()}`
-                   CartSubTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
-                   CartItemsTotal.innerHTML = `&#8358;${data['sumTotal'].toLocaleString()}`
+                   CartItemsTotal.innerHTML = `&#8358;${data['total'].toLocaleString()}`
                    msgArea.setAttribute("style", "display:block")
                    msgArea.classList.remove('alert-danger')
                     msgArea.classList.add('alert-success')
@@ -279,11 +227,5 @@
              })
             
         }
-
-        function loginRequired() {
-            alert('please login to save items')
-        }
-        
     </script>
-    {% include 'js.html' %}
-{% endblock %}
+    {% endblock  %}

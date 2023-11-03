@@ -1,0 +1,64 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Li's Breadcrumb Area End Here -->
+    <!-- Begin Login Content Area -->
+    <div class="page-section mb-60">
+        <div class="container">
+            <div class="row">
+                <div class=" col-lg-6 col-sm-12 col-md-12 col-xs-12  mb-30">
+                    <!-- Login Form s-->
+                    <form action="#" >
+                        <div class="login-form">
+                            <h4 class="login-title">Reset Password</h4>
+                            <div class="row">
+                                <div class="col-md-12 col-12 mb-20">
+                                    <label>Enter Your Email Address*</label>
+                                    <input class="mb-0" type="email" placeholder="Email Address">
+                                </div>
+                           
+                               
+                                <div class="col-md-4 mt-10 mb-20 text-left ">
+                                    <a href="{% url 'auth' %}"> Login to your account</a>
+                                </div>
+                                <div class="col-md-12">
+                                    <button class="register-button mt-0">Send Email</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+   
+    <script >  
+        const Form = document.getElementById("login-form")
+        Form.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const formData = new FormData(form)
+            const FormSubmitBtn = document.getElementById("login-btn")
+            FormSubmitBtn.innerHTML="Authenticating ..."
+            FormSubmitBtn.disabled = true;
+            fetch("", {
+                body: formData,
+                method: "POST",
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                //  console.log("data", data);
+                FormSubmitBtn.innerHTML="Add Lesson"
+                Form.reset()
+                FormSubmitBtn.removeAttribute("disabled");
+                if (data.field_error ) {
+                    alert("course already exists")
+                }
+                });
+        })
+    </script>
+    
+     
+{% endblock  %}

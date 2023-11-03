@@ -1,94 +1,165 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 {% load static %}
-{% load humanize %}
 {% block content %}
-
-    <main class="main pt-5">
-       
-        <div class="page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="toolbox">
-                            <div class="toolbox-left">
-                                <div class="toolbox-info">
-                                     Showing <span> {{ start_index }}-{{ end_index }} of {{ page.paginator.count }}</span> Products
-                                </div><!-- End .toolbox-info -->
-                            </div><!-- End .toolbox-left -->
-                            <div class="toolbox-right">
-                                <div class="toolbox-sort">
-                                    <form  onchange="submit()" >
-                                        <label for="sortby">Sort by:</label>
-                                        <div class="select-custom">
-                                                <select id="sortby" class="form-control" name="sort">
-                                                    {% if sort_query == 'name' %}
-                                                    <option selected value="name">Name (A - Z)</option>
-                                                    {% elif sort_query == '-name' %}
-                                                    <option selected value="-name">Name (Z - A)</option>
-                                                    {% elif sort_query == 'price' %}
-                                                    <option selected value="price">Price (Low &gt; High)</option>
-                                                    {% elif sort_query == '-price' %}
-                                                    <option selected value="-price">Price (High &gt; Low)</option>
-                                                    {% else %}
-                                                    <option selected >Relevance</option>
-                                                    {% endif %}
-                                                    <option value="name">Name (A - Z)</option>
-                                                    <option value="-name">Name (Z - A)</option>
-                                                    <option value="price">Price (Low &gt; High)</option>
-                                                    <option value="-price">Price (High &gt; Low)</option>
-                                                    {% comment %} <option value="-pr">Rating (Lowest)</option> {% endcomment %}
-                                                </select>
-                                        </div>
-                                    </form>
-                                </div><!-- End .toolbox-sort -->
+{% load humanize  %}
+    <!-- Begin Li's Breadcrumb Area -->
+    <div class="breadcrumb-area">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <ul>
+                    <li><a href="{% url 'homepage' %}">Home</a></li>
+                    {% if request.path == '/search' %}
+                    <li class="active">Search Results </li>
+                    {% else %}
+                    <li class="active">Product Listings  </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Li's Breadcrumb Area End Here -->
+    <!-- Begin Li's Content Wraper Area -->
+    <div class="content-wraper pt-60 pb-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9 order-1 order-lg-2">
+                   
+                    <!-- shop-top-bar start -->
+                    <div class="shop-top-bar">
+                        <div class="shop-bar-inner">
+                            <div class="product-view-mode">
+                                <!-- shop-item-filter-list start -->
+                               
+                                <!-- shop-item-filter-list end -->
                             </div>
-<<<<<<< HEAD
+                            <div class="toolbar-amount">
+                                <span>Showing  {{ start_index }}-{{ end_index }} of {{ page.paginator.count }} items</span>
+                            </div>
+                        </div>
+                        <!-- product-select-box start -->
+                        <div class="product-select-box">
+                            <form id="sortForm" onchange="submit()" >  
+                                <input type="hidden" value="{{item}}" name="item">
+                            <div class="product-short">
+                                    <p>Sort By:</p>
+                                    <select class="nice-select" name="sort">
+                                        {% if sort_query == 'name' %}
+                                        <option selected value="name">Name (A - Z)</option>
+                                        {% elif sort_query == '-name' %}
+                                        <option selected value="-name">Name (Z - A)</option>
+                                        {% elif sort_query == 'price' %}
+                                        <option selected value="price">Price (Low &gt; High)</option>
+                                        {% elif sort_query == '-price' %}
+                                        <option selected value="-price">Price (High &gt; Low)</option>
+                                        {% else %}
+                                        <option selected >Relevance</option>
+                                        {% endif %}
+                                        <option value="name">Name (A - Z)</option>
+                                        <option value="-name">Name (Z - A)</option>
+                                        <option value="price">Price (Low &gt; High)</option>
+                                        <option value="-price">Price (High &gt; Low)</option>
+                                        {% comment %} <option value="-pr">Rating (Lowest)</option> {% endcomment %}
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- product-select-box end -->
+                    </div>
+                    <!-- shop-top-bar end -->
+                    <!-- shop-products-wrapper start -->
+                    <div class="shop-products-wrapper">
+                        <div class="tab-content">
+                            <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
+                                <div class="product-area shop-product-area">
+                                    <div class="row">
+                                        {% for product in page  %}
+                                        {% comment %} <div class="col-lg-4 col-md-4 col-sm-6 mt-40"> {% endcomment %}
+                                            <!-- single-product-wrap start -->
+                                            <div  id="prod-wrapper" class="mt-5 p-3">
+                                                <div class="single-product-wrap">
+                                                    <div class="product-image">
+                                                        <a href="{% url 'product' product.slug %}">
+                                                            <img height="100" src="{{product.img1.url}}" alt="Li's Product Image">
+                                                        </a>
+                                                        {% if product.is_new %}
+                                                        <span class="sticker">New</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="product_desc">
+                                                        <div class="product_desc_info">
+                                                            <div class="product-review">
+                                                                <h5 class="manufacturer">
+                                                                </h5>
+                                                                <div class="rating-box">
+                                                                    <ul class="rating">
+                                                                        {% for i in "12345" %}
+                                                                        {% if i|add:0 <= product.average_rating %}
+                                                                        <li><i class="fa fa-star-o"></i></li>
+                                                                        {% else %}
+                                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                                        {% endif %}
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <h4><a class="product_name" href="">{{product.name}}</a></h4>
+                                                            <div class="price-box">
+                                                                {% if product.discount == 0 %}
+                                                                <span class="new-price new-price-2">&#8358;{{product.price |intcomma }}</span>
+                                                                {% else %}
+                                                                <span class="new-price new-price-2">&#8358;{{product.discount_price |intcomma }}</span>
+                                                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
+                                                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="my-4">
+                                                                {% if user.is_authenticated %}
+                                                                {% if product.in_stock %}
+                                                                <button onclick="AddTocart(this)" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"></i>  <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                                                <button onclick="AddToWishList(this)" class="btn  btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                                {% else %}
+                                                                <button disabled  class="add-to-cart btn btn-secondary text-sm btn-sm" id="add-cart-btn" type="submit"> Out Of Stock </button>
+                        
+                                                                {% endif %}
+                                                                {% else %}
+                                                                <button onclick="loginRequiredAction()" class="add-to-cart btn btn-warning btn-sm" id="add-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>  <span id="prod-name"> {{product.slug}}</span></button>
+                                                                <button onclick="loginRequiredAction()" class="btn btn-warning btn-sm"><i class="fa fa-heart-o"></i> <span id="prod-name">Add to wishlist {{product.slug}}</span></button>
+                                                                {% endif %} 
+                                                            </div>
+                                                        </div>
+                                                    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- single-product-wrap end -->
+                                        {% comment %} </div> {% endcomment %}
+
+                                        {%empty%}
+                                        <div class="product_desc">
+
+                                        no products 
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                            {% if page %}
                             <nav class="paginatoin-area ">
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <p>Showing  {{ start_index }}-{{ end_index }} of {{ page.paginator.count }} items</p>
-=======
-                        </div><!-- End .toolbox -->
->>>>>>> 30e33f685f1d9db9b8f9e3faafb78034e59fc8d6
 
-                        <div class="products mb-3">
-                            <div class="row">
-                                {% for product in page %}
-                                <div class="col-4 col-md-3 col-lg-6 col-xl-3">
-                                    <div class="product product-7 ">
-                                        <figure class="product-media">
-                                            <a href="{% url 'product' product.slug %}">
-                                                <img style="height:150px !important" src="{{product.img1.url}}" alt="Product image" class="product-image">
-                                            </a>
-                                            <div class="product-action-vertical">
-                                                {% comment %} <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> {% endcomment %}
-                                                <button style="border:0" onclick="AddToWishList(this)" class="btn-product-icon btn-wishlist btn-expandable" id="add-cart-btn"> <i class="fa fa-shopping-cart"> </i><span>add to wishlist</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
+                                    </div>
 
-                                            </div><!-- End .product-action-vertical -->
-
-                                            <div class="product-action">
-                                                {% comment %} <a href="#" class="btn-product btn-cart"><span>add to cart</span></a> {% endcomment %}
-                                                <button style="border:0" onclick="AddTocart(this)" class="btn-product btn-cart" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{product.slug}}"></span></button>
-
-                                            </div><!-- End .product-action -->
-                                        </figure><!-- End .product-media -->
-
-                                        <div class="product-body">
-                                            <div class="product-cat">
-                                                <a href="#">{{product.category}}</a>
-                                            </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="{% url 'product' product.slug %}">{{product.name|truncatechars:20}}</a></h3><!-- End .product-title -->
-                                           
-                                            <div class="product-price">
-                                                {% if product.discount == 0 %}
-                                                <span class="new-price ">&#8358;{{product.price |intcomma }}</span>
+                                    <div class="col-lg-6 col-md-6">
+                                        <ul class="pagination-box ">
+                                            {% if page.has_previous %}
+                                            <li class=" ">
+                                                {% if request.path == '/search' %}
+                                                <a class="Previous" href="?item={{item}}&page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
                                                 {% else %}
-                                                <span class="new-price ">&#8358;{{product.discount_price |intcomma }}</span>
-                                                <span class="old-price">&#8358;{{product.price |intcomma }}</span>
-                                                <span class="discount-percentage">-{{product.discount}}%</span>
+                                                <a class="Previous" href="?page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
                                                 {% endif %}
-<<<<<<< HEAD
                                             </li>
                                             {% else %}
                                             <li class=" ">
@@ -151,226 +222,44 @@
                                         {% endfor %} 
                                     </ul>
                                 </li>
-=======
-                                            </div>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: {{product.average_rating.percentage}}%;"></div><!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                                <span class="ratings-text">( {{product.average_rating.no_reviews}} Reviews )</span>
-                                            </div><!-- End .rating-container -->
-                                        </div><!-- End .product-body -->
-                                    </div><!-- End .product -->
-                                </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
->>>>>>> 30e33f685f1d9db9b8f9e3faafb78034e59fc8d6
                                 {% endfor %}
-                            </div><!-- End .row -->
-                        </div><!-- End .products -->
-                            
-                          
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                {% if page.has_previous %}
-                                <li class=" ">
-                                    {% if request.path == '/search' %}
-                                    <a class="page-link page-link-prev" aria-label="Previous" href="?item={{item}}&page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
-                                    {% else %}
-                                    <a class="page-link page-link-prev" aria-label="Previous" href="?page={{ page.previous_page_number }}&sort={{sort_query}}" tabindex="-1"><i class="fa fa-chevron-left"></i> Previous</a>
-                                    {% endif %}
-                                </li>
-                                {% else %}
-                                <li class="page-item disabled">
-                                    <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-                                        <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                    </a>
-                                </li>
-                                {% endif %}
-                                {% for page_num in page.paginator.page_range %}
-                                {% if page_num == page.number %}
-                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{ page_num }}</a></li>
-                                {% else %}
-        
-                                {% if request.path == '/search' %}
-                                <li class="page-item " aria-current="page"><a class="page-link" href="?item={{item}}&page={{ page_num }}&sort={{sort_query}}">{{ page_num }}</a></li>
-                                {% else %}
-                                <li class="page-item " aria-current="page"><a class="page-link" href="?page={{ page_num }}&sort={{sort_query}}">{{ page_num }}</a></li>
-                                {% endif %}
-        
-                                {% endif %}
-                                {% endfor %}
-        
-                                {% if page.has_next %}
-                                <li class="page-item">
-                                    
-                                    {% if request.path == '/search' %}
-                                    <a class="page-link page-link-next"  href="?item={{item}}&page={{ page.next_page_number }}&sort={{sort_query}}" aria-label="Next">
-                                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                    </a>
-                                    {% else %}
-                                    <a class="page-link page-link-next"  href="?page={{ page.next_page_number }}&sort={{sort_query}}" aria-label="Next">
-                                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                    </a>
-                                    {% endif %}
-        
-                                </li>
-                                {% else %}
-                                <li class="">
-                                    <a class="Next disabled" aria-disabled="true" >Next <i class="fa fa-chevron-right"></i></a>
-                                </li>
-                                {% endif %}
                             </ul>
-                        </nav>
-
-                  
+                        </div>
+                        <!-- category-sub-menu end -->
+                    </div>
+                    <!--sidebar-categores-box end  -->
+                    <!--sidebar-categores-box start  -->
+                    <div class="sidebar-categores-box">
+                        <div class="sidebar-title">
+                            <h2>Filter By</h2>
+                        </div>
+                        <!-- btn-clear-all start -->
+                        {% comment %} <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button> {% endcomment %}
+                        <!-- btn-clear-all end -->
+                        <!-- filter-sub-area start -->
+                        <div class="filter-sub-area upper">
+                            <h5 class="filter-sub-titel">Brand</h5>
+                            <div class="categori-checkbox">
+                                <form action="#">
+                                    <ul>
+                                        {% for brand in brands %}
+                                        <li><input type="checkbox" name="product-categori"><a class="upper">{{brand.brand}} </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </form>
+                            </div>
+                            </div>
+                        <!-- filter-sub-area end -->
+                    </div>
+                    <!--sidebar-categores-box end  -->
                     
-                           
-                    </div><!-- End .col-lg-9 -->
-                    {% comment %} <aside class="col-lg-3 order-lg-first">
-                        <div class="sidebar sidebar-shop">
-                            <div class="widget widget-clean">
-                                <label>Filters:</label>
-                                <a href="#" class="sidebar-filter-clear">Clean All</a>
-                            </div><!-- End .widget widget-clean -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Wraper Area End Here -->
 
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                                        Category
-                                    </a>
-                                </h3><!-- End .widget-title -->
 
-                                <div class="collapse show" id="widget-1">
-                                    <div class="widget-body">
-                                        <div class="filter-items filter-items-count">
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-1">
-                                                    <label class="custom-control-label" for="cat-1">Dresses</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">3</span>
-                                            </div><!-- End .filter-item -->
 
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-2">
-                                                    <label class="custom-control-label" for="cat-2">T-shirts</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
-                                            </div><!-- End .filter-item -->
 
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-3">
-                                                    <label class="custom-control-label" for="cat-3">Bags</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">4</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-4">
-                                                    <label class="custom-control-label" for="cat-4">Jackets</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">2</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-5">
-                                                    <label class="custom-control-label" for="cat-5">Shoes</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">2</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-6">
-                                                    <label class="custom-control-label" for="cat-6">Jumpers</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-7">
-                                                    <label class="custom-control-label" for="cat-7">Jeans</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-8">
-                                                    <label class="custom-control-label" for="cat-8">Sportwear</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
-                                            </div><!-- End .filter-item -->
-                                        </div><!-- End .filter-items -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
-
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                                        Size
-                                    </a>
-                                </h3><!-- End .widget-title -->
-
-                                <div class="collapse show" id="widget-2">
-                                    <div class="widget-body">
-                                        <div class="filter-items">
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-1">
-                                                    <label class="custom-control-label" for="size-1">XS</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-2">
-                                                    <label class="custom-control-label" for="size-2">S</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" checked id="size-3">
-                                                    <label class="custom-control-label" for="size-3">M</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" checked id="size-4">
-                                                    <label class="custom-control-label" for="size-4">L</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-5">
-                                                    <label class="custom-control-label" for="size-5">XL</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-6">
-                                                    <label class="custom-control-label" for="size-6">XXL</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .filter-item -->
-                                        </div><!-- End .filter-items -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
-                        
-                        </div><!-- End .sidebar sidebar-shop -->
-                    </aside><!-- End .col-lg-3 --> {% endcomment %}
-                </div><!-- End .row -->
-            </div><!-- End .container -->
-        </div><!-- End .page-content -->
-    </main><!-- End .main -->
-    {% include 'js.html' %}
-{% endblock %}
+{% endblock  %}

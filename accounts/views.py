@@ -11,10 +11,10 @@ from django.contrib import messages
 from django.conf import settings
 from django.views import View
 from core.models import Order
-from .models import Profile, Billing
+from .models import Profile
 import json
 import os
-from core.models import Cart, Product
+
 
 
 class SignIn(View):
@@ -181,15 +181,8 @@ def login(request):
         print(user)
         if user:
             auth.login(request, user)
-            for slug, quantity in  request.session.get('cart', {}).items():
-                product = get_object_or_404(Product, slug=slug)
-                cart_item = Cart.objects.filter(user=request.user, product=product).first()
-                if cart_item:
-                    cart_item.number_of_items += quantity
-                else:
-                    cart_item = Cart.objects.create(user=request.user, number_of_items=quantity, product=product)
-                    cart_item.save()
             return JsonResponse({"success":"logged In"})
+
         else:
             return JsonResponse({"auth_error":"invalid login"})
     raise Http404("invalid request")
@@ -242,40 +235,3 @@ def changePw(request):
             return JsonResponse({'password_strength':str(err)})
 
 
-@login_required()
-def billing_info(request):
-    billing  = Billing.objects.filter(user=request.user).first()
-    if request.method == 'POST':
-        first_name=request.POST['first_name']
-        last_name=request.POST['last_name']
-        country=request.POST['country']
-        state=request.POST['state']
-        city=request.POST['city']
-        address=request.POST['address']
-        phone_number=request.POST['phone_number']
-        # apartment=request.POST['apartment']
-        profile = get_object_or_404(Profile, email=request.user.email)
-        profile.first_name = first_name
-        profile.last_name = last_name
-        profile.save()
-        if not billing:
-            billing = Billing.objects.create(
-                user=profile, 
-                country=country,
-                state=state,
-                city=city,
-                address =address,
-                # apartment=apartment
-                )
-        else:
-            billing.city = city
-            billing.country = country
-            billing.state = state
-            billing.city = city
-            billing.address = address
-            billing.phone_number = phone_number
-
-        billing.save()
-        messages.success(request, 'billing details has been updated')
-        return redirect('billing')
-    return render(request, 'accounts/billing.html',{"billing":billing})

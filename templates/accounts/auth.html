@@ -1,9 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'accounts/base.html' %}
 {% load static %}
 {% load socialaccount %}
+
 {% block content %}
-        <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+
+ 
+    <!-- Begin Login Content Area -->
+    <div class="page-section mb-60">
+        <div class="container">
+           {% include 'asyncMessages.html' %}
+            <div class="product-area pt-35">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -65,66 +71,50 @@
                                         <h4 class="login-title">Register</h4>
                                         
                                         {% csrf_token %}
-                                        <input  id="next" type="hidden" value="{{redirect_page}}">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12 mb-20">
+                                                <label>First Name</label>
+                                                <input id="firstNameField" required class="mb-0 form-control " type="text" placeholder="First Name">
+                                            </div>
+                                            <div class="col-md-6 col-12 mb-20">
+                                                <label>Last Name</label>
+                                                <input id="lastNameField" required class="mb-0" type="text" placeholder="Last Name">
+                                            </div>
+                                            <div class="col-md-12 mb-20">
+                                                <label>Email Address*</label>
+                                                <p class="text-sm text-success usernameSuccessOutput"></p>
+                                                <input id="emailField" required class="mb-0  form-control" type="email" placeholder="Email Address">
+                                                <p id="emailFieldMsg"  style="display:">
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-20">
+                                                {% comment %} <small class="float-right py-3 showPasswordToggle" style="cursor:pointer">SHOW</small> {% endcomment %}
+                                                <label>Password</label>
+                                                <input id="passwordField" required class="mb-0  form-control" type="password" placeholder="Password">
+                                                <p id="passwordFieldMsg"  style="display:">
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6 mb-20">
+                                                <label>Confirm Password</label>
+                                                <input id="confPasswordField" required class="mb-0  form-control" type="password" placeholder="Confirm Password">
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="register-button mt-0" id="reg-btn">Register</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
-							    		<div class="form-group">
-							    			<label for="singin-email-2">Email address *</label>
-							    			<input type="text"  class="form-control" id="loginEmailField" name="email" required>
-							    		</div><!-- End .form-group -->
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-							    		<div class="form-group">
-							    			<label for="singin-password-2">Password *</label>
-							    			<input type="password" class="form-control" id="loginpasswordField" name="password" required>
-							    		</div><!-- End .form-group -->
+    <script src="{% static 'js/auth.js' %}"></script>
 
-							    		<div class="form-footer">
-							    			<button login-btn type="submit" class="btn btn-outline-primary-2" id="login-btn">
-			                					<span>LOG IN</span>
-			            						<i class="icon-long-arrow-right"></i>
-			                				</button>
-
-			                				<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="signin-remember-2">
-												<label class="custom-control-label" for="signin-remember-2">Remember Me</label>
-											</div><!-- End .custom-checkbox -->
-
-											<a href="#" class="forgot-link">Forgot Your Password?</a>
-							    		</div><!-- End .form-footer -->
-							    	</form>
-							    </div><!-- .End .tab-pane -->
-							    <div class="tab-pane fade " id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
-							    	<form action="#" id="reg-form">
-							    		<div class="form-group">
-							    			<label for="register-email-2">Your email address *</label>
-							    			<input type="email" class="form-control" id="register-email-2" name="register-email" required>
-							    		</div><!-- End .form-group -->
-
-							    		<div class="form-group">
-							    			<label for="register-password-2">Password *</label>
-							    			<input type="password" class="form-control" id="register-password-2" name="register-password" required>
-							    		</div><!-- End .form-group -->
-
-							    		<div class="form-footer">
-							    			<button type="submit" class="btn btn-outline-primary-2" id="reg-btn">
-			                					<span>SIGN UP</span>
-			            						<i class="icon-long-arrow-right"></i>
-			                				</button>
-
-			                				<div class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" id="register-policy-2" required>
-												<label class="custom-control-label" for="register-policy-2">I agree to the <a href="{% url 'policy' %}">privacy policy</a> *</label>
-											</div><!-- End .custom-checkbox -->
-							    		</div><!-- End .form-footer -->
-							    	</form>
-							    
-							    </div><!-- .End .tab-pane -->
-							</div><!-- End .tab-content -->
-						</div><!-- End .form-tab -->
-            		</div><!-- End .form-box -->
-            	</div><!-- End .container -->
-            </div><!-- End .login-page section-bg -->
-        </main><!-- End .main -->
-        <script src="{% static 'assets/js/auth.js' %}"></script>
-		{% include 'js.html' %}
-
-{% endblock %}
+     
+{% endblock  %}

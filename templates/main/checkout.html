@@ -1,194 +1,164 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 {% load static %}
+{% load humanize  %}
 {% block content %}
-{% load humanize %}
-
-    <main class="main">
-        
-        <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                </ol>
-            </div><!-- End .container -->
-        </nav><!-- End .breadcrumb-nav -->
-
-        <div class="page-content">
-            <div class="checkout">
-                <div class="container">
-                    <form action="#">
-                        <div class="row">
-                            {% comment %} <div class="col-lg-9">
-                                <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>First Name *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-
-                                        <div class="col-sm-6">
-                                            <label>Last Name *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-                                    </div><!-- End .row -->
-
-                                    <label>Company Name (Optional)</label>
-                                    <input type="text" class="form-control">
-
-                                    <label>Country *</label>
-                                    <input type="text" class="form-control" required>
-
-                                    <label>Street address *</label>
-                                    <input type="text" class="form-control" placeholder="House number and Street name" required>
-                                    <input type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." required>
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>Town / City *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-
-                                        <div class="col-sm-6">
-                                            <label>State / County *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-                                    </div><!-- End .row -->
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>Postcode / ZIP *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-
-                                        <div class="col-sm-6">
-                                            <label>Phone *</label>
-                                            <input type="tel" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-                                    </div><!-- End .row -->
-
-                                    <label>Email address *</label>
-                                    <input type="email" class="form-control" required>
-
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="checkout-create-acc">
-                                        <label class="custom-control-label" for="checkout-create-acc">Create an account?</label>
-                                    </div><!-- End .custom-checkbox -->
-
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="checkout-diff-address">
-                                        <label class="custom-control-label" for="checkout-diff-address">Ship to a different address?</label>
-                                    </div><!-- End .custom-checkbox -->
-
-                                    <label>Order notes (optional)</label>
-                                    <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea>
-                            </div> {% endcomment %}
-                            <div class="col-lg-7 upper">
-                                <div class="card card-dashboard">
-                                    <div class="card-body">
-                                        <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
-
-                                        <p>{{user.first_name}} {{user.last_name}}<br>
-                                         {{user.billing_address.country}}<br>
-                                         {{user.billing_address.state}}<br>
-                                        {{user.billing_address.city}}, {{user.billing_address.address}}<br>
-                                        {{user.billing_address.phone_number}}<br>
-                                        {{user.email}}<br>
-                                        <a href="{% url 'billing' %}">Change Billing info <i class="icon-edit"></i></a></p>
-                                    </div><!-- End .card-body -->
-                                </div><!-- End .card-dashboard -->
-                            </div>
-                            <aside class="col-lg-5">
-                                <div class="summary">
-                                    <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-
-                                    <table class="table table-summary">
-                                        <thead>
-                                            <tr>
-                                                <th>Product</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            {% for item in cart_items %}
-                                            {% if item.product.in_stock %}
-                                            <tr>
-                                                <td><a href="{% url 'product' item.product.slug %}">{{item.product.name}} x {{item.number_of_items}} </a></td>
-                                                <td>&#8358;{{item.CartTotal|intcomma}}</td>
-                                            </tr>
-                                            {% endif %}
-                                            {% endfor %}
-                                            <tr class="summary-subtotal">
-                                                <td>Subtotal:</td>
-                                                <td>&#8358;{{order_total|intcomma}}</td>
-                                            </tr><!-- End .summary-subtotal -->
-                                            <tr>
-                                                <td>Shipping:</td>
-                                                <td>&#8358;3,000</td>
-                                            </tr>
-                                            <tr class="summary-total">
-                                                <td>Total:</td>
-                                                <td>&#8358;{{payable_amt|intcomma}}</td>
-                                            </tr><!-- End .summary-total -->
-                                        </tbody>
-                                    </table><!-- End .table table-summary -->
-
-                                    
-
-                                    {% comment %} <button  class="btn btn-outline-primary-2 btn-order btn-block">
-                                        <span class="btn-text">Place Order</span>
-                                        <span class="btn-hover-text">Proceed to Checkout</span>
-                                    </button> {% endcomment %}
-                                    <a href="#checkout-modal" class="btn btn-outline-primary-2 btn-order btn-block" data-toggle="modal">Checkout</a>
-
-
-                                </div><!-- End .summary -->
-                            </aside><!-- End .col-lg-3 -->
-                        </div><!-- End .row -->
-                    
-                </div><!-- End .container -->
-            </div><!-- End .checkout -->
-        </div><!-- End .page-content -->
-    </main><!-- End .main -->
-    <div class="modal fade " id="checkout-modal" tabindex="-1" role="dialog" style="display: ; padding-right: 17px;" aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="icon-close"></i></span>
-                    </button>
-
-                    <div class="form-box">
-                        <div class="form-tab">
-                                <div class="icon-box icon-box-circle text-center">
-                                    <span class="icon-box-icon">
-                                        <i class="icon-info-circle"></i>
-                                    </span>
-                                    <div class="icon-box-content">
-                                        <p> The next page is a simulated (demo) payment to test 
-                                            paystack integration. You are not required to enter any card details. Just follow the prompts. click on success or 
-                                            authorize if the success button doesn't work.
-                                        </p>
-                                        <br>
-                                        <i class ="fa fa-info p-1" ></i> No refund After payment is made
-                                        <br>
-                                        <span class="mb-3" > <i class="fa fa-info p-1 text-warning "></i>  Payment includes the flat shipping fee of &#8358;3,000
-                                            <p class="text-secondary"> Total amount payable is &#8358;{{payable_amt|intcomma}} </p>
-                                        </span>
-
-                                    </div><!-- End .icon-box-content -->
-                                </div><!-- End .icon-box -->
-                                <a href="{% url 'payment' %}" class="btn btn-outline-primary-2 btn-order btn-block">Continue</a>
-
-                            <div class="tab-content" id="tab-content-5">
-                         
-                            </div><!-- End .tab-content -->
-                        </div><!-- End .form-tab -->
-                    </div><!-- End .form-box -->
-                </div><!-- End .modal-body -->
-            </div><!-- End .modal-content -->
-        </div><!-- End .modal-dialog -->
+<style>
+    .fa-info {
+        border :1px solid #ffc107;
+        border-radius:50%
+    }
+</style>
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="{% url 'homepage' %}">Home</a></li>
+                <li><a href="{% url 'cart-page' %}">Cart</a></li>
+                <li class="active">Checkout</li>
+            </ul>
+        </div>
     </div>
-    {% include 'js.html' %}
+</div>
+<!-- Li's Breadcrumb Area End Here -->
+<!--Checkout Area Strat-->
+<div class="checkout-area pt-60 pb-30">
+    <div class="container">
+        <div class="row">
+          
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-12">
+                {% if user.is_billing_address == True %}
+                <div>
+                    <h4>Your delivery address is currently set to 
+                    </h4>
+                    <ul class="py-3" style="font-size:20px; text-transform:capitalize;">
+                        <li> {{user.address}},  {{user.apartment}}, </li>
+                        <li> {{user.city}}, {{user.state}},  </li>
+                        <li> {{user.country}}  </li>
+
+                    </ul>
+
+                </div>
+                <div class="different-address mb-4">
+                    <div class="ship-different-title">
+                            <p>Ship to a different address? 
+                            <a href="{% url 'account' %}" > change you shipping/delivery info here </a>
+                        </p>
+                    </div>
+                    
+                    
+                </div>
+                {% else %}
+                <div>
+                <h4 class="my-4">Your delivery address has not been set. Add Delivery address to continue</h4>
+
+                <a class="btn btn-info" href="{% url 'account' %}" > Set billing info </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="col-lg-6 col-12">
+                <div class="your-order">
+                    <h3>Your order</h3>
+                    <div class="your-order-table table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-name">Product</th>
+                                    <th class="cart-product-total">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                {% if item.product.in_stock %}
+                                <tr class="cart_item">
+                                    <td class="cart-product-name"> {{item.product.name}} <strong class="product-quantity"> × {{item.number_of_items}} </strong></td>
+                                    <td class="cart-product-total"><span class="amount">&#8358;{{item.CartTotal|intcomma}} </span></td>  
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                
+                                <tr class="order-total">
+                                    <th>Grand Total</th>
+                                    <td><strong><span class="amount">&#8358;{{order_total|intcomma}}</span></strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="payment-method">
+                        <div class="payment-accordion">
+                            <div class="order-button-payment">
+                                {% comment %} <input value="Place order" type="submit"> {% endcomment %}
+                                {% if user.is_billing_address == True and order_amt != 0 %}
+                                
+                                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#mymodal">Place Order</a>
+                                {% endif %}
+                               
+                                <div class="modal fade modal-wrapper" id="mymodal" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content p-2">
+                                            <div class="modal-body">
+                                                <div class="modal-inner-area row " style="font-size:15px">
+                                                    <p class=" text-warning my-3" > <i class ="fa fa-info p-1" ></i> The next page is a simulated (demo) payment to test 
+                                                        paystack integration. You are not required to enter any card details. Just follow the prompts. click on success or 
+                                                        authorize if the success button doesn't work. 
+                                                        <br>
+                                                        <i class ="fa fa-info p-1" ></i> No refund After payment is made
+                                                    </p>
+                                                    <span class="mb-3" > <i class="fa fa-info p-1 text-warning "></i> NOTE: payment includes the paystack fee/commission of 1.8% 
+                                                        <p class="text-secondary"> Total amount payable is &#8358;{{payable_amt|intcomma}} </p>
+                                                    </span>
+                                                    
+                                                </div>
+                                                <div class=" mt-4 ">
+                                                    <a href="#" class="btn btn-warning mr-5" class="close" data-dismiss="modal" aria-label="Close">Cancel</a>
+                                                    <a class="btn btn-success ml-5" href="{% url 'payment' %}" >Continue </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% comment %} <button  class="btn btn-dark" onclick="payWithPaystack()"> Pay Now</button> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+    function payWithPaystack() {
+        const first_name= "{{user.first_name}}"
+        const last_name= "{{user.last_name}}"
+        const email= "{{user.email}}"
+        const amt = {{order_amt}} * 100
+        console.log(typeof(amt), amt)
+        let handler = PaystackPop.setup({
+          key: 'pk_test_80ce0931ea2340cedcc210e22b23b973a0397752', // Replace with your public key
+          email: `${email}`,
+          amount: amt,
+        //  currency: 'NGN',
+          channels: ['card'],
+          ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+          // label: "Optional string that replaces customer email"
+          onClose: function(){
+            alert('Window closed.');
+          },
+          callback: function(response){
+            let message = 'Payment complete! Reference: ' + response.reference;
+            alert(message);
+            //here, make request to create order, redirect user to another page
+            window.location = "/place-order"
+          }
+        });
+      
+        handler.openIframe();
+      }
+    </script>
+
 {% endblock %}
