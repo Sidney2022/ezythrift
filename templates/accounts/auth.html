@@ -1,5 +1,7 @@
 {% extends 'accounts/base.html' %}
 {% load static %}
+{% load socialaccount %}
+
 {% block content %}
 
  
@@ -53,6 +55,9 @@
                                             <div class="col-md-12">
                                                 <button class="register-button mt-0" id="login-btn">Login</button>
                                             </div>
+                                            {% comment %} <div class="col-md-12">
+                                                <a href="{% provider_login_url 'google' %}"><i class="fab fa-google"></i> Login With Google</a>
+                                            </div> {% endcomment %}
                                         </div>
                                     </div>
                                 </form>

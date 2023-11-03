@@ -10,14 +10,16 @@
                     <div class="error-wrapper text-center ptb-50 pt-xs-20">
                         <div class="error-text">
                             <h1>404</h1>
-                            <h2>Opps! PAGE NOT BE FOUND</h2>
+                            <h2>Opps! PAGE NOT  FOUND</h2>
                             <p>Sorry but the page you are looking for does not exist, have been removed, <br> name changed or is temporarity unavailable.</p>
                         </div>
                         <div class="search-error">
                             <form id="search-form" action="{% url 'search' %}">
-                                <input type="text" placeholder="Search for products" name="item">
+                                <input name="item" type="text" placeholder="Enter your search key ..." required>
+                                  <input name="sort" type="hidden" value="{{sort_query}}" required>
                                 <button><i class="zmdi zmdi-search"></i></button>
                             </form>
+                           
                         </div>
                         <div class="error-button">
                             <a href="{% url 'homepage' %}">Back to home page</a>

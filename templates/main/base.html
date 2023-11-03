@@ -59,7 +59,6 @@
         <div class="body-wrapper">
             <!-- Begin Header Area -->
             <header>
-                <!-- Begin Header Top Area -->
                 <div class="header-top">
                     <div class="container">
                         <div class="row">
@@ -67,7 +66,7 @@
                             <div class="col-lg-3 col-md-4">
                                 <div class="header-top-left">
                                     <ul class="phone-wrap">
-                                        <li><a href="#">(+123) 123 321 345</a></li>
+                                        <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -77,28 +76,18 @@
                                 <div class="header-top-right">
                                     <ul class="ht-menu">
                                         <!-- Begin Setting Area -->
-                                        <li>
-                                            <div class="ht-setting-trigger"><span>Account</span></div>
-                                            <div class="setting ht-setting">
-                                                <ul class="ht-setting-list">
-                                                    <li><a href="{% url 'account' %}">My Account</a></li>
-                                                    <li><a href="{% url 'checkout' %}">Checkout</a></li>
-                                                    {% if  user.is_authenticated %}
-                                                    <li><a href="{% url 'logout' %}">Logout</a></li>
-                                                    {% else %}
-                                                    <li><a href="{% url 'auth' %}">Sign In</a></li>
-                                                    {% endif %} 
-                                                </ul>
-                                            </div>
-                                            
-                                        </li>
+                                        
+                                        {% if user.is_authenticated %}
+                                        <li><span> {{user}} </span></li>
+                                        <li><span><a href="{% url 'account' %}">My Account</a> </span></li>
+                                        <li><span><a href="{% url 'logout' %}">Logout</a> </span></li>
+                                        {% else %}
+                                        <li><span><a href="{% url 'auth' %}">Signin</a> </span></li>
+                                        {% endif %}
                                         <!-- Setting Area End Here -->
-                                 
-                                        <!-- Begin Language Area -->
+                                        <!-- Begin Currency Area -->
+                                      
                                         
-                                        <li id ="google_translate_element" > </li>
-                                        
-                                        <!-- Language Area End Here -->
                                     </ul>
                                 </div>
                             </div>
@@ -106,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Header Top Area End Here -->
                 <!-- Begin Header Middle Area -->
                 <div class="header-middle pl-sm-0 pr-sm-0 pl-xs-0 pr-xs-0">
                     <div class="container">
@@ -181,6 +169,7 @@
                                             </div>
                                             {% endif %}
                                         </li>
+                                      
                                         <!-- Header Mini Cart Area End Here -->
                                     </ul>
                                 </div>

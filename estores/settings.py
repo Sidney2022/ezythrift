@@ -41,8 +41,15 @@ INSTALLED_APPS = [
 
     'django_password_validators',
     'whitenoise.runserver_nostatic',
-]
 
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
+]
+SITE_ID = 1
+SOCIALACCOUNT_LOGIN_ON_GET = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -92,9 +99,26 @@ DATABASES = {
 AUTHENTICATION_BACKENDS = [
         'accounts.backends.EmailBackend',
         'django.contrib.auth.backends.ModelBackend',
+        'allauth.account.auth_backends.AuthenticationBackend'
 
         ]
-
+SOCIALACCOUNT_PROVIDERS = {
+    'google' : {
+        'SCOPE' : {
+            'profile',
+            'email',
+        },
+        "AUTH_PARAMS" : {
+            'access_type': 'online'
+        },
+        # 'APP': {
+        #     'client_id': os.getenv('CLIENT_ID'),
+        #     'secret': os.getenv('CLIENT_SECRET'),
+        # }
+        
+    }
+}
+LOGIN_REDIRECT_URL = '/'
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -146,7 +170,7 @@ STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS=[os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = '/home/Ezythrift/ezythrift/media/'
-#MEDIA_ROOT = 'C:/Users/USER/desktop/proj/estores/media'
+# MEDIA_ROOT = 'C:/Users/USER/desktop/proj/estores/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -168,12 +192,12 @@ EMAIL_PORT = os.getenv('PORT')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-SECURE_HSTS_SECONDS = 3600
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE  = True
-SESSION_COOKIE_SECURE = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS =True
-SECURE_HSTS_PRELOAD=True
+# SECURE_HSTS_SECONDS = 3600
+# SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE  = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_HSTS_INCLUDE_SUBDOMAINS =True
+# SECURE_HSTS_PRELOAD=True
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
