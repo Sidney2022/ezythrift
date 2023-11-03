@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'account' %}">My Account</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'orders' %}">Orders</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{order.tracking_id}}</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="row upper">
+                      {% include 'accounts/sidenav.html' %}
+
+                        <div class="col-md-8 col-lg-9">
+                            <table class="table table-cart ">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for item in order_items %}
+                                    <tr>
+                                        <td class=""> {{item.product.name}} </td>
+                                        <td class=""> {{item.unit_price}} </td>
+                                        <td class=""> {{item.quantity}} </td>
+                                        <td class=" " >  {{item.amt}} </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div  class="btn btn-outline-dark-2"><span>TOTAL: {{order.total}}</span></div>
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+    {% include 'js.html' %}
+{%endblock%}

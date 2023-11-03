@@ -2,22 +2,21 @@
 
 # Table of Contents
 
-- [Overview](#Overview)
-- [Features](#Features)
-- [Resources](#Resources)
-- [Development](#Development)
-- [Built with](#Built-With)
-- [Frontend development](#Frontend-Development)
-- [Backend development](#Backend-Development)
-- [Continued development](#Continued-Development)
-- [Author](#Author) 
+- [Overview](#overview)
+- [Features](#features)
+- [Resources](#resources)
+- [Built with](#built-with)
+- [Frontend development](#frontend-development)
+- [Backend development](#backend-development)
+- [Continued development](#continued-development)
+- [Author](#author) 
 
-# Overview
+## Overview
 
 EzyThrift is an eCommerce platform where users can purchase products at affordble prices 
 
 
-# Features
+## Features
 
 
 ## Features Overview
@@ -45,15 +44,14 @@ EzyThrift is an eCommerce platform where users can purchase products at affordbl
 These features collectively create a robust and user-friendly eCommerce platform, enabling customers to enjoy a seamless shopping experience while providing site administrators with efficient tools to manage products and orders.
 
 
-# Resources
+## Resources
 - [Live Link](#Live-Link)(https://ezythrift.pythonanywhere.com)
 - [Database Schema](#Database-Schema)
 - [Presentation](#Presentation)
 
 
-# Development
 
-# Built With
+## Built With
 
  Our site was built using the following tools:
 
@@ -83,9 +81,6 @@ These features collectively create a robust and user-friendly eCommerce platform
 ## Install Dependencies
 ``` pip install -r requirements.txt ```
 
-## Make migrations
-``` python manage.py makemigrations ```
-
 ## Migrate the database
 ``` python manage.py migrate ```
 
@@ -97,7 +92,7 @@ NB: uses email for authentication
 ``` python manage.py runserver ``` 
 
 
-# Author
+## Author
 Sidney Uwaya [{@sidney2022}](https://github.com/sidney2022)
 
 

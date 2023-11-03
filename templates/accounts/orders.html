@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/">Account</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Orders</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="row">
+                      {% include 'accounts/sidenav.html' %}
+
+                        <div class="col-md-8 col-lg-9 table-cart table-mobile">
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for order in orders %}
+                                    <tr>
+                                        <td class=""> {{order.tracking_id}} </td>
+                                        <td class=""> &#8358;{{order.total}} </td>
+                                        <td class=""> {{order.date}} </td>
+                                        <td class=" " > <span class="p-2 btn m-2 bg-{{order.badge}}"> {{order.status}} </span> </td>
+                                        <td class=""> 
+                                            <a style="max-width:7px !important" class="p-2 bg-info text-white" href="{% url 'order-items' order.tracking_id %}">View </a>
+                                        </td>
+                                    </tr>
+                                    {%empty%}
+                                    <td>No Orders</td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+    {% include 'js.html' %}
+{%endblock%}

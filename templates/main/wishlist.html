@@ -1,89 +1,97 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
-{% load humanize %}
 {% block content %}
-<style>
-    #product-select {
-        display:none
-    }
-</style>
-    <div class="breadcrumb-area">
-        <div class="container">
-            <div class="breadcrumb-content">
-                <ul>
-                    <li><a href="{% url 'homepage' %}">Home</a></li>
-                    <li class="active">Wishlist</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- Li's Breadcrumb Area End Here -->
-    <!--Wishlist Area Strat-->
-    <div class="wishlist-area pt-60 pb-60">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <form action="#">
-                        <div class="table-content table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="cart-product-name">Product</th>
-                                        <th class="li-product-price">Unit Price</th>
-                                        <th class="li-product-stock-status">Stock Status</th>
-                                        <th class="li-product-add-cart">add to cart</th>
-                                        <th class="li-product-remove">remove item</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in wishlist_items %}
-                                    <tr>
-                                        <td class="li-product-name"><a href="{% url 'product' item.product.slug %}">{{item.product.name}}</a></td>
-                                        {% if item.product.discount == 0 %}
-                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.price|intcomma}}</span></td>
-                                        {% else %}
-                                        <td class="li-product-price"><span class="amount">&#8358;{{item.product.discount_price|intcomma}}</span></td>
-                                        {% endif %}
-                                        {% if item.product.in_stock == True %}
-                                        <td class="li-product-stock-status " ><span class="in-stock text-white btn btn-success btn-sm">{{item.product.no_stock}} units left</span></td>
-                                        {% else %}
-                                        <td class="li-product-stock-status"><span class="text-white btn btn-warning btn-sm">out of stock</span></td>
-                                        {% endif %}
-                                        
-                                        {% if item.product.in_stock == True %}
-                                        <td ><span style="border:none; cursor:pointer" class="btn text-white btn-warning" onclick="AddTocart(this)">Add to cart <input type="hidden" id ="prod-name" value="{{item.product.slug}}"></span></td>
-                                        {% else %}
-                                        <td ><span class="btn btn-secondary btn-sm"> Out Of Stock</span></td>
-                                        {% endif %}   
+{% load humanize %}
+    <main class="main">
+       
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
 
-                                        <td class="li-product-remove"><a id="del-cart" style="cursor:pointer" onclick="deleteCartItem(this)"><i class="fa fa-times"></i> <span id="product-select" > {{item.product.slug}} </span></a>
+        <div class="page-content">
+            <div class="container">
+                <table class="table table-wishlist table-mobile">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Stock Status</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-                                            {%empty%}
-                                            <td colspan="6">No items in wishlist</td>
-                                        </tr>
-                                        {% endfor %}
-                                  
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
+                    <tbody>
+                      {% for item in wishlist_items %}
+                        <tr>
+                            <td class="product-col">
+                                <div class="product">
+                                    <figure class="product-media">
+                                        <a href="#">
+                                            <img src="{{item.product.img1.url}}" alt="Product image">
+                                        </a>
+                                    </figure>
+
+                                    <h3 class="product-title">
+                                        <a href="#">{{item.product.name}}</a>
+                                    </h3><!-- End .product-title -->
+                                </div><!-- End .product -->
+                            </td>
+                            {% if item.product.discount == 0 %}
+                            <td class="price-col">&#8358;{{item.product.price|intcomma}}</td>
+                            {% else %}
+                            <td class="price-col">&#8358;{{item.product.discount_price|intcomma}}</td>
+                            {% endif %}
+                            {% if item.product.in_stock %}
+                            <td class="stock-col"><span class="in-stock">In stock</span></td>
+                            <td class="action-col">
+                                {% comment %} <button class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to Cart</button> {% endcomment %}
+                                <button  onclick="AddTocart(this)" class="btn btn-block btn-outline-primary-2" id="add-cart-btn" type="submit"> <i class="fa fa-shopping-cart"> </i><span>add to cart</span></a> <input type="hidden" id ="prod-name" value="{{item.product.slug}}"></span></button>
+
+                            </td>
+                            {% else %}
+                            <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
+                            <td class="action-col">
+                                 <button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>                                
+                            </td>
+                            {% endif %}
+                            <td class="remove-col"><button onclick="deleteCartItem(this)" class="btn-remove"><i class="icon-close"> </i>
+                                 <input id="slug" type="hidden" value="{{item.product.slug}}">
+                                 <input id="wish_no" type="hidden" value="{{number_of_items}}">
+                                </button></td>
+                        </tr>
+                        {% endfor %}
+                    
+                    </tbody>
+                </table><!-- End .table table-wishlist -->
     
+            </div><!-- End .container -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+
+    <script>
         function deleteCartItem(elem) {
-            
-            fetch(`{% url 'del-wishlist-item'  %}?item=${elem.textContent}`, {
+            const slug = elem.querySelector('#slug').value
+            var wish_no = elem.querySelector('#wish_no').value
+            const WishAmtElem = document.getElementById("wishlist-count")
+            WishAmtElem.innerHTML = 0
+            fetch(`{% url 'del-wishlist-item'  %}?item=${slug}`, {
                 method:"GET"
             })
             .then((res) => res.json())
             .then((data) => {
                 console.log('data', data)
                 elem.parentNode.parentNode.innerHTML = ''
+                WishAmtElem.innerHTML = wish_no -1
              })
-            
+
         }
     </script>
-    {% endblock %}
+    {% include 'js.html' %}
+{% endblock %}

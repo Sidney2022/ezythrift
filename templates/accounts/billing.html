@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <main class="main">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'orders' %}">Orders</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{order.tracking_id}}</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
+                    {% include 'messages.html' %}
+                    <div class="row upper">
+                      {% include 'accounts/sidenav.html' %}
+
+                        <div class="col-md-8 col-lg-9">
+                                <form action="{% url 'billing' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>First Name *</label>
+                                            <input name="first_name" value="{{user.first_name}}" type="text" class="form-control" required="">
+                                        </div><!-- End .col-sm-6 -->
+
+                                        <div class="col-sm-6">
+                                            <label>Last Name *</label>
+                                            <input name="last_name" value="{{user.last_name}}" type="text" class="form-control" required="">
+                                        </div><!-- End .col-sm-6 -->
+                                    </div><!-- End .row -->
+
+                                    <label>Email address (this cannot be changed)</label>
+                                    <input type="email" class="form-control" disabled value="{{user.email}}">
+
+                                    <label>Country *</label>
+                                    <input name="country" value="{{billing.country}}" type="text" class="form-control" >
+
+
+                                    <label>State *</label>
+                                    <input value="{{billing.state}}" name="state" type="text" class="form-control">
+
+                                    <label>City *</label>
+                                    <input value="{{billing.city}}" name="city" type="text" class="form-control">
+
+                                    <label>Address *</label>
+                                    <input value="{{billing.address}}" name="address" type="text" class="form-control mb-2">
+
+                                    <label>Phone *</label>
+                                    <input value="{{billing.phone_number}}" name="phone_number" type="text" class="form-control mb-2">
+
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>SAVE CHANGES</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                </form>
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+    {% include 'js.html' %}
+{%endblock%}

@@ -1,18 +1,17 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
-<div class="breadcrumb-area">
-    <div class="container">
-        <div class="breadcrumb-content">
-            <ul>
-                <li><a href="{% url 'homepage' %}">Home</a></li>
-                        <li class="active">About Us</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <main class="main">
       
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Privacy Policy</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
         <div class="about-us-wrapper pt-60 pb-40">
             <div class="container">
             <h1>Terms and Conditions</h1>
@@ -101,5 +100,6 @@
                 </li>
             </ul>
     </div>
-    </div>
-        {% endblock %}
+    </main><!-- End .main -->
+    {% include 'js.html' %}
+{% endblock %}

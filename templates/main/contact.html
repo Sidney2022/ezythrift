@@ -1,9 +1,25 @@
-{% extends 'main/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block content %}
 
+        <main class="main">
+        	
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
 
-   
+            <div class="page-content">
+            	<div id="map" class="mb-5"></div><!-- End #map -->
+                <div class="container">
+                	<div class="row">
+                		<div class="col-md-4">
+                			<div class="contact-box text-center">
+        						<h3>Office</h3>
 
         <!-- Li's Breadcrumb Area End Here -->     
         <!-- Begin Contact Main Page Area -->
@@ -20,53 +36,76 @@
                                      to you as soon as possible. Our team is available to answer your questions and provide 
                                      assistance with any issues you may be experiencing on ezythrift.</div>
 
-                            </p>
-                            <div class="single-contact-block">
-                                <h4><i class="fa fa-fax"></i> Address</h4>
-                                <p>123 Main Street, Anytown, CA 12345 – USA</p>
-                            </div>
-                            <div class="single-contact-block">
-                                <h4><i class="fa fa-phone"></i> Call Us</h4>
-                                <p>Mobile: (08) 123 456 789</p>
-                                <p>Hotline: 1009 678 456</p>
-                            </div>
-                            <div class="single-contact-block last-child">
-                                <h4><i class="fa fa-envelope-o"></i> Email Us</h4>
-                                <a class="text-dark" href="mailto:ezythrift@gmail.com">ezythrift@gmail.com</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12 order-2 order-lg-1">
-                        <div class="contact-form-content pt-sm-55 pt-xs-55">
-                            <h3 class="contact-page-title">Tell Us Your Message</h3>
-                            <div class="contact-form">
-                                <form  id="contact-form" action="{% url 'contact' %}" method="post">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label>Your Name <span class="required">*</span></label>
-                                        <input type="text" name="name" id="customername" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Your Email <span class="required">*</span></label>
-                                        <input type="email" name="email" id="customerEmail" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Subject</label>
-                                        <input type="text" name="subject" id="contactSubject" required>
-                                    </div>
-                                    <div class="form-group mb-30">
-                                        <label>Your Message</label>
-                                        <textarea name="message" id="contactMessage" required></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" value="submit" id="submit" class="li-btn-3" name="submit">send</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                		<div class="col-md-4">
+                			<div class="contact-box text-center">
+        						<h3>Start a Conversation</h3>
 
-        {% endblock %}
+        						<div><a href="mailto:#">ezythrift@gmail.com</a></div>
+        						<div><a href="tel:#">+1 987-876-6543</a>, <a href="tel:#">+1 987-976-1234</a></div>
+        					</div><!-- End .contact-box -->
+                		</div><!-- End .col-md-4 -->
+
+                		<div class="col-md-4">
+                			<div class="contact-box text-center">
+        						<h3>Social</h3>
+
+        						<div class="social-icons social-icons-color justify-content-center">
+			    					<a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+			    					<a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+			    					<a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+			    					<a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
+			    					<a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+			    				</div><!-- End .soial-icons -->
+        					</div><!-- End .contact-box -->
+                		</div><!-- End .col-md-4 -->
+                	</div><!-- End .row -->
+
+                	<hr class="mt-3 mb-5 mt-md-1">
+                	<div class="touch-container row justify-content-center">
+                		<div class="col-md-9 col-lg-7">
+                			<div class="text-center">
+                			<h2 class="title mb-1">Get In Touch</h2><!-- End .title mb-2 -->
+                		
+                			<p class="mb-3">
+                                You can also send us an email at
+                                     <a href="mailto:ezythrift@gmail.com">ezythrift@gmail.com</a> and we’ll get back 
+                                     to you as soon as possible. Our team is available to answer your questions and provide 
+                                     assistance with any issues you may be experiencing on ezythrift.
+                            </p>
+                			</div><!-- End .text-center -->
+
+                			<form action="{% url 'contact' %}" class="contact-form mb-2" method="post">
+                                {% csrf_token %}
+                				<div class="row">
+                					<div class="col-sm-6">
+                                        <label for="cname" class="sr-only">Name</label>
+                						<input type="text" class="form-control" id="cname" placeholder="Name *" name="name" required>
+                					</div><!-- End .col-sm-4 -->
+
+                					<div class="col-sm-6">
+                                        <label for="cemail" class="sr-only">Name</label>
+                						<input type="email" class="form-control" id="cemail" placeholder="Email *" required name="email">
+                					</div><!-- End .col-sm-4 -->
+
+                				</div><!-- End .row -->
+
+                                <label for="csubject" class="sr-only">Subject</label>
+        						<input type="text" class="form-control" id="csubject" placeholder="Subject" name="subject"> 
+
+                                <label for="cmessage" class="sr-only">Message</label>
+                				<textarea class="form-control" cols="30" rows="4" id="cmessage" required placeholder="Message *" name="message"></textarea>
+								
+								<div class="text-center">
+	                				<button type="submit" class="btn btn-outline-primary-2 btn-minwidth-sm">
+	                					<span>SUBMIT</span>
+	            						<i class="icon-long-arrow-right"></i>
+	                				</button>
+                				</div><!-- End .text-center -->
+                			</form><!-- End .contact-form -->
+                		</div><!-- End .col-md-9 col-lg-7 -->
+                	</div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+		{% include 'js.html' %}
+    {% endblock %}
